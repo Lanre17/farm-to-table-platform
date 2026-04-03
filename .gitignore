@@ -1,0 +1,29 @@
+
+# NetBeans build output
+
+/FarmToTableNetwork/target/
+
+/FarmToTableNetwork/build/
+
+/FarmToTableNetwork/dist/
+
+# NetBeans per-machine settings — THIS is what caused your property resets
+
+nbproject/private/
+
+nbproject/Makefile-*.mk
+
+nbproject/Package-*.bash
+
+# Compiled class files
+
+*.class
+
+# Mac/Windows OS noise
+
+.DS_Store
+
+Thumbs.db
+
+desktop.ini
+

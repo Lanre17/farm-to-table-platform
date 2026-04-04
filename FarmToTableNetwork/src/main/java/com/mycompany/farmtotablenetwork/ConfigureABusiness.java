@@ -4,12 +4,17 @@
  */
 package com.mycompany.farmtotablenetwork;
 
+import com.mycompany.farmtotablenetwork.personnel.UserAccountDirectory;
+
 /**
  *
  * @author Lanre
  */
 public class ConfigureABusiness {
-    public void configure() {
-        System.out.println("ConfigureABusiness stub - not implemented yet");
+
+    public static UserAccountDirectory accountDirectory = new UserAccountDirectory();
+
+    public static void configure() {
+        System.out.println("ConfigureABusiness stub — not implemented yet");
     }
 }

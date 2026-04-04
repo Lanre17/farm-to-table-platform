@@ -18,7 +18,7 @@ import com.mycompany.farmtotablenetwork.personnel.UserAccountDirectory;
 
 // ── Import ALL profile types ─────────────────────────────────────────────────
 
-// import com.mycompany.farmtotablenetwork.personnel.profiles.*;
+import com.mycompany.farmtotablenetwork.personnel.profiles.*;
 
 // ── Import ALL work area panels ───────────────────────────────────────────────
 import com.mycompany.farmtotablenetwork.ui.farm.*;
@@ -34,14 +34,19 @@ import java.awt.event.*;
 
 public class MainFrame extends JFrame {
 
-    private final UserAccountDirectory accountDirectory;
+    private final UserAccountDirectory accountDirectory; 
     private final CardSequencePanel    cardPanel;
+    
+    /*final on a field means the reference can only be assigned once when the object is constructed
+    accountDirectory and cardPanel are passed in through the constructor and should never be swapped out 
+    mid-session. Marking them final makes that intent explicit and lets the compiler catch it if someone 
+    accidentally tries to reassign them.*/
 
     // Login components
 
     private JTextField  usernameField;
     private JPasswordField passwordField;
-    private JLabel      messageLabel;
+    private JLabel      messageLabel; // make the message label reusable 
 
     public MainFrame(UserAccountDirectory accountDirectory) {
         this.accountDirectory = accountDirectory;
@@ -51,14 +56,14 @@ public class MainFrame extends JFrame {
 
     private void initComponents() {
         setTitle("Regional Farm-to-Table Food Network");
+        
+        //upload template for design
         setLayout(new BorderLayout());
 
         // ── Login panel (LEFT side of JSplitPane) ─────────────────────────
-
         JPanel loginPanel = buildLoginPanel();
 
         // ── JSplitPane ────────────────────────────────────────────────────
-
         JSplitPane splitPane = new JSplitPane(
             JSplitPane.HORIZONTAL_SPLIT, loginPanel, cardPanel
         );
@@ -80,7 +85,6 @@ public class MainFrame extends JFrame {
         gbc.gridx  = 0;
 
         // Title
-
         gbc.gridy = 0;
         JLabel title = new JLabel("Farm-to-Table");
         title.setFont(UIConstants.FONT_HEADER_TITLE);
@@ -95,13 +99,11 @@ public class MainFrame extends JFrame {
         panel.add(subtitle, gbc);
 
         // Spacer
-
         gbc.gridy = 2; gbc.weighty = 0.3;
         panel.add(Box.createVerticalGlue(), gbc);
         gbc.weighty = 0;
 
         // Username
-
         gbc.gridy = 3;
         JLabel userLabel = new JLabel("Username");
         userLabel.setFont(UIConstants.FONT_SECTION_LABEL);
@@ -114,7 +116,6 @@ public class MainFrame extends JFrame {
         panel.add(usernameField, gbc);
 
         // Password
-
         gbc.gridy = 5;
         JLabel passLabel = new JLabel("Password");
         passLabel.setFont(UIConstants.FONT_SECTION_LABEL);
@@ -126,12 +127,10 @@ public class MainFrame extends JFrame {
         passwordField.setPreferredSize(new Dimension(0, UIConstants.FIELD_HEIGHT));
 
         // Allow Enter key to submit
-
         passwordField.addActionListener(e -> handleLogin());
         panel.add(passwordField, gbc);
 
         // Login button
-
         gbc.gridy = 7; gbc.insets = new Insets(16, 20, 8, 20);
         JButton loginBtn = new JButton("Log In");
         loginBtn.setFont(UIConstants.FONT_BTN);
@@ -146,7 +145,6 @@ public class MainFrame extends JFrame {
         gbc.insets = new Insets(8, 20, 8, 20);
 
         // Message label
-
         gbc.gridy = 8;
         messageLabel = new JLabel(" ");
         messageLabel.setFont(UIConstants.FONT_ERROR);
@@ -156,7 +154,6 @@ public class MainFrame extends JFrame {
         panel.add(messageLabel, gbc);
 
         // Bottom spacer
-
         gbc.gridy = 9; gbc.weighty = 1;
         panel.add(Box.createVerticalGlue(), gbc);
         return panel;
@@ -166,14 +163,15 @@ public class MainFrame extends JFrame {
 
         String username = usernameField.getText().trim();
         String password = new String(passwordField.getPassword());
-
+        
+        //validation message if fields are empty
         if (username.isEmpty() || password.isEmpty()) {
             messageLabel.setText("Enter username and password.");
             return;
         }
 
         UserAccount account = accountDirectory.authenticate(username, password);
-
+        //validation methods if crdentials are wrong
         if (account == null) {
             messageLabel.setText("Invalid credentials.");
             passwordField.setText("");
@@ -183,7 +181,7 @@ public class MainFrame extends JFrame {
         messageLabel.setText(" ");
         passwordField.setText("");
 
-        // loadWorkArea(account.getProfile());
+        loadWorkArea(account.getProfile());
 
     }
 
@@ -196,86 +194,68 @@ public class MainFrame extends JFrame {
      * ── HOW TO ADD YOUR PANELS ────────────────────────────────────────────
 
      * Each member adds two else-if blocks here, one per role they own.
-
      * Pattern:
-
      *   } else if (profile instanceof YourProfile) {
-
      *       cardPanel.pushPanel(new YourWorkArea((YourProfile) profile, cardPanel));
-
      *   }
 
      * ─────────────────────────────────────────────────────────────────────
 
      */
-
+    private void loadWorkArea(Profile profile) {
+    if (profile instanceof FarmerProfile) {
+        cardPanel.pushPanel(new FarmerWorkArea((FarmerProfile) profile, cardPanel));
+    } else {
+            JLabel fallback = new JLabel("No work area for role: " + profile.getRole());
+            fallback.setFont(UIConstants.FONT_BODY);
+            fallback.setHorizontalAlignment(SwingConstants.CENTER);
+            cardPanel.pushPanel(new JPanel() {{ add(fallback); }});
+        }
+    }
     /* private void loadWorkArea(Profile profile) {
-
         // ── Farm (Polina) ─────────────────────────────────────────────────
-
         if (profile instanceof FarmerProfile) {
-
             cardPanel.pushPanel(new FarmerWorkArea((FarmerProfile) profile, cardPanel));
-
-        } else if (profile instanceof HarvestWorkerProfile) {
-
+        }else if (profile instanceof HarvestWorkerProfile) {
             cardPanel.pushPanel(new HarvestWorkerWorkArea((HarvestWorkerProfile) profile, cardPanel));
 
         // ── Inspection (Emmanuel) ─────────────────────────────────────────
 
         } else if (profile instanceof InspectorProfile) {
-
             cardPanel.pushPanel(new InspectorWorkArea((InspectorProfile) profile, cardPanel));
-
         } else if (profile instanceof CertifierProfile) {
-
             cardPanel.pushPanel(new CertifierWorkArea((CertifierProfile) profile, cardPanel));
 
         // ── Distribution (Henry) ──────────────────────────────────────────
 
         } else if (profile instanceof WarehouseManagerProfile) {
-
             cardPanel.pushPanel(new WarehouseManagerWorkArea((WarehouseManagerProfile) profile, cardPanel));
-
         } else if (profile instanceof DeliveryDriverProfile) {
-
             cardPanel.pushPanel(new DeliveryDriverWorkArea((DeliveryDriverProfile) profile, cardPanel));
 
         // ── Retail (Lanre) ────────────────────────────────────────────────
 
         } else if (profile instanceof ProcurementOfficerProfile) {
-
             cardPanel.pushPanel(new ProcurementOfficerWorkArea((ProcurementOfficerProfile) profile, cardPanel));
-
         } else if (profile instanceof InventoryClerkProfile) {
-
             cardPanel.pushPanel(new InventoryClerkWorkArea((InventoryClerkProfile) profile, cardPanel));
 
         // ── Network / Shared roles ────────────────────────────────────────
-
         } else if (profile instanceof NetworkCoordinatorProfile) {
-
             cardPanel.pushPanel(new NetworkCoordinatorWorkArea((NetworkCoordinatorProfile) profile, cardPanel));
-
         } else if (profile instanceof QualityAnalystProfile) {
-
             cardPanel.pushPanel(new QualityAnalystWorkArea((QualityAnalystProfile) profile, cardPanel));
 
         // ── Fallback ──────────────────────────────────────────────────────
-
         } else {
-
             JLabel fallback = new JLabel("No work area for role: " + profile.getRole());
-
             fallback.setFont(UIConstants.FONT_BODY);
-
             fallback.setHorizontalAlignment(SwingConstants.CENTER);
-
             cardPanel.pushPanel(new JPanel() {{ add(fallback); }});
-
         }
 
     } */
 
 }
+
 

@@ -35,24 +35,32 @@ public class ConfigureABusiness {
     public static ShipmentReceiptConfirmationDirectory receiptDirectory = new ShipmentReceiptConfirmationDirectory(); //HL: added import using AltEnter, 4/4/26
     
     //Organization references
-    public static Organization cropMgmt;        //ps added 4/4/26
-    public static Organization harvestAndPackaging; // ps added 4/4/26
-    
+    public static Organization cropMgmt;                            //ps added 4/4/26
+    public static Organization harvestAndPackaging;                 //ps added 4/4/26
+    public static Organization inspectionDept;                       //ps added 4/4/26
+    public static Organization certificationDept;                   //ps added 4/4/26
+    public static Organization warehouseOps;                        //ps added 4/4/26
+    public static Organization fleetMgmt;                           //ps added 4/4/26
+    public static Organization procurement;                         //ps added 4/4/26
+    public static Organization storefrontInventory;                 //ps added 4/4/26
+       
     
     public static void configure() {
-        Enterprise farmEnterprise = new Enterprise("Farm/Producer");                        //ps added 4/4/26
-        //Inspection Enterprise placeholder
-        //Logistics Enterprise placeholder
-        //RetailEnterprise placeholder
+        Enterprise farmEnterprise = new Enterprise("Farm/Producer");                            //ps added 4/4/26
+        Enterprise inspectionEnterprise   = new Enterprise("Quality & Inspection Agency");      //ps added 4/4/26
+        Enterprise distributionEnterprise = new Enterprise("Distribution / Logistics Co.");     //ps added 4/4/26
+        Enterprise retailEnterprise       = new Enterprise("Retail Store / Restaurant");        //ps added 4/4/26
+
         
-        cropMgmt = new Organization ("Crop Management", farmEnterprise.getEnterpriseId());                  //ps added 4/4/26
-        harvestAndPackaging = new Organization ("Harvest & packaging", farmEnterprise.getEnterpriseId());   //ps added 4/4/26
-        //insp
-        //cert
-        //warehouse
-        //fleet
-        //procurement
-        //storefront
+        cropMgmt = new Organization ("Crop Management", farmEnterprise.getEnterpriseId());                              //ps added 4/4/26
+        harvestAndPackaging = new Organization ("Harvest & packaging", farmEnterprise.getEnterpriseId());               //ps added 4/4/26
+        inspectionDept = new Organization("Inspection Department", inspectionEnterprise.getEnterpriseId());             //ps added 4/4/26
+        certificationDept = new Organization("Certification Department", inspectionEnterprise.getEnterpriseId());       //ps added 4/4/26
+        warehouseOps         = new Organization("Warehouse Operations", distributionEnterprise.getEnterpriseId());      //ps added 4/4/26
+        fleetMgmt            = new Organization("Fleet / Delivery Management", distributionEnterprise.getEnterpriseId());//ps added 4/4/26
+        procurement          = new Organization("Procurement / Purchasing", retailEnterprise.getEnterpriseId());        //ps added 4/4/26
+        storefrontInventory  = new Organization("Storefront / Inventory", retailEnterprise.getEnterpriseId());          //ps added 4/4/26
+
         
         
         //seedAuth

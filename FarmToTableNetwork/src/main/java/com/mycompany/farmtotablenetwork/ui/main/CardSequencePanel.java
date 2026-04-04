@@ -4,8 +4,8 @@
  */
 package com.mycompany.farmtotablenetwork.ui.main;
 
-import java.awt.CardLayout;
-import javax.swing.JPanel;
+import javax.swing.*;
+import java.awt.*;
 
 /**
  *
@@ -14,9 +14,22 @@ import javax.swing.JPanel;
 public class CardSequencePanel extends JPanel {
  
     public CardSequencePanel() {
- 
-        setLayout(new CardLayout());
- 
+         setLayout(new CardLayout());
+     }
+    
+   //method to add a panel aka go forward
+    public void pushPanel(JPanel panel) {
+            String name = String.valueOf(System.nanoTime());
+            this.add(panel, name);
+            ((CardLayout) this.getLayout()).show(this, name);
+        }
+    
+    //method to remove a panel aka go back
+     public void popPanel(JPanel panel) {
+        this.remove(panel);
+        ((CardLayout) this.getLayout()).next(this);
     }
+
+
 }
 

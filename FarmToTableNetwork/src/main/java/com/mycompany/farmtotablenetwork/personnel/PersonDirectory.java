@@ -12,6 +12,7 @@ import java.util.ArrayList;
  */
 public class PersonDirectory {
     private ArrayList<Person> persons = new ArrayList<>();
+    
     public Person newPerson(String fn, String ln, String email, String phone) { 
         Person p = new Person(fn,ln,email,phone); 
         persons.add(p); 

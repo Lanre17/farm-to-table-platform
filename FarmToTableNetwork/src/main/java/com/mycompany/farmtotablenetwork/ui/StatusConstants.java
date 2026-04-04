@@ -23,8 +23,10 @@ public class StatusConstants {
     // Certification Approval (Cross-org: Inspection Dept → Certification Dept)
     public static final String PENDING_REVIEW = "Pending Review";
     public static final String DENIED         = "Denied";
+    public static final String CERTIFIED = "Certified"; //HL
 
     // Delivery Request (Cross-org: Warehouse → Fleet)
+    public static final String WAREHOUSED = "Warehoused"; //HL 
     public static final String REQUESTED  = "Requested";
     public static final String IN_TRANSIT = "In Transit";
     public static final String DELIVERED  = "Delivered";
@@ -38,4 +40,6 @@ public class StatusConstants {
     // Shipment Receipt Confirmation (Cross-enterprise: Distribution → Retail)
     public static final String PENDING = "Pending";
     public static final String STOCKED = "Stocked";
+    
+    
 }

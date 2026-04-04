@@ -71,7 +71,7 @@ public class FarmerWorkArea  extends JPanel {
 
         //stubbed out until panels are ready - ps 4/4/26
         btnNewCrop.addActionListener(e-> pushNewCropPanel());
-    //    btnSubmitHarvest.addActionListener(e-> pushSubmitHarvestPanel());
+        btnSubmitHarvest.addActionListener(e-> pushSubmitHarvestPanel());
 
         btnBar.add(btnSubmitHarvest);
         btnBar.add(btnNewCrop);
@@ -105,15 +105,20 @@ public class FarmerWorkArea  extends JPanel {
         cardPanel.add(p,"newCrop");
         ((CardLayout)cardPanel.getLayout()).show(cardPanel,"newCrop");
     }
-/*
+
     private void pushSubmitHarvestPanel() {
         Crop selected = getSelectedCrop();
         if(selected == null)
             return;
-        SubmitHarvestPanel p = newSubmitHarvestpanel 9selected, cardPanel, this)
+        SubmitHarvestPanel p = new SubmitHarvestPanel (selected, cardPanel, this);
         cardPanel.add(p,"submitHarvest");
         ((CardLayout)cardPanel.getLayout()).show(cardPanel,"submitHarvest");
-    }*/
+    }
+    
+    public String getName() {
+        return profile.getPerson().getFullName();
+    }
+
 
   
 }

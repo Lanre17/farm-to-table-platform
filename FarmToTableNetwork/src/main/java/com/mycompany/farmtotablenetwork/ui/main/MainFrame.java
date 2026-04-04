@@ -13,9 +13,7 @@ package com.mycompany.farmtotablenetwork.ui.main;
 
 
 import com.mycompany.farmtotablenetwork.personnel.Profile;
-
 import com.mycompany.farmtotablenetwork.personnel.UserAccount;
-
 import com.mycompany.farmtotablenetwork.personnel.UserAccountDirectory;
 
 // ── Import ALL profile types ─────────────────────────────────────────────────
@@ -23,55 +21,36 @@ import com.mycompany.farmtotablenetwork.personnel.UserAccountDirectory;
 // import com.mycompany.farmtotablenetwork.personnel.profiles.*;
 
 // ── Import ALL work area panels ───────────────────────────────────────────────
-
 import com.mycompany.farmtotablenetwork.ui.farm.*;
-
 import com.mycompany.farmtotablenetwork.ui.inspection.*;
-
 import com.mycompany.farmtotablenetwork.ui.distribution.*;
-
 import com.mycompany.farmtotablenetwork.ui.retail.*;
-
 import com.mycompany.farmtotablenetwork.ui.admin.*;
-
 import com.mycompany.farmtotablenetwork.ui.reports.*;
-
 import com.mycompany.farmtotablenetwork.ui.UIConstants;
-
 import javax.swing.*;
-
 import java.awt.*;
-
 import java.awt.event.*;
 
 public class MainFrame extends JFrame {
 
     private final UserAccountDirectory accountDirectory;
-
     private final CardSequencePanel    cardPanel;
 
     // Login components
 
     private JTextField  usernameField;
-
     private JPasswordField passwordField;
-
     private JLabel      messageLabel;
 
     public MainFrame(UserAccountDirectory accountDirectory) {
-
         this.accountDirectory = accountDirectory;
-
         this.cardPanel        = new CardSequencePanel();
-
         initComponents();
-
     }
 
     private void initComponents() {
-
         setTitle("Regional Farm-to-Table Food Network");
-
         setLayout(new BorderLayout());
 
         // ── Login panel (LEFT side of JSplitPane) ─────────────────────────
@@ -81,155 +60,97 @@ public class MainFrame extends JFrame {
         // ── JSplitPane ────────────────────────────────────────────────────
 
         JSplitPane splitPane = new JSplitPane(
-
             JSplitPane.HORIZONTAL_SPLIT, loginPanel, cardPanel
-
         );
 
         splitPane.setDividerLocation(280);
-
         splitPane.setDividerSize(1);
-
         splitPane.setResizeWeight(0.0);
-
         add(splitPane, BorderLayout.CENTER);
-
     }
 
     private JPanel buildLoginPanel() {
 
         JPanel panel = new JPanel(new GridBagLayout());
-
         panel.setBackground(UIConstants.BG_HEADER);
-
         panel.setPreferredSize(new Dimension(280, 0));
-
         GridBagConstraints gbc = new GridBagConstraints();
-
         gbc.insets = new Insets(8, 20, 8, 20);
-
         gbc.fill   = GridBagConstraints.HORIZONTAL;
-
         gbc.gridx  = 0;
 
         // Title
 
         gbc.gridy = 0;
-
         JLabel title = new JLabel("Farm-to-Table");
-
         title.setFont(UIConstants.FONT_HEADER_TITLE);
-
         title.setForeground(UIConstants.TEXT_ON_DARK);
-
         title.setHorizontalAlignment(SwingConstants.CENTER);
-
         panel.add(title, gbc);
-
         gbc.gridy = 1;
-
         JLabel subtitle = new JLabel("Network Login");
-
         subtitle.setFont(UIConstants.FONT_HEADER_SUB);
-
         subtitle.setForeground(new java.awt.Color(0xAACC88));
-
         subtitle.setHorizontalAlignment(SwingConstants.CENTER);
-
         panel.add(subtitle, gbc);
 
         // Spacer
 
         gbc.gridy = 2; gbc.weighty = 0.3;
-
         panel.add(Box.createVerticalGlue(), gbc);
-
         gbc.weighty = 0;
 
         // Username
 
         gbc.gridy = 3;
-
         JLabel userLabel = new JLabel("Username");
-
         userLabel.setFont(UIConstants.FONT_SECTION_LABEL);
-
         userLabel.setForeground(UIConstants.TEXT_ON_DARK);
-
         panel.add(userLabel, gbc);
-
         gbc.gridy = 4;
-
         usernameField = new JTextField();
-
         usernameField.setFont(UIConstants.FONT_BODY);
-
         usernameField.setPreferredSize(new Dimension(0, UIConstants.FIELD_HEIGHT));
-
         panel.add(usernameField, gbc);
 
         // Password
 
         gbc.gridy = 5;
-
         JLabel passLabel = new JLabel("Password");
-
         passLabel.setFont(UIConstants.FONT_SECTION_LABEL);
-
         passLabel.setForeground(UIConstants.TEXT_ON_DARK);
-
         panel.add(passLabel, gbc);
-
         gbc.gridy = 6;
-
         passwordField = new JPasswordField();
-
         passwordField.setFont(UIConstants.FONT_BODY);
-
         passwordField.setPreferredSize(new Dimension(0, UIConstants.FIELD_HEIGHT));
 
         // Allow Enter key to submit
 
         passwordField.addActionListener(e -> handleLogin());
-
         panel.add(passwordField, gbc);
 
         // Login button
 
         gbc.gridy = 7; gbc.insets = new Insets(16, 20, 8, 20);
-
         JButton loginBtn = new JButton("Log In");
-
         loginBtn.setFont(UIConstants.FONT_BTN);
-
         loginBtn.setBackground(new java.awt.Color(0x4A7C2F));
-
         loginBtn.setForeground(java.awt.Color.WHITE);
-
         loginBtn.setFocusPainted(false);
-
         loginBtn.setBorderPainted(false);
-
         loginBtn.setOpaque(true);
-
         loginBtn.setPreferredSize(new Dimension(0, UIConstants.BTN_HEIGHT));
-
         loginBtn.addActionListener(e -> handleLogin());
-
         panel.add(loginBtn, gbc);
-
         gbc.insets = new Insets(8, 20, 8, 20);
 
         // Message label
 
         gbc.gridy = 8;
-
         messageLabel = new JLabel(" ");
-
         messageLabel.setFont(UIConstants.FONT_ERROR);
-
         messageLabel.setForeground(new java.awt.Color(0xFF6B6B));
-
         messageLabel.setHorizontalAlignment(SwingConstants.CENTER);
 
         panel.add(messageLabel, gbc);
@@ -237,41 +158,29 @@ public class MainFrame extends JFrame {
         // Bottom spacer
 
         gbc.gridy = 9; gbc.weighty = 1;
-
         panel.add(Box.createVerticalGlue(), gbc);
-
         return panel;
-
     }
 
     private void handleLogin() {
 
         String username = usernameField.getText().trim();
-
         String password = new String(passwordField.getPassword());
 
         if (username.isEmpty() || password.isEmpty()) {
-
             messageLabel.setText("Enter username and password.");
-
             return;
-
         }
 
         UserAccount account = accountDirectory.authenticate(username, password);
 
         if (account == null) {
-
             messageLabel.setText("Invalid credentials.");
-
             passwordField.setText("");
-
             return;
-
         }
 
         messageLabel.setText(" ");
-
         passwordField.setText("");
 
         // loadWorkArea(account.getProfile());

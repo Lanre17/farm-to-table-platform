@@ -181,7 +181,7 @@ public class MainFrame extends JFrame {
         messageLabel.setText(" ");
         passwordField.setText("");
 
-        //loadWorkArea(account.getProfile());
+        loadWorkArea(account.getProfile());
 
     }
 
@@ -202,7 +202,16 @@ public class MainFrame extends JFrame {
      * ─────────────────────────────────────────────────────────────────────
 
      */
-
+    private void loadWorkArea(Profile profile) {
+    if (profile instanceof FarmerProfile) {
+        cardPanel.pushPanel(new FarmerWorkArea((FarmerProfile) profile, cardPanel));
+    } else {
+            JLabel fallback = new JLabel("No work area for role: " + profile.getRole());
+            fallback.setFont(UIConstants.FONT_BODY);
+            fallback.setHorizontalAlignment(SwingConstants.CENTER);
+            cardPanel.pushPanel(new JPanel() {{ add(fallback); }});
+        }
+    }
     /* private void loadWorkArea(Profile profile) {
         // ── Farm (Polina) ─────────────────────────────────────────────────
         if (profile instanceof FarmerProfile) {
@@ -248,4 +257,5 @@ public class MainFrame extends JFrame {
     } */
 
 }
+
 

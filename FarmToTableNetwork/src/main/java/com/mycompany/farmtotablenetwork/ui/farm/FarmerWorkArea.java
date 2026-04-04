@@ -29,6 +29,7 @@ public class FarmerWorkArea  extends JPanel {
     public FarmerWorkArea(FarmerProfile profile, JPanel cardPanel){
         this.profile = profile;
         this.cardPanel = cardPanel;
+        
         setLayout(new BorderLayout());
         setBackground(UIConstants.BG_APP);
         buildUI();
@@ -61,7 +62,6 @@ public class FarmerWorkArea  extends JPanel {
         add(center, BorderLayout.CENTER);
 
 // SOUTH — buttons
-
         JPanel btnBar = new JPanel(new FlowLayout(FlowLayout.RIGHT, 8, UIConstants.PADDING));
         btnBar.setBackground(UIConstants.BG_APP);
         btnBar.setBorder(BorderFactory.createMatteBorder(1, 0, 0, 0, UIConstants.BORDER_LIGHT));
@@ -70,7 +70,7 @@ public class FarmerWorkArea  extends JPanel {
         btnSubmitHarvest.setEnabled(false);
 
         //stubbed out until panels are ready - ps 4/4/26
-        //btnNewCrop.addActionListener(e-> pushNewCropPanel());
+        btnNewCrop.addActionListener(e-> pushNewCropPanel());
     //    btnSubmitHarvest.addActionListener(e-> pushSubmitHarvestPanel());
 
         btnBar.add(btnSubmitHarvest);
@@ -79,7 +79,7 @@ public class FarmerWorkArea  extends JPanel {
 
     }
 
-    private void loadTable() {
+    public void loadTable() {
         tableModel.setRowCount(0);
         for(Crop c: ConfigureABusiness.cropDirectory.getAllCrops()){
             tableModel.addRow(new Object[]{
@@ -99,14 +99,13 @@ public class FarmerWorkArea  extends JPanel {
         return (Crop)tableModel.getValueAt(row, 0);
     }
     
-    /* stubbed out until Panels are ready - ps 4/4/26
-    
+         
     private void pushNewCropPanel() {
-        NewCropPanel p = NewCropPanel(cardPanel, this);
+        NewCropPanel p = new NewCropPanel(cardPanel, this);
         cardPanel.add(p,"newCrop");
         ((CardLayout)cardPanel.getLayout()).show(cardPanel,"newCrop");
     }
-
+/*
     private void pushSubmitHarvestPanel() {
         Crop selected = getSelectedCrop();
         if(selected == null)
@@ -115,4 +114,6 @@ public class FarmerWorkArea  extends JPanel {
         cardPanel.add(p,"submitHarvest");
         ((CardLayout)cardPanel.getLayout()).show(cardPanel,"submitHarvest");
     }*/
+
+  
 }

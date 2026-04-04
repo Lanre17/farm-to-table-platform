@@ -4,10 +4,19 @@
  */
 package com.mycompany.farmtotablenetwork.ui.main;
 
+import java.awt.CardLayout;
+import javax.swing.JPanel;
+
 /**
  *
  * @author p.starobinets
  */
-public class NewClass {
-    
+public class CardSequencePanel extends JPanel {
+ 
+    public CardSequencePanel() {
+ 
+        setLayout(new CardLayout());
+ 
+    }
 }
+

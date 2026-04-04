@@ -5,6 +5,7 @@
 package com.mycompany.farmtotablenetwork;
 
 import com.github.javafaker.Faker;
+import com.mycompany.farmtotablenetwork.distribution.ShipmentReceiptConfirmationDirectory;
 import com.mycompany.farmtotablenetwork.ecosystem.Enterprise;
 import com.mycompany.farmtotablenetwork.ecosystem.Organization;
 import com.mycompany.farmtotablenetwork.farm.Crop;
@@ -29,9 +30,9 @@ public class ConfigureABusiness {
     public static WorkRequestDirectory workRequestDirectory = new WorkRequestDirectory();       //ps added 4/4/26
     
     //Enterprise Directories
-    public static CropDirectory cropDirectory = new CropDirectory();                            //ps added 4/4/26
-    public static HarvestBatchDirectory batchDirectory = new HarvestBatchDirectory();           // ps added 4/4/26
-
+    public static CropDirectory cropDirectory = new CropDirectory();        //ps added 4/4/26
+    public static HarvestBatchDirectory batchDirectory = new HarvestBatchDirectory();       // ps added 4/4/26
+    public static ShipmentReceiptConfirmationDirectory receiptDirectory = new ShipmentReceiptConfirmationDirectory(); //HL: added import using AltEnter, 4/4/26
     
     //Organization references
     public static Organization cropMgmt;                            //ps added 4/4/26

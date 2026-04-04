@@ -8,6 +8,6 @@ package com.mycompany.farmtotablenetwork.ui.farm;
  *
  * @author p.starobinets
  */
-public class NewClass {
+class NewCropPanel {
     
 }

@@ -7,7 +7,6 @@ package com.mycompany.farmtotablenetwork.ui.main;
 import javax.swing.*;
 import java.awt.*;
 
-
 /**
  *
  * @author p.starobinets
@@ -17,6 +16,7 @@ public class CardSequencePanel extends JPanel {
     public CardSequencePanel() {
          setLayout(new CardLayout());
      }
+    
    //method to add a panel aka go forward
     public void pushPanel(JPanel panel) {
             String name = String.valueOf(System.nanoTime());

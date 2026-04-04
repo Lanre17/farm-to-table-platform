@@ -7,6 +7,7 @@ package com.mycompany.farmtotablenetwork.ui;
 public class StatusConstants {
 
     // Harvest Submission (Cross-org: Crop Mgmt → Harvest & Packaging)
+    public static final String PLANTED = "Planted"; // added a status for Crop
     public static final String SUBMITTED  = "Submitted";
     public static final String REVIEWED   = "Reviewed";
     public static final String APPROVED   = "Approved";

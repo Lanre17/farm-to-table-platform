@@ -27,13 +27,11 @@ public class UserAccountDirectory {
     }
 
     public UserAccount findAccount(String username) {
-
         for (UserAccount a : accounts) {
             if (a.getUsername().equals(username)) {
                 return a;
             }
         }
-
         return null;
     }
 

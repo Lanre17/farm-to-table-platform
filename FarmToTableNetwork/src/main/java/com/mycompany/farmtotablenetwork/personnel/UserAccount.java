@@ -10,7 +10,7 @@ package com.mycompany.farmtotablenetwork.personnel;
  */
 public class UserAccount {
     private String username;
-    private String password;
+    private String password; 
     private Profile profile;
 
     public UserAccount(String username, String password, Profile profile) {
@@ -23,12 +23,17 @@ public class UserAccount {
         return username.equals(u) && password.equals(p);
     }
 
-    public String  getUsername()          { return username; }
-    public Profile getProfile()           { return profile; }
-    public void    updatePassword(String newPass) { this.password = newPass; }
+    public String  getUsername(){ 
+        return username; 
+    }
+    public Profile getProfile(){ 
+        return profile; 
+    }
+    public void    updatePassword(String newPass){ 
+        this.password = newPass; 
+    }
 
     @Override
-
     public String toString() { return username + " [" + profile.getRole() + "]"; }
 
     

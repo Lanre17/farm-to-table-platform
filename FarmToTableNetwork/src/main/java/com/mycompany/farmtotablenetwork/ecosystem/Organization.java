@@ -20,12 +20,17 @@ public class Organization {
         this.enterpriseId = enterpriseId;
     }
 
-    public int getOrgId()      { return orgId; }
-    public String getName()    { return name; }
-    public int getEnterpriseId() { return enterpriseId; }
+    public int getOrgId(){
+        return orgId; 
+    }
+    public String getName(){ 
+        return name; 
+    }
+    public int getEnterpriseId(){ 
+        return enterpriseId; 
+    }
 
     @Override
-
     public String toString()   { return name + " (Org #" + orgId + ")"; }
   
 }

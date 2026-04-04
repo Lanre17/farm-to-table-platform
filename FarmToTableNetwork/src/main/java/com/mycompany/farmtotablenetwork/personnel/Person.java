@@ -17,25 +17,42 @@ public class Person {
     private String phone;
 
     public Person(String firstName, String lastName, String email, String phone) {
-        this.personId = ++count;
+        this.personId = ++count; // for auto id count
         this.firstName = firstName;
         this.lastName  = lastName;
         this.email     = email;
         this.phone     = phone;
     }
 
-    public int    getPersonId()    { return personId; }
-    public String getFirstName()   { return firstName; }
-    public String getLastName()    { return lastName; }
-    public String getEmail()       { return email; }
-    public String getPhone()       { return phone; }
-    public String getFullName()    { return firstName + " " + lastName; }
-    public void   setEmail(String e) { this.email = e; }
-    public void   setPhone(String p) { this.phone = p; }
+    public int getPersonId(){ 
+        return personId; 
+    }
+    public String getFirstName(){ 
+        return firstName; 
+    }
+    public String getLastName(){ 
+        return lastName; 
+    }
+    public String getEmail(){ 
+        return email; 
+    }
+    public String getPhone(){ 
+        return phone; 
+    }
+    public String getFullName(){ 
+        return firstName + " " + lastName; 
+    }
+    public void   setEmail(String e){ 
+        this.email = e; 
+    }
+    public void   setPhone(String p){ 
+        this.phone = p; 
+    }
 
     @Override
-
-    public String toString() { return getFullName() + " <" + email + ">"; }
+    public String toString() {
+        return getFullName() + " <" + email + ">"; 
+    }
 
     
 }

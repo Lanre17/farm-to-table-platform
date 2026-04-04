@@ -17,7 +17,7 @@ public class HarvestBatch {
     private String packagingType;
     private String status;
 
-    public HarvestBatch(int batchId, Crop crop, float quantityKg, String grade, String packagingType, String status) {
+    public HarvestBatch(Crop crop, float quantityKg, String grade, String packagingType) {
         this.batchId = ++count; //auto id generation
         this.crop = crop;
         this.quantityKg = quantityKg;

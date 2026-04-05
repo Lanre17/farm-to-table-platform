@@ -93,7 +93,7 @@ public class ConfigureABusiness {
         seedAuth(); //HL
         seedFarm();    //ps added 4/4/26
         //seedInsp
-        //seedLogistics
+        seedDistribution(); //HL
         seedRetail(); // LY added 4/5/26
     }
     
@@ -176,6 +176,10 @@ public class ConfigureABusiness {
         sub1.approve(); 
         
     }
+    
+    private static void seedDistribution() {
+        
+    }
 
     private static void seedRetail() {
         Faker faker = new Faker();
@@ -204,6 +208,8 @@ public class ConfigureABusiness {
         
         // end of Retail seeding block as of 4/5/26
     }
+
+    
 
     
 }

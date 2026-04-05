@@ -18,7 +18,7 @@ public class DeliveryRequest extends WorkRequest {
     private int purchaseOrderId; //HL: decoupled from Retail
     private String driver;
     
-    //HL: constructor - cross organization request from Warehouse Ops to Fleet Management, begins with requested status 
+    //HL: constructor - cross organization request from Warehouse Ops to Fleet Management, initial status = Requested
     public DeliveryRequest(WarehouseItem warehouseItem, int purchaseOrderId, Organization senderOrg, Organization receiverOrg){ //HL: added organization import using AltEnter
         super(senderOrg, receiverOrg, StatusConstants.REQUESTED); //HL: added StatusConstants import using AltEnter 
         this.warehouseItem = warehouseItem;
@@ -42,14 +42,9 @@ public class DeliveryRequest extends WorkRequest {
     public void markDelivered(){
         this.updateStatus(StatusConstants.DELIVERED);
         //HL: fleet management becomes sender, retail becomes receiver 
-        /* 
-        
-        TO DO: uncomment when storefrontInvetory is added to ConfigureABusiness 
-        
         ShipmentReceiptConfirmation src = new ShipmentReceiptConfirmation(this, this.getReceiverOrg(), ConfigureABusiness.storefrontInventory); 
         ConfigureABusiness.workRequestDirectory.addRequest(src);
         ConfigureABusiness.receiptDirectory.addReceipt(src);
-        */
     }
     
     //HL: getters

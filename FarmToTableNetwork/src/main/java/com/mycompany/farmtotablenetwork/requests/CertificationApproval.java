@@ -27,4 +27,29 @@ public class CertificationApproval extends WorkRequest {
         this.inspection = inspection;
         this.certifier  = "";
     }
+    
+    // certifier fills in cert type and expiry, creates the actual Certification object
+    public void approve(String certifierUsername, String certType, String expiryDate) {
+        this.certifier = certifierUsername;
+        this.updateStatus(StatusConstants.APPROVED);
+        Certification cert = new Certification(
+            this.inspection, certifierUsername, certType, expiryDate
+        );
+        ConfigureABusiness.certDirectory.addCertification(cert);
+    }
+
+    // denial is terminal — no notification sent back to the Farm
+    public void deny(String reason) {
+        this.updateStatus(StatusConstants.DENIED);
+    }
+
+    public InspectionRequest getInspection() { return inspection; }
+    public String            getCertifier()  { return certifier; }
+
+    @Override
+    public String toString() {
+        return "CertificationApproval #" + getRequestId()
+               + " — " + inspection.getBatch().getCrop().getType()
+               + " [" + getStatus() + "]";
+    }
 }

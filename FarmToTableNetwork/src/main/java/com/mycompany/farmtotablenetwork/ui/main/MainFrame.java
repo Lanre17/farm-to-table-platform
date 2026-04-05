@@ -203,15 +203,38 @@ public class MainFrame extends JFrame {
 
      */
     private void loadWorkArea(Profile profile) {
-    if (profile instanceof FarmerProfile) {
-        cardPanel.pushPanel(new FarmerWorkArea((FarmerProfile) profile, cardPanel));
-    } else {
+
+        // ── Farm ─────────────────────────────────────────
+        if (profile instanceof FarmerProfile) {
+            cardPanel.pushPanel(
+                    new FarmerWorkArea((FarmerProfile) profile, cardPanel)
+            );
+
+        // ── Retail (Lanre) ───────────────────────────────
+        } else if (profile instanceof ProcurementOfficerProfile) {
+            cardPanel.pushPanel(
+                    new ProcurementOfficerWorkArea((ProcurementOfficerProfile) profile, cardPanel)
+            ); // LY added 4/5/26
+
+        } else if (profile instanceof InventoryClerkProfile) {
+            cardPanel.pushPanel(
+                    new InventoryClerkWorkArea((InventoryClerkProfile) profile, cardPanel)
+            ); // LY added 4/5/26
+
+        
+        // ── Fallback ─────────────────────────────────────
+        } else {
             JLabel fallback = new JLabel("No work area for role: " + profile.getRole());
             fallback.setFont(UIConstants.FONT_BODY);
             fallback.setHorizontalAlignment(SwingConstants.CENTER);
-            cardPanel.pushPanel(new JPanel() {{ add(fallback); }});
+
+            JPanel panel = new JPanel();
+            panel.add(fallback);
+
+            cardPanel.pushPanel(panel);
         }
     }
+    
     /* private void loadWorkArea(Profile profile) {
         // ── Farm (Polina) ─────────────────────────────────────────────────
         if (profile instanceof FarmerProfile) {

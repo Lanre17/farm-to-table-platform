@@ -29,4 +29,10 @@ public class InspectionRequest extends WorkRequest {
         this.inspector = "";
         this.result    = "";
     }
+    
+    // inspector self-assigns from the open requests table, no admin needed
+    public void assign(String inspectorUsername) {
+        this.inspector = inspectorUsername;
+        this.updateStatus(StatusConstants.ASSIGNED);
+    }
 }

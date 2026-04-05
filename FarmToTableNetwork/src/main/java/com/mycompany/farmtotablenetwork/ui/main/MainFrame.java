@@ -205,6 +205,8 @@ public class MainFrame extends JFrame {
     private void loadWorkArea(Profile profile) {
     if (profile instanceof FarmerProfile) {
         cardPanel.pushPanel(new FarmerWorkArea((FarmerProfile) profile, cardPanel));
+    }else if (profile instanceof HarvestWorkerProfile) {
+            cardPanel.pushPanel(new HarvestWorkerWorkArea((HarvestWorkerProfile) profile, cardPanel));
     } else {
             JLabel fallback = new JLabel("No work area for role: " + profile.getRole());
             fallback.setFont(UIConstants.FONT_BODY);

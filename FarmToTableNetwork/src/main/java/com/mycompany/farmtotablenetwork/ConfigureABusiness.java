@@ -98,7 +98,7 @@ public class ConfigureABusiness {
         
         HarvestWorkerProfile hwProfile = new HarvestWorkerProfile(hwPerson, harvestAndPackaging);
         accountDirectory.newAccount("harvest1", "password", hwProfile);
-        //end of Farme & Harvest seeding block as of 4/4/26
+        //end of Farm & Harvest seeding block as of 4/4/26
         
     }
 }

@@ -209,6 +209,8 @@ public class MainFrame extends JFrame {
             cardPanel.pushPanel(
                     new FarmerWorkArea((FarmerProfile) profile, cardPanel)
             );
+        }else if (profile instanceof HarvestWorkerProfile) {
+            cardPanel.pushPanel(new HarvestWorkerWorkArea((HarvestWorkerProfile) profile, cardPanel));
 
         // ── Retail (Lanre) ───────────────────────────────
         } else if (profile instanceof ProcurementOfficerProfile) {

@@ -45,15 +45,16 @@ public class ConfigureABusiness {
     public static WorkRequestDirectory workRequestDirectory = new WorkRequestDirectory();       //ps added 4/4/26
     
     //Enterprise Directories
+    //Farm & Harvest
     public static CropDirectory cropDirectory = new CropDirectory();        //ps added 4/4/26
     public static HarvestBatchDirectory batchDirectory = new HarvestBatchDirectory();       // ps added 4/4/26
     public static ShipmentReceiptConfirmationDirectory receiptDirectory = new ShipmentReceiptConfirmationDirectory();//HL: added import using AltEnter, 4/4/26
     public static WarehouseDirectory warehouseDirectory = new WarehouseDirectory(); //HL
     public static DeliveryDirectory deliveryDirectory = new DeliveryDirectory(); //HL 
     
+    //Retail& Procurement
     // Shared in-memory storage for all retail purchase orders
     public static PurchaseOrderDirectory orderDirectory = new PurchaseOrderDirectory();  //LY added 4/4/26
-
     // Shared in-memory storage for all stocked inventory items
     public static InventoryDirectory inventoryDirectory = new InventoryDirectory(); //LY added 4/4/26
     
@@ -63,7 +64,7 @@ public class ConfigureABusiness {
     //Organization references
     public static Organization cropMgmt;                            //ps added 4/4/26
     public static Organization harvestAndPackaging;                 //ps added 4/4/26
-    public static Organization inspectionDept;                       //ps added 4/4/26
+    public static Organization inspectionDept;                      //ps added 4/4/26
     public static Organization certificationDept;                   //ps added 4/4/26
     public static Organization warehouseOps;                        //ps added 4/4/26
     public static Organization fleetMgmt;                           //ps added 4/4/26
@@ -73,20 +74,20 @@ public class ConfigureABusiness {
        
     
     public static void configure() {
-        Enterprise farmEnterprise = new Enterprise("Farm/Producer");                            //ps added 4/4/26
-        Enterprise inspectionEnterprise   = new Enterprise("Quality & Inspection Agency");      //ps added 4/4/26
-        Enterprise distributionEnterprise = new Enterprise("Distribution / Logistics Co.");     //ps added 4/4/26
-        Enterprise retailEnterprise       = new Enterprise("Retail Store / Restaurant");        //ps added 4/4/26
+        Enterprise farmEnterprise           = new Enterprise("Farm/Producer");                    //ps added 4/4/26
+        Enterprise inspectionEnterprise     = new Enterprise("Quality & Inspection Agency");      //ps added 4/4/26
+        Enterprise distributionEnterprise   = new Enterprise("Distribution / Logistics Co.");     //ps added 4/4/26
+        Enterprise retailEnterprise         = new Enterprise("Retail Store / Restaurant");        //ps added 4/4/26
 
         
-        cropMgmt = new Organization ("Crop Management", farmEnterprise.getEnterpriseId());                              //ps added 4/4/26
-        harvestAndPackaging = new Organization ("Harvest & packaging", farmEnterprise.getEnterpriseId());               //ps added 4/4/26
-        inspectionDept = new Organization("Inspection Department", inspectionEnterprise.getEnterpriseId());             //ps added 4/4/26
-        certificationDept = new Organization("Certification Department", inspectionEnterprise.getEnterpriseId());       //ps added 4/4/26
-        warehouseOps         = new Organization("Warehouse Operations", distributionEnterprise.getEnterpriseId());      //ps added 4/4/26
-        fleetMgmt            = new Organization("Fleet / Delivery Management", distributionEnterprise.getEnterpriseId());//ps added 4/4/26
-        procurement          = new Organization("Procurement / Purchasing", retailEnterprise.getEnterpriseId());        //ps added 4/4/26
-        storefrontInventory  = new Organization("Storefront / Inventory", retailEnterprise.getEnterpriseId());          //ps added 4/4/26
+        cropMgmt            = new Organization ("Crop Management", farmEnterprise.getEnterpriseId());                       //ps added 4/4/26
+        harvestAndPackaging = new Organization ("Harvest & packaging", farmEnterprise.getEnterpriseId());                   //ps added 4/4/26
+        inspectionDept      = new Organization("Inspection Department", inspectionEnterprise.getEnterpriseId());            //ps added 4/4/26
+        certificationDept   = new Organization("Certification Department", inspectionEnterprise.getEnterpriseId());         //ps added 4/4/26
+        warehouseOps        = new Organization("Warehouse Operations", distributionEnterprise.getEnterpriseId());           //ps added 4/4/26
+        fleetMgmt           = new Organization("Fleet / Delivery Management", distributionEnterprise.getEnterpriseId());    //ps added 4/4/26
+        procurement         = new Organization("Procurement / Purchasing", retailEnterprise.getEnterpriseId());             //ps added 4/4/26
+        storefrontInventory = new Organization("Storefront / Inventory", retailEnterprise.getEnterpriseId());               //ps added 4/4/26
 
         
         
@@ -114,8 +115,7 @@ public class ConfigureABusiness {
         
         HarvestWorkerProfile hwProfile = new HarvestWorkerProfile(hwPerson, harvestAndPackaging);
         accountDirectory.newAccount("harvest1", "password", hwProfile);
-        
-        
+           
         // UserAccounts for Retail roles
         Person procPerson = new Person(
                 faker.name().firstName(), faker.name().lastName(),

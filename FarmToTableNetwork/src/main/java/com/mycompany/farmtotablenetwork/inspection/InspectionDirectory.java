@@ -35,4 +35,18 @@ public class InspectionDirectory {
         }
         return result;
     }
+    
+    // shortcut for loading the open requests table in InspectorWorkArea
+    public ArrayList<InspectionRequest> getOpenRequests() {
+        return findByStatus(StatusConstants.SUBMITTED);
+    }
+
+    // filters the table to show only requests assigned to the logged-in inspector
+    public ArrayList<InspectionRequest> findByAssignedInspector(String username) {
+        ArrayList<InspectionRequest> result = new ArrayList<>();
+        for (InspectionRequest r : requests) {
+            if (username.equals(r.getInspector())) result.add(r);
+        }
+        return result;
+    }
 }

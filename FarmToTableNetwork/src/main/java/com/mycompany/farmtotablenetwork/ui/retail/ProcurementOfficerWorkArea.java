@@ -92,6 +92,9 @@ public class ProcurementOfficerWorkArea extends JPanel{
 
     // Opens the form panel for creating a new order
     private void openNewOrderPanel() {
-        JOptionPane.showMessageDialog(this, "New Order form coming next.");
+        NewOrderPanel panel = new NewOrderPanel(profile, cardPanel, this);
+        cardPanel.add(panel, "NewOrderPanel");
+        CardLayout layout = (CardLayout) cardPanel.getLayout();
+        layout.next(cardPanel);
     }
 }

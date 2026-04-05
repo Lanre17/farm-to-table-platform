@@ -8,7 +8,7 @@ import java.util.ArrayList;
 
 /**
  *
- * @author user
+ * @author Lanre
  */
 public class InventoryDirectory {
     // Stores all inventory items in the retail store

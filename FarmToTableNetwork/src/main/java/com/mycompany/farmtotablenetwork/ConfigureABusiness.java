@@ -22,6 +22,10 @@ import com.mycompany.farmtotablenetwork.retail.InventoryDirectory;
 import com.mycompany.farmtotablenetwork.retail.PurchaseOrderDirectory;
 import com.mycompany.farmtotablenetwork.inspection.CertificationDirectory;
 import com.mycompany.farmtotablenetwork.inspection.InspectionDirectory;
+import com.mycompany.farmtotablenetwork.personnel.profiles.InventoryClerkProfile;
+import com.mycompany.farmtotablenetwork.personnel.profiles.ProcurementOfficerProfile;
+import com.mycompany.farmtotablenetwork.requests.PurchaseOrder;
+import com.mycompany.farmtotablenetwork.retail.InventoryItem;
 
 
 /**
@@ -83,7 +87,7 @@ public class ConfigureABusiness {
         seedFarm();    //ps added 4/4/26
         //seedInsp
         //seedLogistics
-        //seerRetail
+        seedRetail(); // LY added 4/5/26
     }
     private static void seedFarm(){
         Faker faker = new Faker();
@@ -116,5 +120,47 @@ public class ConfigureABusiness {
         accountDirectory.newAccount("harvest1", "password", hwProfile);
         //end of Farme & Harvest seeding block as of 4/4/26
         
+    }
+
+    private static void seedRetail() {
+        Faker faker = new Faker();
+
+        // Purchase Orders seeding
+        PurchaseOrder po1 = orderDirectory.newOrder(
+                "Tomatoes", 50, "Distribution Co.", "2026-04-05", procurement, warehouseOps);
+
+        PurchaseOrder po2 = orderDirectory.newOrder(
+                "Lettuce", 30, "Distribution Co.", "2026-03-28", procurement, warehouseOps);
+
+        // move one order through the full lifecycle for demo/reporting
+        po2.confirm();
+        po2.fulfill();
+        po2.markShipped();
+        po2.receive();
+
+        // add retail requests to shared work request directory
+        workRequestDirectory.addRequest(po1);
+        workRequestDirectory.addRequest(po2);
+
+        // Inventory seeding
+        InventoryItem item1 = inventoryDirectory.newItem(
+                po2.getRequestId(), "Lettuce", 30, "Shelf A1", "2026-04-01");
+
+        // UserAccounts for Retail roles
+        Person procPerson = new Person(
+                faker.name().firstName(), faker.name().lastName(),
+                faker.internet().emailAddress(), faker.phoneNumber().cellPhone());
+
+        ProcurementOfficerProfile procProfile = new ProcurementOfficerProfile(procPerson, procurement);
+        accountDirectory.newAccount("proc1", "password", procProfile);
+
+        Person clerkPerson = new Person(
+                faker.name().firstName(), faker.name().lastName(),
+                faker.internet().emailAddress(), faker.phoneNumber().cellPhone());
+
+        InventoryClerkProfile clerkProfile = new InventoryClerkProfile(clerkPerson, storefrontInventory);
+        accountDirectory.newAccount("clerk1", "password", clerkProfile);
+
+        // end of Retail seeding block as of 4/5/26
     }
 }

@@ -18,6 +18,8 @@ import com.mycompany.farmtotablenetwork.personnel.profiles.FarmerProfile;
 import com.mycompany.farmtotablenetwork.personnel.profiles.HarvestWorkerProfile;
 import com.mycompany.farmtotablenetwork.requests.HarvestSubmission;
 import com.mycompany.farmtotablenetwork.requests.WorkRequestDirectory;
+import com.mycompany.farmtotablenetwork.retail.InventoryDirectory;
+import com.mycompany.farmtotablenetwork.retail.PurchaseOrderDirectory;
 
 /**
  *
@@ -33,6 +35,12 @@ public class ConfigureABusiness {
     public static CropDirectory cropDirectory = new CropDirectory();        //ps added 4/4/26
     public static HarvestBatchDirectory batchDirectory = new HarvestBatchDirectory();       // ps added 4/4/26
     public static ShipmentReceiptConfirmationDirectory receiptDirectory = new ShipmentReceiptConfirmationDirectory(); //HL: added import using AltEnter, 4/4/26
+    
+    // Shared in-memory storage for all retail purchase orders
+    public static PurchaseOrderDirectory orderDirectory = new PurchaseOrderDirectory();  //LY added 4/4/26
+
+    // Shared in-memory storage for all stocked inventory items
+    public static InventoryDirectory inventoryDirectory = new InventoryDirectory(); //LY added 4/4/26
     
     //Organization references
     public static Organization cropMgmt;                            //ps added 4/4/26

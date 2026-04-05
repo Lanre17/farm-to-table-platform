@@ -50,4 +50,18 @@ public class CertificationDirectory {
         }
         return result;
     }
+    
+    // called automatically from InspectionRequest.recordResult() when result is PASSED
+    public void addCertificationApproval(CertificationApproval ca) { approvals.add(ca); }
+
+    // CertifierWorkArea loads this to show the pending queue
+    public ArrayList<CertificationApproval> getPendingApprovals() {
+        ArrayList<CertificationApproval> result = new ArrayList<>();
+        for (CertificationApproval ca : approvals) {
+            if (StatusConstants.PENDING_REVIEW.equals(ca.getStatus())) result.add(ca);
+        }
+        return result;
+    }
+
+    public ArrayList<CertificationApproval> getAllApprovals() { return approvals; }
 }

@@ -20,6 +20,9 @@ import com.mycompany.farmtotablenetwork.requests.HarvestSubmission;
 import com.mycompany.farmtotablenetwork.requests.WorkRequestDirectory;
 import com.mycompany.farmtotablenetwork.retail.InventoryDirectory;
 import com.mycompany.farmtotablenetwork.retail.PurchaseOrderDirectory;
+import com.mycompany.farmtotablenetwork.inspection.CertificationDirectory;
+import com.mycompany.farmtotablenetwork.inspection.InspectionDirectory;
+
 
 /**
  *
@@ -51,6 +54,11 @@ public class ConfigureABusiness {
     public static Organization fleetMgmt;                           //ps added 4/4/26
     public static Organization procurement;                         //ps added 4/4/26
     public static Organization storefrontInventory;                 //ps added 4/4/26
+   
+    
+    
+    public static CertificationDirectory certDirectory = new CertificationDirectory(); // EC added
+    public static InspectionDirectory inspectionDirectory = new InspectionDirectory(); // EC added
        
     
     public static void configure() {

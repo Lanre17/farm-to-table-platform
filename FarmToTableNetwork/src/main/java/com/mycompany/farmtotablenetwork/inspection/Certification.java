@@ -11,16 +11,22 @@ import com.mycompany.farmtotablenetwork.ui.StatusConstants;
  *
  * @author emmanuelcroll
  */
+
+
+// NOT a WorkRequest subclass — this is the certified output artifact
+// Henry's WarehouseManager reads CertificationDirectory.findByStatus(CERTIFIED) to create WarehouseItems
+
 public class Certification {
 
-    private static int count = 0;
+    private static int count = 0; // auto-generates a unique cert ID across all instances
     private int certId;
-    private InspectionRequest inspection;
-    private String certifier;
-    private String certType;
-    private String expiryDate;
+    private InspectionRequest inspection; // the inspection that produced this cert
+    private String certifier;             // username of the certifier who approved it
+    private String certType;              // e.g. "Organic", "Standard"
+    private String expiryDate;            // format YYYY-MM-DD
     private String status;
 
+    // status starts as CERTIFIED — only created when CertificationApproval.approve() is called
     public Certification(InspectionRequest inspection, String certifier,
                          String certType, String expiryDate) {
         this.certId     = ++count;

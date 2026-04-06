@@ -141,7 +141,15 @@ public class CreateBatchPanel extends JPanel {
         ConfigureABusiness.workRequestDirectory.addRequest(ir);
 
         parent.loadTable();
-        popPanel();
+            
+        // Show success, then reset fields for another entry
+        JOptionPane.showMessageDialog(
+            this,
+            "Batch sent for inspection successfully.",
+            "Success",
+            JOptionPane.INFORMATION_MESSAGE
+        );
+        //popPanel();
     }
 
     private void popPanel() {

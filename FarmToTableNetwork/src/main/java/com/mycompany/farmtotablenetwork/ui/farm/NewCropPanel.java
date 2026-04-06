@@ -135,14 +135,26 @@ public class NewCropPanel extends JPanel {
      //cretaes new crop andreturns to Farmer Work Area
     private void onSubmit() {
         if (!validateInputs()) return;
-        ConfigureABusiness.cropDirectory.newCrop(
-            fieldType.getText().trim(),
-            fieldDate.getText().trim(),
-            fieldLocation.getText().trim()
-        );
+    ConfigureABusiness.cropDirectory.newCrop(
+        fieldType.getText().trim(),
+        fieldDate.getText().trim(),
+        fieldLocation.getText().trim()
+    );
+    parent.loadTable();
 
-        parent.loadTable();
-        popPanel();
+    // Show success, then reset fields for another entry
+    JOptionPane.showMessageDialog(
+        this,
+        "Crop saved successfully.",
+        "Success",
+        JOptionPane.INFORMATION_MESSAGE
+    );
+
+    fieldType.setText("");
+    fieldLocation.setText("");
+    fieldDate.setText("");
+    errorLabel.setText(" ");
+    fieldType.requestFocusInWindow();
     }
 
     //"Back button" navigation

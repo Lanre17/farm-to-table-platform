@@ -7,7 +7,7 @@ package com.mycompany.farmtotablenetwork.ui.farm;
 import com.mycompany.farmtotablenetwork.ConfigureABusiness;
 import com.mycompany.farmtotablenetwork.farm.HarvestBatch;
 import com.mycompany.farmtotablenetwork.requests.HarvestSubmission;
-//import com.mycompany.farmtotablenetwork.requests.InspectionRequest;
+import com.mycompany.farmtotablenetwork.requests.InspectionRequest;
 import com.mycompany.farmtotablenetwork.ui.*;
 import javax.swing.*;
 import java.awt.*;
@@ -132,13 +132,13 @@ public class CreateBatchPanel extends JPanel {
         );
 
         // Trigger InspectionRequest — cross-enterprise handoff to Emmanuel's Inspector
-        //InspectionRequest ir = new InspectionRequest(
-            //batch,
-            //ConfigureABusiness.harvestAndPackaging,
-            //ConfigureABusiness.inspectionDept
-        //);
-       // ConfigureABusiness.inspectionDirectory.addInspectionRequest(ir);
-      //  ConfigureABusiness.workRequestDirectory.addRequest(ir);
+        InspectionRequest ir = new InspectionRequest(
+            batch,
+            ConfigureABusiness.harvestAndPackaging,
+            ConfigureABusiness.inspectionDept
+        );
+       ConfigureABusiness.inspectionDirectory.addInspectionRequest(ir);
+        ConfigureABusiness.workRequestDirectory.addRequest(ir);
 
         parent.loadTable();
         popPanel();

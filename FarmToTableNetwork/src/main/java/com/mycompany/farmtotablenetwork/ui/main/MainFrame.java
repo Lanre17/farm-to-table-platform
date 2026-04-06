@@ -34,8 +34,8 @@ import java.awt.event.*;
 
 public class MainFrame extends JFrame {
 
-    private final UserAccountDirectory accountDirectory; 
-    private final CardSequencePanel    cardPanel;
+    private final UserAccountDirectory  accountDirectory; 
+    private final CardSequencePanel     cardPanel;
     
     /*final on a field means the reference can only be assigned once when the object is constructed
     accountDirectory and cardPanel are passed in through the constructor and should never be swapped out 
@@ -44,9 +44,9 @@ public class MainFrame extends JFrame {
 
     // Login components
 
-    private JTextField  usernameField;
-    private JPasswordField passwordField;
-    private JLabel      messageLabel; // make the message label reusable 
+    private JTextField              usernameField;
+    private JPasswordField          passwordField;
+    private JLabel                  messageLabel; // make the message label reusable 
 
     public MainFrame(UserAccountDirectory accountDirectory) {
         this.accountDirectory = accountDirectory;
@@ -68,7 +68,6 @@ public class MainFrame extends JFrame {
             JSplitPane.HORIZONTAL_SPLIT, loginPanel, cardPanel
         );
 
-        splitPane.setDividerLocation(280);
         splitPane.setDividerSize(1);
         splitPane.setResizeWeight(0.0);
         add(splitPane, BorderLayout.CENTER);
@@ -127,7 +126,11 @@ public class MainFrame extends JFrame {
         passwordField.setPreferredSize(new Dimension(0, UIConstants.FIELD_HEIGHT));
 
         // Allow Enter key to submit
-        passwordField.addActionListener(e -> handleLogin());
+        passwordField.addActionListener(e -> {
+        if (passwordField.getPassword().length > 0) 
+            handleLogin();
+        }
+        );
         panel.add(passwordField, gbc);
 
         // Login button
@@ -158,7 +161,7 @@ public class MainFrame extends JFrame {
         panel.add(Box.createVerticalGlue(), gbc);
         return panel;
     }
-
+    
     private void handleLogin() {
 
         String username = usernameField.getText().trim();
@@ -171,7 +174,7 @@ public class MainFrame extends JFrame {
         }
 
         UserAccount account = accountDirectory.authenticate(username, password);
-        //validation methods if crdentials are wrong
+        //validation methods if credentials are wrong
         if (account == null) {
             messageLabel.setText("Invalid credentials.");
             passwordField.setText("");

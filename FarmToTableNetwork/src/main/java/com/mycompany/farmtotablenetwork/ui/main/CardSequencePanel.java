@@ -22,6 +22,8 @@ public class CardSequencePanel extends JPanel {
             String name = String.valueOf(System.nanoTime());
             this.add(panel, name);
             ((CardLayout) this.getLayout()).show(this, name);
+            this.revalidate();
+            this.repaint();
         }
     
     //method to remove a panel aka go back

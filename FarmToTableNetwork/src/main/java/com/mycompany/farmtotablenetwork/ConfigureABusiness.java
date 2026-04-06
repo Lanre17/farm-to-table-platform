@@ -32,6 +32,8 @@ import com.mycompany.farmtotablenetwork.personnel.profiles.ProcurementOfficerPro
 import com.mycompany.farmtotablenetwork.personnel.profiles.WarehouseManagerProfile;
 import com.mycompany.farmtotablenetwork.requests.PurchaseOrder;
 import com.mycompany.farmtotablenetwork.retail.InventoryItem;
+import com.mycompany.farmtotablenetwork.requests.InspectionRequest;
+import com.mycompany.farmtotablenetwork.requests.CertificationApproval;
 
 
 /**
@@ -93,7 +95,7 @@ public class ConfigureABusiness {
         
         seedAuth(); //HL
         seedFarm();    //ps added 4/4/26
-        //seedInsp
+        seedInspection(); // EC 
         seedDistribution(); //HL
         seedRetail(); // LY added 4/5/26
     }
@@ -208,6 +210,35 @@ public class ConfigureABusiness {
         
         // end of Retail seeding block as of 4/5/26
     }
+    
+    private static void seedInspection() {
+    // get the tomato batch Polina seeded in seedFarm()
+    HarvestBatch seedBatch = batchDirectory.findBatch(1);
+
+    if (seedBatch != null) {
+        // create an InspectionRequest that is already Passed for the demo
+        InspectionRequest passedRequest = new InspectionRequest(
+            seedBatch, harvestAndPackaging, inspectionDept
+        );
+        passedRequest.assign("inspector1");
+
+        // using updateStatus directly instead of recordResult() to avoid
+        // auto-creating a CertificationApproval — we create it manually below
+        passedRequest.updateStatus(com.mycompany.farmtotablenetwork.ui.StatusConstants.PASSED);
+        inspectionDirectory.addInspectionRequest(passedRequest);
+        workRequestDirectory.addRequest(passedRequest);
+
+        // create the CertificationApproval manually for this seeded path
+        CertificationApproval seedApproval = new CertificationApproval(
+            passedRequest, inspectionDept, certificationDept
+        );
+
+        // approve directly — creates a Certification Henry uses in seedDistribution()
+        seedApproval.approve("certifier1", "Organic", "2027-01-01");
+        certDirectory.addCertificationApproval(seedApproval);
+        workRequestDirectory.addRequest(seedApproval);
+    }
+}
 
     
 

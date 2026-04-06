@@ -7,18 +7,22 @@ package com.mycompany.farmtotablenetwork.ui.retail;
 import com.mycompany.farmtotablenetwork.ConfigureABusiness;
 import com.mycompany.farmtotablenetwork.personnel.profiles.ProcurementOfficerProfile;
 import com.mycompany.farmtotablenetwork.requests.PurchaseOrder;
+import com.mycompany.farmtotablenetwork.ui.UIConstants;
+import com.mycompany.farmtotablenetwork.ui.UIFactory;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
-import java.awt.Color;
 import java.awt.FlowLayout;
-import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 import javax.swing.BorderFactory;
+import javax.swing.Box;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 
 /**
@@ -42,76 +46,79 @@ public class NewOrderPanel extends JPanel {
         this.parent = parent;
 
         setLayout(new BorderLayout());
+        setBackground(UIConstants.BG_APP);
         buildUI();
     }
 
     private void buildUI() {
 
-        JLabel title = new JLabel("New Purchase Order");
-        title.setFont(new Font("SansSerif", Font.BOLD, 20));
-        title.setBorder(BorderFactory.createEmptyBorder(15, 15, 10, 15));
-        add(title, BorderLayout.NORTH);
+        add(UIFactory.headerSimple("New Purchase Order"), BorderLayout.NORTH);
 
-        JPanel formPanel = new JPanel(new GridBagLayout());
-        formPanel.setBorder(BorderFactory.createEmptyBorder(20, 40, 20, 40));
+        JPanel formOuter = new JPanel(new BorderLayout());
+        formOuter.setBackground(UIConstants.BG_APP);
+        formOuter.setBorder(BorderFactory.createEmptyBorder(
+                UIConstants.PADDING, UIConstants.PADDING * 3,
+                UIConstants.PADDING, UIConstants.PADDING * 3
+        ));
+
+        JPanel card = new JPanel(new GridBagLayout());
+        card.setBackground(UIConstants.BG_PANEL);
+        card.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(UIConstants.BORDER_LIGHT),
+                BorderFactory.createEmptyBorder(
+                        UIConstants.PADDING, UIConstants.PADDING,
+                        UIConstants.PADDING, UIConstants.PADDING
+                )
+        ));
 
         GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(8, 8, 8, 8);
+        gbc.insets = new Insets(6, 8, 6, 8);
         gbc.anchor = GridBagConstraints.WEST;
+
+        int row = 0;
+        gbc.gridx = 0;
+        gbc.gridy = row++;
+        gbc.gridwidth = 2;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        card.add(UIFactory.sectionDivider("Order Details"), gbc);
+        gbc.gridwidth = 1;
+
+        fieldProduct = UIFactory.labeledField(card, gbc, "Product Name *", row++);
+        fieldQty = UIFactory.labeledField(card, gbc, "Quantity *", row++);
+        fieldDistributor = UIFactory.labeledField(card, gbc, "Distributor *", row++);
+        fieldDate = UIFactory.labeledField(card, gbc, "Requested Date * (YYYY-MM-DD)", row++);
+
+        gbc.gridx = 0;
+        gbc.gridy = row++;
+        gbc.gridwidth = 2;
+        gbc.weighty = 1;
+        gbc.fill = GridBagConstraints.BOTH;
+        card.add(Box.createVerticalGlue(), gbc);
+        gbc.weighty = 0;
+
+        gbc.gridx = 0;
+        gbc.gridy = row++;
+        gbc.gridwidth = 2;
         gbc.fill = GridBagConstraints.HORIZONTAL;
 
-        // Product Name
-        gbc.gridx = 0;
-        gbc.gridy = 0;
-        formPanel.add(new JLabel("Product Name:"), gbc);
+        errorLabel = UIFactory.errorLabel();
+        card.add(errorLabel, gbc);
 
-        fieldProduct = new JTextField(20);
-        gbc.gridx = 1;
-        formPanel.add(fieldProduct, gbc);
+        formOuter.add(card, BorderLayout.CENTER);
 
-        // Quantity
-        gbc.gridx = 0;
-        gbc.gridy = 1;
-        formPanel.add(new JLabel("Quantity:"), gbc);
+        JScrollPane scroll = new JScrollPane(formOuter);
+        scroll.setBorder(null);
+        scroll.getViewport().setBackground(UIConstants.BG_APP);
+        add(scroll, BorderLayout.CENTER);
 
-        fieldQty = new JTextField(20);
-        gbc.gridx = 1;
-        formPanel.add(fieldQty, gbc);
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 8, UIConstants.PADDING));
+        buttonPanel.setBackground(UIConstants.BG_APP);
+        buttonPanel.setBorder(BorderFactory.createMatteBorder(1, 0, 0, 0, UIConstants.BORDER_LIGHT));
 
-        // Distributor
-        gbc.gridx = 0;
-        gbc.gridy = 2;
-        formPanel.add(new JLabel("Distributor:"), gbc);
-
-        fieldDistributor = new JTextField(20);
-        gbc.gridx = 1;
-        formPanel.add(fieldDistributor, gbc);
-
-        // Requested Date
-        gbc.gridx = 0;
-        gbc.gridy = 3;
-        formPanel.add(new JLabel("Requested Date (YYYY-MM-DD):"), gbc);
-
-        fieldDate = new JTextField(20);
-        gbc.gridx = 1;
-        formPanel.add(fieldDate, gbc);
-
-        // Error Label
-        errorLabel = new JLabel(" ");
-        errorLabel.setForeground(Color.RED);
-        gbc.gridx = 0;
-        gbc.gridy = 4;
-        gbc.gridwidth = 2;
-        formPanel.add(errorLabel, gbc);
-
-        add(formPanel, BorderLayout.CENTER);
-
-        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-
-        JButton btnBack = new JButton("Back");
+        JButton btnBack = UIFactory.secondaryButton("← Back");
         btnBack.addActionListener(e -> goBack());
 
-        JButton btnSubmit = new JButton("Place Order");
+        JButton btnSubmit = UIFactory.primaryButton("Place Order");
         btnSubmit.addActionListener(e -> submitOrder());
 
         buttonPanel.add(btnBack);
@@ -143,8 +150,15 @@ public class NewOrderPanel extends JPanel {
             return false;
         }
 
-        if (!fieldDate.getText().trim().matches("\\d{4}-\\d{2}-\\d{2}")) {
-            errorLabel.setText("Requested date must be in YYYY-MM-DD format.");
+        try {
+            LocalDate requestedDate = LocalDate.parse(fieldDate.getText().trim());
+
+            if (!requestedDate.isAfter(LocalDate.now())) {
+                errorLabel.setText("Requested date must be in the future.");
+                return false;
+            }
+        } catch (DateTimeParseException ex) {
+            errorLabel.setText("Requested date must be a valid date in YYYY-MM-DD format.");
             return false;
         }
 

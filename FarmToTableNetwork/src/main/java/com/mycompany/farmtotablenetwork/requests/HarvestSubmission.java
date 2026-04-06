@@ -29,15 +29,17 @@ public class HarvestSubmission extends WorkRequest {
     Approval of a `HarvestSubmission` does **not** auto-create the batch. 
     The Harvest Worker fills a separate form pre-filled with the crop reference, 
     and enters quantity, grade, and packaging type manually. This is an intentional
-    design dcision given the time constraints. We may add this asan improvment if we are
+    design decision given the time constraints. We may add this as an improvment if we are
     ahead of schedule.*/
     
     public void approve(){
         updateStatus(StatusConstants.APPROVED);
+        crop.setStatus(StatusConstants.APPROVED);
     }
     
     public void reject(){
         updateStatus(StatusConstants.REJECTED);
+        crop.setStatus(StatusConstants.REJECTED);
     }
 
     public Crop getCrop() {

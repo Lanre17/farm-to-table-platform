@@ -9,29 +9,30 @@ import com.mycompany.farmtotablenetwork.personnel.profiles.HarvestWorkerProfile;
 import com.mycompany.farmtotablenetwork.requests.HarvestSubmission;
 import com.mycompany.farmtotablenetwork.requests.WorkRequest;
 import com.mycompany.farmtotablenetwork.ui.*;
+import com.mycompany.farmtotablenetwork.ui.main.CardSequencePanel;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
-import java.util.ArrayList;
 /**
  *
  * @author p.starobinets
  */
 public class HarvestWorkerWorkArea extends JPanel {
     private final HarvestWorkerProfile profile;
-    private final JPanel cardPanel;
+    private final CardSequencePanel cardPanel;
 
     private DefaultTableModel tableModel;
     private JTable  table;
     private JButton btnApprove;
     private JButton btnCreateBatch;
+    private JButton btnReject;
 
     private static final String[] COLUMNS = {
         "Submission", "Crop", "Estimated Qty (kg)", "Submitted By", "Status"
         // Col 0: HarvestSubmission object
     };
 
-    public HarvestWorkerWorkArea(HarvestWorkerProfile profile, JPanel cardPanel) {
+    public HarvestWorkerWorkArea(HarvestWorkerProfile profile, CardSequencePanel cardPanel) {
         this.profile   = profile;
         this.cardPanel = cardPanel;
         setLayout(new BorderLayout());
@@ -55,6 +56,8 @@ public class HarvestWorkerWorkArea extends JPanel {
                     && StatusConstants.SUBMITTED.equals(sel.getStatus()));
                 btnCreateBatch.setEnabled(sel != null
                     && StatusConstants.APPROVED.equals(sel.getStatus()));
+                btnReject.setEnabled(sel != null
+                    && StatusConstants.SUBMITTED.equals(sel.getStatus()));
             }
         });
 
@@ -71,14 +74,18 @@ public class HarvestWorkerWorkArea extends JPanel {
 
         btnApprove     = UIFactory.primaryButton("Approve");
         btnCreateBatch = UIFactory.primaryButton("Create Batch");
+        btnReject = UIFactory.primaryButton("Reject");
         btnApprove.setEnabled(false);
         btnCreateBatch.setEnabled(false);
+        btnReject.setEnabled(false);
 
         btnApprove.addActionListener(e     -> onApprove());
         btnCreateBatch.addActionListener(e -> pushCreateBatchPanel());
+        btnReject.addActionListener(e -> onReject());
 
         btnBar.add(btnCreateBatch);
         btnBar.add(btnApprove);
+        btnBar.add(btnReject);
         add(btnBar, BorderLayout.SOUTH);
     }
 
@@ -114,9 +121,14 @@ public class HarvestWorkerWorkArea extends JPanel {
     private void pushCreateBatchPanel() {
         HarvestSubmission sub = getSelected();
         if (sub == null) return;
-        CreateBatchPanel p = new CreateBatchPanel(sub, cardPanel, this);
-        cardPanel.add(p, "createBatch");
-        ((CardLayout) cardPanel.getLayout()).show(cardPanel, "createBatch");
+        cardPanel.pushPanel(new CreateBatchPanel(sub, cardPanel, this));
+    }
+
+    private void onReject() {
+        HarvestSubmission sub = getSelected();
+         if (sub == null) return;
+        sub.reject();
+        loadTable();
     }
     
 }

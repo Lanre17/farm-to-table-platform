@@ -9,6 +9,7 @@ import com.mycompany.farmtotablenetwork.farm.HarvestBatch;
 import com.mycompany.farmtotablenetwork.requests.HarvestSubmission;
 import com.mycompany.farmtotablenetwork.requests.InspectionRequest;
 import com.mycompany.farmtotablenetwork.ui.*;
+import com.mycompany.farmtotablenetwork.ui.main.CardSequencePanel;
 import javax.swing.*;
 import java.awt.*;
 /**
@@ -17,7 +18,7 @@ import java.awt.*;
  */
 public class CreateBatchPanel extends JPanel {
     private final HarvestSubmission    submission;
-    private final JPanel               cardPanel;
+    private final CardSequencePanel    cardPanel;
     private final HarvestWorkerWorkArea parent;
 
     private JTextField        fieldQty;
@@ -26,7 +27,7 @@ public class CreateBatchPanel extends JPanel {
     private JLabel            errorLabel;
 
     public CreateBatchPanel(HarvestSubmission submission,
-                             JPanel cardPanel, HarvestWorkerWorkArea parent) {
+                             CardSequencePanel cardPanel, HarvestWorkerWorkArea parent) {
         this.submission = submission;
         this.cardPanel  = cardPanel;
         this.parent     = parent;
@@ -137,9 +138,11 @@ public class CreateBatchPanel extends JPanel {
             ConfigureABusiness.harvestAndPackaging,
             ConfigureABusiness.inspectionDept
         );
-       ConfigureABusiness.inspectionDirectory.addInspectionRequest(ir);
+        ConfigureABusiness.inspectionDirectory.addInspectionRequest(ir);
         ConfigureABusiness.workRequestDirectory.addRequest(ir);
-
+        submission.updateStatus(StatusConstants.INSPECTION_REQUESTED);
+        submission.getCrop().setStatus(StatusConstants.INSPECTION_REQUESTED);
+        
         parent.loadTable();
             
         // Show success, then reset fields for another entry
@@ -149,12 +152,10 @@ public class CreateBatchPanel extends JPanel {
             "Success",
             JOptionPane.INFORMATION_MESSAGE
         );
-        //popPanel();
+        popPanel();
     }
 
     private void popPanel() {
-        cardPanel.remove(this);
-        ((CardLayout) cardPanel.getLayout()).show(cardPanel,
-            cardPanel.getComponent(cardPanel.getComponentCount() - 1).getName());
+        cardPanel.popPanel(this);
     }
 }

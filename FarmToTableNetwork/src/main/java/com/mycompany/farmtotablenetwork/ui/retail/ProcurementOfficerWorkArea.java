@@ -8,6 +8,7 @@ import com.mycompany.farmtotablenetwork.ConfigureABusiness;
 import com.mycompany.farmtotablenetwork.personnel.profiles.ProcurementOfficerProfile;
 import com.mycompany.farmtotablenetwork.requests.PurchaseOrder;
 import com.mycompany.farmtotablenetwork.ui.UIConstants;
+import com.mycompany.farmtotablenetwork.ui.UIFactory;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Color;
@@ -40,7 +41,7 @@ public class ProcurementOfficerWorkArea extends JPanel{
         this.cardPanel = cardPanel;
 
         setLayout(new BorderLayout());
-        setBackground(Color.WHITE);
+        setBackground(UIConstants.BG_APP);
 
         buildUI();
         loadTable();
@@ -48,10 +49,11 @@ public class ProcurementOfficerWorkArea extends JPanel{
 
     private void buildUI() {
 
-        JLabel title = new JLabel("Procurement Officer Work Area");
-        title.setFont(UIConstants.FONT_HEADER_TITLE);
-        title.setBorder(BorderFactory.createEmptyBorder(15, 15, 10, 15));
-        add(title, BorderLayout.NORTH);
+        add(UIFactory.header(
+                "Procurement / Purchasing",
+                profile.getPerson().getFullName(),
+                profile.getRole()
+        ), BorderLayout.NORTH);
 
         String[] columns = {"Order", "Product", "Qty", "Distributor", "Requested Date", "Status"};
 
@@ -62,16 +64,31 @@ public class ProcurementOfficerWorkArea extends JPanel{
             }
         };
 
-        orderTable = new JTable(tableModel);
-        JScrollPane scrollPane = new JScrollPane(orderTable);
-        add(scrollPane, BorderLayout.CENTER);
+        orderTable = UIFactory.styledTable(tableModel);
 
-        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-        btnNewOrder = new JButton("New Order");
+        JPanel center = new JPanel(new BorderLayout());
+        center.setBackground(UIConstants.BG_APP);
+        center.setBorder(BorderFactory.createEmptyBorder(
+                UIConstants.PADDING,
+                UIConstants.PADDING,
+                0,
+                UIConstants.PADDING
+        ));
+
+        center.add(UIFactory.tableScrollPane(orderTable), BorderLayout.CENTER);
+        add(center, BorderLayout.CENTER);
+
+        JPanel btnBar = new JPanel(new FlowLayout(FlowLayout.RIGHT, 8, UIConstants.PADDING));
+        btnBar.setBackground(UIConstants.BG_APP);
+        btnBar.setBorder(BorderFactory.createMatteBorder(
+                1, 0, 0, 0, UIConstants.BORDER_LIGHT
+        ));
+
+        btnNewOrder = UIFactory.primaryButton("+ New Order");
         btnNewOrder.addActionListener(e -> openNewOrderPanel());
-        buttonPanel.add(btnNewOrder);
+        btnBar.add(btnNewOrder);
 
-        add(buttonPanel, BorderLayout.SOUTH);
+        add(btnBar, BorderLayout.SOUTH);
     }
 
     // Loads all seeded and newly created purchase orders into the table

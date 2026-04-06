@@ -206,10 +206,10 @@ public class ConfigureABusiness {
         // Inventory seeding
         InventoryItem item1 = inventoryDirectory.newItem(
                 po2.getRequestId(), "Lettuce", 30, "Shelf A1", "2026-04-01");
-
-        
+       
         // end of Retail seeding block as of 4/5/26
     }
+ 
     
     private static void seedInspection() {
     // get the tomato batch Polina seeded in seedFarm()

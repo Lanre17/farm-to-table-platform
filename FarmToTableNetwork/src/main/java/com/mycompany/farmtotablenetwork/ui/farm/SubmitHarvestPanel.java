@@ -7,8 +7,10 @@ package com.mycompany.farmtotablenetwork.ui.farm;
 import com.mycompany.farmtotablenetwork.ConfigureABusiness;
 import com.mycompany.farmtotablenetwork.farm.Crop;
 import com.mycompany.farmtotablenetwork.requests.HarvestSubmission;
+import com.mycompany.farmtotablenetwork.ui.StatusConstants;
 import com.mycompany.farmtotablenetwork.ui.UIConstants;
 import com.mycompany.farmtotablenetwork.ui.UIFactory;
+import com.mycompany.farmtotablenetwork.ui.main.CardSequencePanel;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.FlowLayout;
@@ -22,12 +24,12 @@ import javax.swing.*;
  */
 public class SubmitHarvestPanel extends JPanel {
     private Crop crop;
-    private final JPanel cardPanel;
+    private final CardSequencePanel cardPanel;
     private final FarmerWorkArea parent;
     private JTextField fieldQty;
     private JLabel errorLabel;
     
-    public SubmitHarvestPanel(Crop crop, JPanel cardPanel, FarmerWorkArea parent){
+    public SubmitHarvestPanel(Crop crop, CardSequencePanel cardPanel, FarmerWorkArea parent){
         this.cardPanel = cardPanel;
         this.parent = parent;
         this.crop = crop;
@@ -130,15 +132,23 @@ public class SubmitHarvestPanel extends JPanel {
                 ConfigureABusiness.cropMgmt,
                 ConfigureABusiness.harvestAndPackaging);
         ConfigureABusiness.workRequestDirectory.addRequest(sub);
+        crop.setStatus(StatusConstants.SUBMITTED);
         parent.loadTable();
+        
+        // Show success
+        JOptionPane.showMessageDialog(
+            this,
+        "Harvest submitted successfully.",
+        "Success",
+        JOptionPane.INFORMATION_MESSAGE
+        );
         popPanel();
+        
     }
 
         //Back button
     private void popPanel() {
-        cardPanel.remove(this);
-        ((CardLayout) cardPanel.getLayout()).show(cardPanel,
-        cardPanel.getComponent(cardPanel.getComponentCount() - 1).getName());    
+        cardPanel.popPanel(this);
     }
 
 

@@ -5,6 +5,7 @@
 package com.mycompany.farmtotablenetwork.ui.farm;
 import com.mycompany.farmtotablenetwork.ConfigureABusiness;
 import com.mycompany.farmtotablenetwork.ui.*;
+import com.mycompany.farmtotablenetwork.ui.main.CardSequencePanel;
 import javax.swing.*;
 import java.awt.*;
 
@@ -13,14 +14,14 @@ import java.awt.*;
  * @author p.starobinets
  */
 public class NewCropPanel extends JPanel {
-    private final JPanel cardPanel;
+    private final CardSequencePanel cardPanel;
     private final FarmerWorkArea parent;
     private JTextField fieldType;
     private JTextField fieldLocation;
     private JTextField fieldDate;
     private JLabel errorLabel;
     
-    public NewCropPanel(JPanel cardPanel, FarmerWorkArea parent){
+    public NewCropPanel(CardSequencePanel cardPanel, FarmerWorkArea parent){
         this.cardPanel = cardPanel;
         this.parent = parent;
         setLayout(new BorderLayout());
@@ -159,9 +160,7 @@ public class NewCropPanel extends JPanel {
 
     //"Back button" navigation
     private void popPanel() {
-        cardPanel.remove(this);
-        ((CardLayout) cardPanel.getLayout()).show(cardPanel,
-            cardPanel.getComponent(cardPanel.getComponentCount() - 1).getName());
+        cardPanel.popPanel(this);
     }
 
 }

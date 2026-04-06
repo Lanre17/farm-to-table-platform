@@ -7,6 +7,7 @@ import com.mycompany.farmtotablenetwork.ConfigureABusiness;
 import com.mycompany.farmtotablenetwork.farm.*;
 import com.mycompany.farmtotablenetwork.personnel.profiles.FarmerProfile;
 import com.mycompany.farmtotablenetwork.ui.*;
+import com.mycompany.farmtotablenetwork.ui.main.CardSequencePanel;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
@@ -17,7 +18,7 @@ import java.awt.*;
  */
 public class FarmerWorkArea  extends JPanel {
     private final FarmerProfile profile;
-    private final JPanel cardPanel;
+    private final CardSequencePanel cardPanel;
     private DefaultTableModel tableModel;
     private JTable table;
     private JButton btnNewCrop;
@@ -26,7 +27,7 @@ public class FarmerWorkArea  extends JPanel {
         "Crop ID", "Type", "Field Location", "Planting Date", "Status"
         // Col 0 is Crop object stored for row-click retrieval. this is what @Override to String is for in the Crop.java
     };
-    public FarmerWorkArea(FarmerProfile profile, JPanel cardPanel){
+    public FarmerWorkArea(FarmerProfile profile, CardSequencePanel cardPanel){
         this.profile = profile;
         this.cardPanel = cardPanel;
         
@@ -101,18 +102,14 @@ public class FarmerWorkArea  extends JPanel {
     
          
     private void pushNewCropPanel() {
-        NewCropPanel p = new NewCropPanel(cardPanel, this);
-        cardPanel.add(p,"newCrop");
-        ((CardLayout)cardPanel.getLayout()).show(cardPanel,"newCrop");
+        cardPanel.pushPanel(new NewCropPanel(cardPanel, this));
     }
 
     private void pushSubmitHarvestPanel() {
         Crop selected = getSelectedCrop();
         if(selected == null)
             return;
-        SubmitHarvestPanel p = new SubmitHarvestPanel (selected, cardPanel, this);
-        cardPanel.add(p,"submitHarvest");
-        ((CardLayout)cardPanel.getLayout()).show(cardPanel,"submitHarvest");
+        cardPanel.pushPanel(new SubmitHarvestPanel(selected, cardPanel, this));
     }
     
     public String getName() {

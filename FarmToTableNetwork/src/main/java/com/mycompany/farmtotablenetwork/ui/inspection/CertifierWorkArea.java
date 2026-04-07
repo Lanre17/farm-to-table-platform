@@ -104,5 +104,12 @@ public class CertifierWorkArea extends JPanel {
             });
         }
     }
+    
+    private CertificationApproval getSelected() {
+        int row = table.getSelectedRow();
+        if (row < 0) return null;
+        return (CertificationApproval) tableModel.getValueAt(row, 0);
+    }
+
 
 }

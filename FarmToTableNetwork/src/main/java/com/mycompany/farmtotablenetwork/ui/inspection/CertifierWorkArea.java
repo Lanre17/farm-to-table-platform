@@ -91,5 +91,18 @@ public class CertifierWorkArea extends JPanel {
         btnBar.add(btnApprove);
         add(btnBar, BorderLayout.SOUTH);
     }
+    
+    public void loadTable() {
+        tableModel.setRowCount(0);
+        for (CertificationApproval ca : ConfigureABusiness.certDirectory.getAllApprovals()) {
+            tableModel.addRow(new Object[]{
+                ca,                                      // col 0 — object stored for retrieval
+                ca.getInspection().getBatch().getCrop().getType(),
+                ca.getInspection().getInspector(),
+                ca.getInspection().getCreatedAt(),
+                ca.getStatus()
+            });
+        }
+    }
 
 }

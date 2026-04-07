@@ -106,5 +106,19 @@ public class RecordResultPanel extends JPanel {
         btnBar.add(btnSubmit);
         add(btnBar, BorderLayout.SOUTH);
     }
+    
+    private void onSubmit() {
+        String result = (String) comboResult.getSelectedItem();
+        // recordResult handles auto-creating CertificationApproval on Pass
+        // and terminal status on Fail — no extra logic needed here
+        request.recordResult(result);
+        parent.loadTable();
+        popPanel();
+    }
+
+    private void popPanel() {
+        cardPanel.popPanel(this);
+    }
+
 
 }

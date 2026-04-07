@@ -214,6 +214,12 @@ public class MainFrame extends JFrame {
             );
         }else if (profile instanceof HarvestWorkerProfile) {
             cardPanel.pushPanel(new HarvestWorkerWorkArea((HarvestWorkerProfile) profile, cardPanel));
+            
+            // ── Inspection (Emmanuel) ────────────────────────────────────────
+        } else if (profile instanceof InspectorProfile) {
+            cardPanel.pushPanel(new InspectorWorkArea((InspectorProfile) profile, cardPanel));
+        } else if (profile instanceof CertifierProfile) {
+            cardPanel.pushPanel(new CertifierWorkArea((CertifierProfile) profile, cardPanel));
 
         // ── Retail (Lanre) ───────────────────────────────
         } else if (profile instanceof ProcurementOfficerProfile) {

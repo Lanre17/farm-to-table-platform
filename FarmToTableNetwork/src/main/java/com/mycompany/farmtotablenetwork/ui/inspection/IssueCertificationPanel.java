@@ -108,4 +108,33 @@ public class IssueCertificationPanel extends JPanel {
         btnBar.add(btnSubmit);
         add(btnBar, BorderLayout.SOUTH);
     }
+    
+    private boolean validate() {
+        if (fieldCertType.getText().trim().isEmpty()) {
+            errorLabel.setText("⚠ Cert Type is required.");
+            return false;
+        }
+        if (!fieldExpiry.getText().trim().matches("\\d{4}-\\d{2}-\\d{2}")) {
+            errorLabel.setText("⚠ Expiry must be YYYY-MM-DD.");
+            return false;
+        }
+        errorLabel.setText(" ");
+        return true;
+    }
+
+    private void onSubmit() {
+        if (!validate()) return;
+        // approve() creates the Certification and adds it to certDirectory
+        approval.approve(
+            profile.getPerson().getFullName(),
+            fieldCertType.getText().trim(),
+            fieldExpiry.getText().trim()
+        );
+        parent.loadTable();
+        popPanel();
+    }
+
+    private void popPanel() {
+        cardPanel.popPanel(this);
+    }
 }

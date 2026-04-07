@@ -110,6 +110,19 @@ public class CertifierWorkArea extends JPanel {
         if (row < 0) return null;
         return (CertificationApproval) tableModel.getValueAt(row, 0);
     }
+// pushes IssueCertificationPanel for the certifier to fill in cert details
+    private void pushIssueCertPanel() {
+        CertificationApproval selected = getSelected();
+        if (selected == null) return;
+        cardPanel.pushPanel(new IssueCertificationPanel(selected, profile, cardPanel, this));
+    }
 
-
+    // deny is inline — no push panel, just updates status and refreshes table
+    private void onDeny() {
+        CertificationApproval selected = getSelected();
+        if (selected == null) return;
+        selected.deny("Denied by certifier");
+        loadTable();
+    }
 }
+

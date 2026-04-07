@@ -109,7 +109,7 @@ public class IssueCertificationPanel extends JPanel {
         add(btnBar, BorderLayout.SOUTH);
     }
     
-    private boolean validate() {
+    private boolean validateInputs() {
         if (fieldCertType.getText().trim().isEmpty()) {
             errorLabel.setText("⚠ Cert Type is required.");
             return false;
@@ -123,7 +123,7 @@ public class IssueCertificationPanel extends JPanel {
     }
 
     private void onSubmit() {
-        if (!validate()) return;
+        if (!validateInputs()) return;
         // approve() creates the Certification and adds it to certDirectory
         approval.approve(
             profile.getPerson().getFullName(),

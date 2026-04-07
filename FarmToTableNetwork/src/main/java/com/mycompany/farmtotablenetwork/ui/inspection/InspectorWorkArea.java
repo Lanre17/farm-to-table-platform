@@ -92,5 +92,42 @@ public class InspectorWorkArea extends JPanel {
         btnBar.add(btnClaim);
         add(btnBar, BorderLayout.SOUTH);
     }
+    
 
+    public void loadTable() {
+        tableModel.setRowCount(0);
+        for (InspectionRequest r : ConfigureABusiness.inspectionDirectory.getAllRequests()) {
+            tableModel.addRow(new Object[]{
+                r,                              // col 0 — object stored for retrieval
+                r.getBatch().getCrop().getType(),
+                r.getBatch().getGrade(),
+                r.getBatch().getQuantityKg(),
+                r.getCreatedAt(),
+                r.getStatus()
+            });
+        }
+    }
+
+    private InspectionRequest getSelected() {
+        int row = table.getSelectedRow();
+        if (row < 0) return null;
+        return (InspectionRequest) tableModel.getValueAt(row, 0);
+    }
+
+    // inspector self-assigns — no admin needed
+    private void onClaim() {
+        InspectionRequest r = getSelected();
+        if (r == null) return;
+        r.assign(profile.getPerson().getFullName());
+        loadTable();
+    }
+
+    // pushes RecordResultPanel on top of this panel
+    private void onRecordResult() {
+        InspectionRequest r = getSelected();
+        if (r == null) return;
+        cardPanel.pushPanel(new RecordResultPanel(r, cardPanel, this));
+    }
 }
+
+

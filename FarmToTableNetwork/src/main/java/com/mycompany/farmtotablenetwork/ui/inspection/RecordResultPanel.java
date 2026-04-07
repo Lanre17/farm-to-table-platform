@@ -5,17 +5,35 @@
 package com.mycompany.farmtotablenetwork.ui.inspection;
 
 import com.mycompany.farmtotablenetwork.requests.InspectionRequest;
+import com.mycompany.farmtotablenetwork.ui.*;
 import com.mycompany.farmtotablenetwork.ui.main.CardSequencePanel;
-import javax.swing.JPanel;
+import javax.swing.*;
+import java.awt.*;
 
 /**
  *
  * @author emmanuelcroll
  */
 
-
-// stub — full implementation coming in 5.9
+// form panel that pushes on top of InspectorWorkArea when inspector clicks Record Result
 public class RecordResultPanel extends JPanel {
-    public RecordResultPanel(InspectionRequest request, CardSequencePanel cardPanel, InspectorWorkArea parent) {
+
+    private final InspectionRequest request;
+    private final CardSequencePanel cardPanel;
+    private final InspectorWorkArea parent;
+
+    private JComboBox<String> comboResult;
+    private JLabel errorLabel;
+
+    public RecordResultPanel(InspectionRequest request,
+                              CardSequencePanel cardPanel,
+                              InspectorWorkArea parent) {
+        this.request   = request;
+        this.cardPanel = cardPanel;
+        this.parent    = parent;
+        setLayout(new BorderLayout());
+        setBackground(UIConstants.BG_APP);
+        buildUI();
     }
+
 }

@@ -6,18 +6,36 @@ package com.mycompany.farmtotablenetwork.ui.inspection;
 
 import com.mycompany.farmtotablenetwork.personnel.profiles.CertifierProfile;
 import com.mycompany.farmtotablenetwork.requests.CertificationApproval;
+import com.mycompany.farmtotablenetwork.ui.*;
 import com.mycompany.farmtotablenetwork.ui.main.CardSequencePanel;
-import javax.swing.JPanel;
+import javax.swing.*;
+import java.awt.*;
 
 /**
  *
  * @author emmanuelcroll
  */
 
-
-// stub — full implementation coming in 5.11
+// form panel that pushes on top of CertifierWorkArea when certifier clicks Approve
 public class IssueCertificationPanel extends JPanel {
+
+    private final CertificationApproval approval;
+    private final CertifierProfile      profile;
+    private final CardSequencePanel     cardPanel;
+    private final CertifierWorkArea     parent;
+
+    private JTextField fieldCertType;
+    private JTextField fieldExpiry;
+    private JLabel     errorLabel;
+
     public IssueCertificationPanel(CertificationApproval approval, CertifierProfile profile,
                                     CardSequencePanel cardPanel, CertifierWorkArea parent) {
+        this.approval  = approval;
+        this.profile   = profile;
+        this.cardPanel = cardPanel;
+        this.parent    = parent;
+        setLayout(new BorderLayout());
+        setBackground(UIConstants.BG_APP);
+        buildUI();
     }
 }

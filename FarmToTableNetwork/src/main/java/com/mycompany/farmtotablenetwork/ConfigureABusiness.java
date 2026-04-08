@@ -8,6 +8,7 @@ import com.github.javafaker.Faker;
 import com.mycompany.farmtotablenetwork.distribution.DeliveryDirectory;
 import com.mycompany.farmtotablenetwork.distribution.ShipmentReceiptConfirmationDirectory;
 import com.mycompany.farmtotablenetwork.distribution.WarehouseDirectory;
+import com.mycompany.farmtotablenetwork.distribution.WarehouseItem;
 import com.mycompany.farmtotablenetwork.ecosystem.Enterprise;
 import com.mycompany.farmtotablenetwork.ecosystem.Organization;
 import com.mycompany.farmtotablenetwork.farm.Crop;
@@ -34,6 +35,9 @@ import com.mycompany.farmtotablenetwork.requests.PurchaseOrder;
 import com.mycompany.farmtotablenetwork.retail.InventoryItem;
 import com.mycompany.farmtotablenetwork.requests.InspectionRequest;
 import com.mycompany.farmtotablenetwork.requests.CertificationApproval;
+import com.mycompany.farmtotablenetwork.requests.DeliveryRequest;
+import com.mycompany.farmtotablenetwork.requests.ShipmentReceiptConfirmation;
+import com.mycompany.farmtotablenetwork.ui.StatusConstants;
 
 
 /**
@@ -98,6 +102,7 @@ public class ConfigureABusiness {
         seedInspection(); // EC 
         seedDistribution(); //HL
         seedRetail(); // LY added 4/5/26
+        seedReceiptTest(); // ===== Receipt test seed ===== LY added
     }
     
     private static void seedAuth() {
@@ -237,10 +242,38 @@ public class ConfigureABusiness {
         seedApproval.approve("certifier1", "Organic", "2027-01-01");
         certDirectory.addCertificationApproval(seedApproval);
         workRequestDirectory.addRequest(seedApproval);
+        }
     }
-}
-
     
+    // ===== Receipt test seed =====
+    private static void seedReceiptTest() {
 
-    
+        // Temporary test WarehouseItem for Retail receipt flow
+        WarehouseItem item = new WarehouseItem(
+                null,
+                "Lettuce",
+                20,
+                "Warehouse A"
+        );
+
+        DeliveryRequest delivery = new DeliveryRequest(
+                item,
+                101,
+                warehouseOps,
+                storefrontInventory
+        );
+
+        delivery.updateStatus(StatusConstants.DELIVERED);
+
+        ShipmentReceiptConfirmation receipt
+                = new ShipmentReceiptConfirmation(
+                        delivery,
+                        warehouseOps,
+                        storefrontInventory
+                );
+
+        workRequestDirectory.addRequest(receipt);
+
+        System.out.println("seedReceiptTest(): test receipt added successfully");
+    }
 }

@@ -14,11 +14,13 @@ import com.mycompany.farmtotablenetwork.ui.StatusConstants;
 import com.mycompany.farmtotablenetwork.ui.UIConstants;
 import com.mycompany.farmtotablenetwork.ui.UIFactory;
 import java.awt.BorderLayout;
+import java.awt.CardLayout;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
@@ -132,15 +134,25 @@ public class InventoryClerkWorkArea extends JPanel {
                 1, 0, 0, 0, UIConstants.BORDER_LIGHT
         ));
 
+        // 🔹 NEW BUTTON
+        JButton btnConfirm = UIFactory.primaryButton("Confirm Receipt");
+
+        // 🔹 EXISTING BUTTON
         JButton btnRefresh = UIFactory.secondaryButton("Refresh");
 
-        // Refresh both receipts and inventory so clerk sees latest data
+        // 🔹 ACTION (we will implement panel next step)
+        btnConfirm.addActionListener(e -> openConfirmReceiptPanel());
+
+        // 🔹 EXISTING ACTION
         btnRefresh.addActionListener(e -> {
             loadReceiptTable();
             loadInventoryTable();
         });
 
+        // 🔹 ORDER MATTERS (Confirm first, then Refresh)
+        btnBar.add(btnConfirm);
         btnBar.add(btnRefresh);
+
         add(btnBar, BorderLayout.SOUTH);
     }
 
@@ -188,5 +200,31 @@ public class InventoryClerkWorkArea extends JPanel {
                 item.getStatus()
             });
         }
+    }
+
+    // Opens panel to allow Inventory Clerk to confirm selected shipment receipt
+    private void openConfirmReceiptPanel() {
+        int selectedRow = receiptTable.getSelectedRow();
+
+        // Validate selection
+        if (selectedRow < 0) {
+            JOptionPane.showMessageDialog(this, "Please select a receipt to confirm.");
+            return;
+        }
+
+        // Get selected receipt
+        ShipmentReceiptConfirmation selectedReceipt
+                = (ShipmentReceiptConfirmation) receiptTableModel.getValueAt(selectedRow, 0);
+
+        // Open next panel
+        ConfirmReceiptPanel panel = new ConfirmReceiptPanel(
+                selectedReceipt,
+                profile,
+                cardPanel,
+                this
+        );
+
+        cardPanel.add(panel);
+        ((CardLayout) cardPanel.getLayout()).next(cardPanel);
     }
 }

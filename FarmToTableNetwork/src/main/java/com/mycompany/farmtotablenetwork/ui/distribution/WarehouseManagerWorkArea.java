@@ -46,10 +46,10 @@ public class WarehouseManagerWorkArea extends JPanel { //HL: added import using 
 
     //HL: method that populates consistent UI pattern with other roles in the ecosystem 
     private void buildUI() {
-        //HL: adds panel header w/title & user info (based on who is logged in) 
+        //HL: NORTH - adds panel header w/title & user info (based on who is logged in) 
         add(UIFactory.header("Warehouse Operations", profile.getPerson().getFullName(), profile.getRole()), BorderLayout.NORTH); 
         
-        //HL: populates table of warehouse items (center of panel) 
+        //HL: CENTER - populates table of warehouse items (center of panel) 
         tableModel = new DefaultTableModel(COLUMNS, 0){
              @Override public boolean isCellEditable(int r, int c) { return false; } //HL: ensures warehouse items in table are not editable 
         };
@@ -68,7 +68,7 @@ public class WarehouseManagerWorkArea extends JPanel { //HL: added import using 
         center.add(UIFactory.tableScrollPane(table), BorderLayout.CENTER);
         add(center, BorderLayout.CENTER);
         
-        //HL: buttons (bottom of panel) 
+        //HL: SOUTH - buttons (bottom of panel) 
         JPanel btnBar = new JPanel(new FlowLayout(FlowLayout.RIGHT, 8, UIConstants.PADDING));
         btnBar.setBackground(UIConstants.BG_APP);
         btnBar.setBorder(BorderFactory.createMatteBorder(1, 0, 0, 0, UIConstants.BORDER_LIGHT));
@@ -87,7 +87,7 @@ public class WarehouseManagerWorkArea extends JPanel { //HL: added import using 
     }
 
     //HL: method to load table in UI panel 
-    private void loadTable() {
+    public void loadTable() {
         tableModel.setRowCount(0);
         for (WarehouseItem item : ConfigureABusiness.warehouseDirectory.getAllItems()) { //HL: added ConfigureABusiness & WarehouseItem imports using AltEnter
             tableModel.addRow(new Object[]{
@@ -111,7 +111,7 @@ public class WarehouseManagerWorkArea extends JPanel { //HL: added import using 
 
     //HL: method that pushes to ReceiveBatchPanel, Warehouse Manager completes form 
     private void pushReceiveBatchPanel() {
-        
+        cardPanel.pushPanel(new ReceiveBatchPanel(cardPanel, this));
     }
 
     //HL: method that pushes to CreateDeliverPanel - passes the WarehouseItem selected in table 

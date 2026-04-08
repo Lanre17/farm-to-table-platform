@@ -6,8 +6,8 @@ package com.mycompany.farmtotablenetwork.ui.distribution;
 
 /**
  *
- * @author p.starobinets
+ * @author Hank_Local
  */
-public class NewClass {
+public class ReceiveBatchPanel {
     
 }

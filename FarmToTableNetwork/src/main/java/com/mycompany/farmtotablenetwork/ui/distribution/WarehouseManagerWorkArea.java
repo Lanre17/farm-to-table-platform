@@ -116,7 +116,9 @@ public class WarehouseManagerWorkArea extends JPanel { //HL: added import using 
 
     //HL: method that pushes to CreateDeliverPanel - passes the WarehouseItem selected in table 
     private void pushCreateDeliveryPanel() {
-        
+        WarehouseItem selected = getSelected();
+        if (selected == null) return;
+        cardPanel.pushPanel(new CreateDeliveryPanel(selected, cardPanel, this));
     }
     
 }

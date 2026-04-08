@@ -220,6 +220,12 @@ public class MainFrame extends JFrame {
             cardPanel.pushPanel(new InspectorWorkArea((InspectorProfile) profile, cardPanel));
         } else if (profile instanceof CertifierProfile) {
             cardPanel.pushPanel(new CertifierWorkArea((CertifierProfile) profile, cardPanel));
+        
+        //── Distribution (Henry) ─────────────────────────────────────────
+        } else if (profile instanceof WarehouseManagerProfile) {
+            cardPanel.pushPanel(new WarehouseManagerWorkArea((WarehouseManagerProfile) profile, cardPanel));
+        } else if (profile instanceof DeliveryDriverProfile) {
+            cardPanel.pushPanel(new DeliveryDriverWorkArea((DeliveryDriverProfile) profile, cardPanel));
 
         // ── Retail (Lanre) ───────────────────────────────
         } else if (profile instanceof ProcurementOfficerProfile) {

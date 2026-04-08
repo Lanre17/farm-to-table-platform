@@ -8,6 +8,7 @@ import com.github.javafaker.Faker;
 import com.mycompany.farmtotablenetwork.distribution.DeliveryDirectory;
 import com.mycompany.farmtotablenetwork.distribution.ShipmentReceiptConfirmationDirectory;
 import com.mycompany.farmtotablenetwork.distribution.WarehouseDirectory;
+import com.mycompany.farmtotablenetwork.distribution.WarehouseItem;
 import com.mycompany.farmtotablenetwork.ecosystem.Enterprise;
 import com.mycompany.farmtotablenetwork.ecosystem.Organization;
 import com.mycompany.farmtotablenetwork.farm.Crop;
@@ -34,6 +35,9 @@ import com.mycompany.farmtotablenetwork.requests.PurchaseOrder;
 import com.mycompany.farmtotablenetwork.retail.InventoryItem;
 import com.mycompany.farmtotablenetwork.requests.InspectionRequest;
 import com.mycompany.farmtotablenetwork.requests.CertificationApproval;
+import com.mycompany.farmtotablenetwork.requests.DeliveryRequest;
+import com.mycompany.farmtotablenetwork.requests.ShipmentReceiptConfirmation;
+import com.mycompany.farmtotablenetwork.ui.StatusConstants;
 
 
 /**
@@ -98,6 +102,7 @@ public class ConfigureABusiness {
         seedInspection(); // EC 
         seedDistribution(); //HL
         seedRetail(); // LY added 4/5/26
+        seedReceiptTest(); // ===== Receipt test seed ===== LY added
     }
     
     private static void seedAuth() {
@@ -284,5 +289,65 @@ public class ConfigureABusiness {
     }
  
     
+    private static void seedInspection() {
+    // get the tomato batch Polina seeded in seedFarm()
+    HarvestBatch seedBatch = batchDirectory.findBatch(1);
+
+    if (seedBatch != null) {
+        // create an InspectionRequest that is already Passed for the demo
+        InspectionRequest passedRequest = new InspectionRequest(
+            seedBatch, harvestAndPackaging, inspectionDept
+        );
+        passedRequest.assign("inspector1");
+
+        // using updateStatus directly instead of recordResult() to avoid
+        // auto-creating a CertificationApproval — we create it manually below
+        passedRequest.updateStatus(com.mycompany.farmtotablenetwork.ui.StatusConstants.PASSED);
+        inspectionDirectory.addInspectionRequest(passedRequest);
+        workRequestDirectory.addRequest(passedRequest);
+
+        // create the CertificationApproval manually for this seeded path
+        CertificationApproval seedApproval = new CertificationApproval(
+            passedRequest, inspectionDept, certificationDept
+        );
+
+        // approve directly — creates a Certification Henry uses in seedDistribution()
+        seedApproval.approve("certifier1", "Organic", "2027-01-01");
+        certDirectory.addCertificationApproval(seedApproval);
+        workRequestDirectory.addRequest(seedApproval);
+        }
+    }
+    
+    // ===== Receipt test seed =====
+    private static void seedReceiptTest() {
+
+        // Temporary test WarehouseItem for Retail receipt flow
+        WarehouseItem item = new WarehouseItem(
+                null,
+                "Lettuce",
+                20,
+                "Warehouse A"
+        );
+
+        DeliveryRequest delivery = new DeliveryRequest(
+                item,
+                101,
+                warehouseOps,
+                storefrontInventory
+        );
+
+        delivery.updateStatus(StatusConstants.DELIVERED);
+
+        ShipmentReceiptConfirmation receipt
+                = new ShipmentReceiptConfirmation(
+                        delivery,
+                        warehouseOps,
+                        storefrontInventory
+                );
+
+        workRequestDirectory.addRequest(receipt);
+
+        System.out.println("seedReceiptTest(): test receipt added successfully");
+    }
     
 }

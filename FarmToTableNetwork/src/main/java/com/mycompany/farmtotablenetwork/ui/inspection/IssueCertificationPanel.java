@@ -2,46 +2,46 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package com.mycompany.farmtotablenetwork.ui.farm;
+package com.mycompany.farmtotablenetwork.ui.inspection;
 
-import com.mycompany.farmtotablenetwork.ConfigureABusiness;
-import com.mycompany.farmtotablenetwork.farm.Crop;
-import com.mycompany.farmtotablenetwork.requests.HarvestSubmission;
-import com.mycompany.farmtotablenetwork.ui.StatusConstants;
-import com.mycompany.farmtotablenetwork.ui.UIConstants;
-import com.mycompany.farmtotablenetwork.ui.UIFactory;
+import com.mycompany.farmtotablenetwork.personnel.profiles.CertifierProfile;
+import com.mycompany.farmtotablenetwork.requests.CertificationApproval;
+import com.mycompany.farmtotablenetwork.ui.*;
 import com.mycompany.farmtotablenetwork.ui.main.CardSequencePanel;
-import java.awt.BorderLayout;
-import java.awt.CardLayout;
-import java.awt.FlowLayout;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
 import javax.swing.*;
+import java.awt.*;
+
 /**
  *
- * @author p.starobinets
+ * @author emmanuelcroll
  */
-public class SubmitHarvestPanel extends JPanel {
-    private Crop crop;
-    private final CardSequencePanel cardPanel;
-    private final FarmerWorkArea parent;
-    private JTextField fieldQty;
-    private JLabel errorLabel;
-    
-    public SubmitHarvestPanel(Crop crop, CardSequencePanel cardPanel, FarmerWorkArea parent){
+
+// form panel that pushes on top of CertifierWorkArea when certifier clicks Approve
+public class IssueCertificationPanel extends JPanel {
+
+    private final CertificationApproval approval;
+    private final CertifierProfile      profile;
+    private final CardSequencePanel     cardPanel;
+    private final CertifierWorkArea     parent;
+
+    private JTextField fieldCertType;
+    private JTextField fieldExpiry;
+    private JLabel     errorLabel;
+
+    public IssueCertificationPanel(CertificationApproval approval, CertifierProfile profile,
+                                    CardSequencePanel cardPanel, CertifierWorkArea parent) {
+        this.approval  = approval;
+        this.profile   = profile;
         this.cardPanel = cardPanel;
-        this.parent = parent;
-        this.crop = crop;
+        this.parent    = parent;
         setLayout(new BorderLayout());
         setBackground(UIConstants.BG_APP);
         buildUI();
     }
-
+    
     private void buildUI() {
-        //-------North aka Header----------
-        
-    add(UIFactory.headerSimple("Submit Harvest"), BorderLayout.NORTH);
+        // NORTH
+        add(UIFactory.headerSimple("Issue Certification"), BorderLayout.NORTH);
 
         JPanel formOuter = new JPanel(new BorderLayout());
         formOuter.setBackground(UIConstants.BG_APP);
@@ -49,7 +49,6 @@ public class SubmitHarvestPanel extends JPanel {
             UIConstants.PADDING, UIConstants.PADDING * 3,
             UIConstants.PADDING, UIConstants.PADDING * 3));
 
-        //Container
         JPanel card = new JPanel(new GridBagLayout());
         card.setBackground(UIConstants.BG_PANEL);
         card.setBorder(BorderFactory.createCompoundBorder(
@@ -57,27 +56,29 @@ public class SubmitHarvestPanel extends JPanel {
             BorderFactory.createEmptyBorder(UIConstants.PADDING, UIConstants.PADDING,
                                             UIConstants.PADDING, UIConstants.PADDING)));
 
-        
-        //------------Center-----------
-        
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(6, 8, 6, 8);
         gbc.anchor = GridBagConstraints.WEST;
 
         int row = 0;
+
+        // read-only inspection reference so certifier knows what they're approving
         gbc.gridx = 0; gbc.gridy = row++; gbc.gridwidth = 2; gbc.fill = GridBagConstraints.HORIZONTAL;
-        card.add(UIFactory.sectionDivider("Crop Reference"), gbc);
+        card.add(UIFactory.sectionDivider("Inspection Reference"), gbc);
         gbc.gridwidth = 1;
 
-        UIFactory.detailRow(card, gbc, "Crop Type",    crop.getType(), row++);
-        UIFactory.detailRow(card, gbc, "Field",        crop.getFieldLocation(), row++);
-        UIFactory.detailRow(card, gbc, "Planting Date", crop.getPlantingDate(), row++);
+        UIFactory.detailRow(card, gbc, "Crop",
+            approval.getInspection().getBatch().getCrop().getType(), row++);
+        UIFactory.detailRow(card, gbc, "Inspector",
+            approval.getInspection().getInspector(), row++);
 
         gbc.gridx = 0; gbc.gridy = row++; gbc.gridwidth = 2;
-        card.add(UIFactory.sectionDivider("Harvest Details"), gbc);
+        card.add(UIFactory.sectionDivider("Certification Details"), gbc);
         gbc.gridwidth = 1;
 
-        fieldQty = UIFactory.labeledField(card, gbc, "Estimated Quantity (kg) *", row++);
+        // certifier fills in cert type and expiry date
+        fieldCertType = UIFactory.labeledField(card, gbc, "Cert Type *", row++);
+        fieldExpiry   = UIFactory.labeledField(card, gbc, "Expiry Date * (YYYY-MM-DD)", row++);
 
         gbc.gridx = 0; gbc.gridy = row++; gbc.gridwidth = 2;
         gbc.weighty = 1; gbc.fill = GridBagConstraints.BOTH;
@@ -94,63 +95,46 @@ public class SubmitHarvestPanel extends JPanel {
         scroll.getViewport().setBackground(UIConstants.BG_APP);
         add(scroll, BorderLayout.CENTER);
 
-        //---------SOUTH---------button bar
+        // SOUTH
         JPanel btnBar = new JPanel(new FlowLayout(FlowLayout.RIGHT, 8, UIConstants.PADDING));
         btnBar.setBackground(UIConstants.BG_APP);
         btnBar.setBorder(BorderFactory.createMatteBorder(1, 0, 0, 0, UIConstants.BORDER_LIGHT));
 
         JButton btnBack   = UIFactory.secondaryButton("← Back");
-        JButton btnSubmit = UIFactory.primaryButton("Submit");
+        JButton btnSubmit = UIFactory.primaryButton("Issue Certificate");
         btnBack.addActionListener(e   -> popPanel());
         btnSubmit.addActionListener(e -> onSubmit());
-
         btnBar.add(btnBack);
         btnBar.add(btnSubmit);
         add(btnBar, BorderLayout.SOUTH);
     }
-    //Validation block
     
     private boolean validateInputs() {
-        try {
-            float qty = Float.parseFloat(fieldQty.getText().trim());
-            if (qty <= 0) throw new NumberFormatException();
-        } catch (NumberFormatException ex) {
-            errorLabel.setText("⚠ Quantity must be a positive number.");
+        if (fieldCertType.getText().trim().isEmpty()) {
+            errorLabel.setText("⚠ Cert Type is required.");
+            return false;
+        }
+        if (!fieldExpiry.getText().trim().matches("\\d{4}-\\d{2}-\\d{2}")) {
+            errorLabel.setText("⚠ Expiry must be YYYY-MM-DD.");
             return false;
         }
         errorLabel.setText(" ");
         return true;
     }
-    
-    //create HarvestSubmission instance and add to workrequestdirectory, return to FarmerWorkArea
-        private void onSubmit() {
+
+    private void onSubmit() {
         if (!validateInputs()) return;
-        float qty = Float.parseFloat(fieldQty.getText().trim());
-        HarvestSubmission sub = new HarvestSubmission(crop, 
-                parent.getName(),               //automatically grabs the submitter's name
-                qty,
-                ConfigureABusiness.cropMgmt,
-                ConfigureABusiness.harvestAndPackaging);
-        ConfigureABusiness.workRequestDirectory.addRequest(sub);
-        crop.setStatus(StatusConstants.SUBMITTED);
-        parent.loadTable();
-        
-        // Show success
-        JOptionPane.showMessageDialog(
-            this,
-        "Harvest submitted successfully.",
-        "Success",
-        JOptionPane.INFORMATION_MESSAGE
+        // approve() creates the Certification and adds it to certDirectory
+        approval.approve(
+            profile.getPerson().getFullName(),
+            fieldCertType.getText().trim(),
+            fieldExpiry.getText().trim()
         );
+        parent.loadTable();
         popPanel();
-        
     }
 
-        //Back button
     private void popPanel() {
         cardPanel.popPanel(this);
     }
-
-
-    
 }

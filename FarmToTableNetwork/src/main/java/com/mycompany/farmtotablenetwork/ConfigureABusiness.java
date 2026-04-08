@@ -184,8 +184,81 @@ public class ConfigureABusiness {
         
     }
     
+    private static void seedInspection() {
+    // get the tomato batch Polina seeded in seedFarm()
+    HarvestBatch seedBatch = batchDirectory.findBatch(1);
+
+    if (seedBatch != null) {
+        // create an InspectionRequest that is already Passed for the demo
+        InspectionRequest passedRequest = new InspectionRequest(
+            seedBatch, harvestAndPackaging, inspectionDept
+        );
+        passedRequest.assign("inspector1");
+
+        // using updateStatus directly instead of recordResult() to avoid
+        // auto-creating a CertificationApproval — we create it manually below
+        passedRequest.updateStatus(com.mycompany.farmtotablenetwork.ui.StatusConstants.PASSED);
+        inspectionDirectory.addInspectionRequest(passedRequest);
+        workRequestDirectory.addRequest(passedRequest);
+
+        // create the CertificationApproval manually for this seeded path
+        CertificationApproval seedApproval = new CertificationApproval(
+            passedRequest, inspectionDept, certificationDept
+        );
+
+        // approve directly — creates a Certification Henry uses in seedDistribution()
+        seedApproval.approve("certifier1", "Organic", "2027-01-01");
+        certDirectory.addCertificationApproval(seedApproval);
+        workRequestDirectory.addRequest(seedApproval);
+    }
+}
+    
     private static void seedDistribution() {
+        //HL: pull certifiecation from tomato inspection
+        //HL: seedInspection() method runs first 
+        com.mycompany.farmtotablenetwork.inspection.Certification tomatoCert = certDirectory.findCert(1);
         
+        if (tomatoCert != null){
+            //HL: WarehouseItem tomoto available for delivery 
+            com.mycompany.farmtotablenetwork.distribution.WarehouseItem tomatoItem = warehouseDirectory.newItem(tomatoCert, "Tomatoes", 200, "Aisle B3");
+            
+            //HL: Delivery Request pre-assigned to driver1, ready to claim & deliver 
+            com.mycompany.farmtotablenetwork.requests.DeliveryRequest dr = deliveryDirectory.newDelivery(tomatoItem, 1, warehouseOps, fleetMgmt);
+            dr.assign("driver1");
+            workRequestDirectory.addRequest(dr);
+            
+            //HL: shipment created with DeleiveryRequest 
+            new com.mycompany.farmtotablenetwork.distribution.Shipment(dr, "Ready for pickup — Aisle B3");
+        } else {
+           System.out.println("[seedDistribution] WARNING: cert #1 not found — check seedInspection() ran first."); 
+        }
+        
+        //HL: give reporting panel data upon a completed delivery
+        //HL: seedFarm()method only has 1 batch (batch #1)
+        //HL: create a single cert here using lettuce (seeded) as the reference crop
+        com.mycompany.farmtotablenetwork.farm.Crop lettuceCrop = cropDirectory.findCrop(2);
+        
+        if (lettuceCrop != null){
+            //HL: create luttuce HarvestBatch (no harvest submission necessary for seeding) 
+            com.mycompany.farmtotablenetwork.farm.HarvestBatch lettuceBatch = batchDirectory.newBatch(lettuceCrop, 180.0f, "A", "Crate");
+            
+            //HL: inspectionRequest (INTENTIONALLY not added to inspectionDirectory, otherwise the request would be seen in Inspector table with no way to act on the request) 
+            com.mycompany.farmtotablenetwork.requests.InspectionRequest lettuceInspection = new com.mycompany.farmtotablenetwork.requests.InspectionRequest(lettuceBatch, harvestAndPackaging, inspectionDept);
+            lettuceInspection.updateStatus(com.mycompany.farmtotablenetwork.ui.StatusConstants.PASSED);
+            
+            com.mycompany.farmtotablenetwork.inspection.Certification lettuceCert = certDirectory.newCertification(lettuceInspection, "certifier1", "Standard", "2027-06-01");
+            
+            com.mycompany.farmtotablenetwork.distribution.WarehouseItem lettuceItem = warehouseDirectory.newItem(lettuceCert, "Lettuce", 150, "Aisle C1");
+            
+            //HL: markDelivered() automatically creaters ShipmentReceiptConfirmation in receiptDirectory 
+            //HL: when the app first runs, this gives clerk1 a pending receipt to review
+            com.mycompany.farmtotablenetwork.requests.DeliveryRequest completedDr = deliveryDirectory.newDelivery(lettuceItem, 2, warehouseOps, fleetMgmt);
+            completedDr.assign("driver1");
+            completedDr.markDelivered();
+            workRequestDirectory.addRequest(completedDr);
+        } else {
+            System.out.println("[seedDistribution] WARNING: lettuce crop #2 not found — check seedFarm() ran first.");
+        }
     }
 
     private static void seedRetail() {
@@ -276,4 +349,5 @@ public class ConfigureABusiness {
 
         System.out.println("seedReceiptTest(): test receipt added successfully");
     }
+    
 }

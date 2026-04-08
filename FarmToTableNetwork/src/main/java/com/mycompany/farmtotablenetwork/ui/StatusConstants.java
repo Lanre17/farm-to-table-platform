@@ -13,6 +13,7 @@ public class StatusConstants {
     public static final String APPROVED   = "Approved";
     public static final String REJECTED   = "Rejected";
     public static final String PACKAGED   = "Packaged";
+    public static final String INSPECTION_REQUESTED = "Inspection Requested";
 
     // Inspection Request (Cross-enterprise: Farm → Inspection Agency)
     public static final String ASSIGNED    = "Assigned";

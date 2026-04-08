@@ -29,7 +29,9 @@ public class CardSequencePanel extends JPanel {
     //method to remove a panel aka go back
      public void popPanel(JPanel panel) {
         this.remove(panel);
-        ((CardLayout) this.getLayout()).next(this);
+        ((CardLayout) this.getLayout()).previous(this);
+        this.revalidate();
+        this.repaint();
     }
 
 

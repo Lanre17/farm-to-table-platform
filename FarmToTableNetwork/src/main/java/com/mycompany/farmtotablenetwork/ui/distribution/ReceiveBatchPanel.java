@@ -102,6 +102,7 @@ public class ReceiveBatchPanel extends JPanel { //HL: added import using AltEnte
         errorLabel = UIFactory.errorLabel();
         card.add(errorLabel, gbc);
 
+        //HL: text is wrapped in scroll pane if UI is resized
         formOuter.add(card, BorderLayout.CENTER);
         JScrollPane scroll = new JScrollPane(formOuter); //HL: added import using AltEnter 
         scroll.setBorder(null);
@@ -158,7 +159,7 @@ public class ReceiveBatchPanel extends JPanel { //HL: added import using AltEnte
         
         Certification cert = (Certification) comboCert.getSelectedItem(); //HL: certification object extracted (no null check necessary, validateInputs already confirms)
         ConfigureABusiness.warehouseDirectory.newItem(cert, fieldProduct.getText().trim(),Integer.parseInt(fieldQty.getText().trim()), fieldLocation.getText().trim());
-        parent.loadTable(); // refreshes WarehouseManagerWorkArea (parent) table
+        parent.loadTable(); //HL: refreshes WarehouseManagerWorkArea (parent) table
         popPanel();
     }
 

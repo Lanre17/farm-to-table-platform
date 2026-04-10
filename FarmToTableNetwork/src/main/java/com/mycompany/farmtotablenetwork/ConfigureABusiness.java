@@ -29,9 +29,9 @@ import com.mycompany.farmtotablenetwork.personnel.profiles.DeliveryDriverProfile
 import com.mycompany.farmtotablenetwork.personnel.profiles.InspectorProfile;
 import com.mycompany.farmtotablenetwork.personnel.profiles.InventoryClerkProfile;
 import com.mycompany.farmtotablenetwork.personnel.profiles.ProcurementOfficerProfile;
+import com.mycompany.farmtotablenetwork.personnel.profiles.QualityAnalystProfile;
 import com.mycompany.farmtotablenetwork.personnel.profiles.WarehouseManagerProfile;
 import com.mycompany.farmtotablenetwork.requests.PurchaseOrder;
-import com.mycompany.farmtotablenetwork.retail.InventoryItem;
 import com.mycompany.farmtotablenetwork.requests.InspectionRequest;
 import com.mycompany.farmtotablenetwork.requests.CertificationApproval;
 
@@ -160,6 +160,25 @@ public class ConfigureABusiness {
                 faker.internet().emailAddress(), faker.phoneNumber().cellPhone());
         DeliveryDriverProfile deliveryDriverProfile = new DeliveryDriverProfile (deliveryPerson, fleetMgmt); 
         accountDirectory.newAccount("driver1", "password", deliveryDriverProfile); 
+        
+        //QA Person Profile
+        Person qualityAnalystPerson = new Person (
+                faker.name().firstName(), faker.name().lastName(),
+                faker.internet().emailAddress(), faker.phoneNumber().cellPhone());
+        QualityAnalystProfile qaProfile = new QualityAnalystProfile (qualityAnalystPerson, cropMgmt);
+        accountDirectory.newAccount("qa1", "password", qaProfile);
+        
+        
+        //Emmanuel, unstub this when you have the NetworkCoordinatorProfile ready
+        
+        /*
+        Person networkCoordinatorPerson = new Person (
+                faker.name().firstName(), faker.name().lastName(),
+                faker.internet().emailAddress(), faker.phoneNumber().cellPhone());
+        NetworkCoordinatorProfile networkCoordinatorProfile = new NetworkCoordinatorProfile (networkCoordinatorPerson,         InspectorProfile inspectorProfile = new InspectorProfile (inspectorPerson, inspectionDept); 
+        accountDirectory.newAccount("network1", "password", networkCoordinatorProfile);
+        */
+        
 
     }
     

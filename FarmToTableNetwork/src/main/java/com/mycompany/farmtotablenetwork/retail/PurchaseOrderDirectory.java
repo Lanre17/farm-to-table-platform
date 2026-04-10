@@ -39,4 +39,14 @@ public class PurchaseOrderDirectory {
     public ArrayList<PurchaseOrder> getAllOrders() {
         return orders;
     }
+    
+    //HL: method that filters orders by status (used by CreateDeliveryPanel to show only unfulfilled orders) 
+    public ArrayList<PurchaseOrder> findByStatus(String status) {
+        ArrayList<PurchaseOrder> result = new ArrayList<>();
+        for (PurchaseOrder o : orders) {
+            if (o.getStatus().equals(status)) result.add(o);
+        }
+        return result;
+    }
+    
 }

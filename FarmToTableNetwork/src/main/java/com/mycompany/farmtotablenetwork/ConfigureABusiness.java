@@ -260,27 +260,51 @@ public class ConfigureABusiness {
         Faker faker = new Faker();
 
         // Purchase Orders seeding
+        // po1: newly submitted order waiting for downstream processing
         PurchaseOrder po1 = orderDirectory.newOrder(
-                "Tomatoes", 50, "Distribution Co.", "2026-04-05", procurement, warehouseOps);
+                "Tomatoes", 50, "Distribution Co.", "2026-04-05", procurement, warehouseOps
+        );
 
+        // po2: completed order already received and stocked
         PurchaseOrder po2 = orderDirectory.newOrder(
-                "Lettuce", 30, "Distribution Co.", "2026-03-28", procurement, warehouseOps);
+                "Lettuce", 30, "Distribution Co.", "2026-03-28", procurement, warehouseOps
+        );
 
-        // move one order through the full lifecycle for demo/reporting
         po2.confirm();
         po2.fulfill();
         po2.markShipped();
         po2.receive();
 
-        // add retail requests to shared work request directory
+        // po3: in-progress order to show mid-lifecycle visibility in Procurement dashboard
+        PurchaseOrder po3 = orderDirectory.newOrder(
+                "Cucumbers", 80, "Fresh Valley Distribution", "2026-04-10", procurement, warehouseOps
+        );
+
+        po3.confirm();
+        po3.fulfill();
+
+        // Add retail requests to shared work request directory
         workRequestDirectory.addRequest(po1);
         workRequestDirectory.addRequest(po2);
+        workRequestDirectory.addRequest(po3);
 
         // Inventory seeding
-        InventoryItem item1 = inventoryDirectory.newItem(
-                po2.getRequestId(), "Lettuce", 30, "Shelf A1", "2026-04-01");
+        // item1: stocked from completed po2
+        inventoryDirectory.newItem(
+                po2.getRequestId(), "Lettuce", 30, "Shelf A1", "2026-04-01"
+        );
+
+        // item2: additional stocked inventory for richer dashboard/demo state
+        inventoryDirectory.newItem(
+                999, "Tomatoes", 120, "Cooler B2", "2026-04-03"
+        );
+
+        // item3: another stocked item to make inventory view feel more realistic
+        inventoryDirectory.newItem(
+                1000, "Bell Peppers", 60, "Shelf C1", "2026-04-04"
+        );
        
-        // end of Retail seeding block as of 4/5/26
+        // end of Retail seeding block as of 4/8/26 (Updated) 
     }  
     
 }

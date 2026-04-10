@@ -11,16 +11,11 @@ import com.mycompany.farmtotablenetwork.ui.UIConstants;
 import com.mycompany.farmtotablenetwork.ui.UIFactory;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
-import java.awt.Color;
 import java.awt.FlowLayout;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -35,6 +30,7 @@ public class ProcurementOfficerWorkArea extends JPanel{
     private DefaultTableModel tableModel;
     private JTable orderTable;
     private JButton btnNewOrder;
+    private JButton btnRefresh;
 
     public ProcurementOfficerWorkArea(ProcurementOfficerProfile profile, JPanel cardPanel) {
         this.profile = profile;
@@ -55,7 +51,9 @@ public class ProcurementOfficerWorkArea extends JPanel{
                 profile.getRole()
         ), BorderLayout.NORTH);
 
-        String[] columns = {"Order", "Product", "Qty", "Distributor", "Requested Date", "Status"};
+        String[] columns = {
+            "Order", "Product", "Qty", "Distributor", "Receiver", "Requested Date", "Status"
+        };
 
         tableModel = new DefaultTableModel(columns, 0) {
             @Override
@@ -84,8 +82,13 @@ public class ProcurementOfficerWorkArea extends JPanel{
                 1, 0, 0, 0, UIConstants.BORDER_LIGHT
         ));
 
+        btnRefresh = UIFactory.secondaryButton("Refresh");
+        btnRefresh.addActionListener(e -> loadTable());
+
         btnNewOrder = UIFactory.primaryButton("+ New Order");
         btnNewOrder.addActionListener(e -> openNewOrderPanel());
+
+        btnBar.add(btnRefresh);
         btnBar.add(btnNewOrder);
 
         add(btnBar, BorderLayout.SOUTH);
@@ -101,6 +104,7 @@ public class ProcurementOfficerWorkArea extends JPanel{
                 order.getProductName(),
                 order.getQty(),
                 order.getDistributor(),
+                order.getReceiverOrg().getName(),
                 order.getRequestedDate(),
                 order.getStatus()
             });

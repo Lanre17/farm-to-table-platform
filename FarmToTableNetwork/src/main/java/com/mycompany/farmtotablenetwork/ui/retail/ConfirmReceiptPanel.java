@@ -181,7 +181,7 @@ class ConfirmReceiptPanel extends JPanel {
         // Success message
         JOptionPane.showMessageDialog(
                 this,
-                "Receipt confirmed and inventory updated successfully.",
+                "Receipt confirmation successful.",
                 "Success",
                 JOptionPane.INFORMATION_MESSAGE
         );

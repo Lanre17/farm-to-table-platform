@@ -42,6 +42,8 @@ public class InventoryClerkWorkArea extends JPanel {
     private JTable inventoryTable;
     private DefaultTableModel inventoryTableModel;
 
+    private JButton btnConfirm;
+
     public InventoryClerkWorkArea(InventoryClerkProfile profile, JPanel cardPanel) {
         this.profile = profile;
         this.cardPanel = cardPanel;
@@ -120,6 +122,31 @@ public class InventoryClerkWorkArea extends JPanel {
 
         inventoryTable = UIFactory.styledTable(inventoryTableModel);
 
+        // Enable confirm only when a receipt row is selected
+        receiptTable.getSelectionModel().addListSelectionListener(e -> {
+            if (!e.getValueIsAdjusting()) {
+                int row = receiptTable.getSelectedRow();
+
+                if (row >= 0) {
+                    Object status = receiptTableModel.getValueAt(row, 5); // Status column
+                    inventoryTable.clearSelection();
+                    btnConfirm.setEnabled(StatusConstants.PENDING.equals(String.valueOf(status)));
+                } else {
+                    btnConfirm.setEnabled(false);
+                }
+            }
+        });
+
+        // Disable confirm when inventory row is selected
+        inventoryTable.getSelectionModel().addListSelectionListener(e -> {
+            if (!e.getValueIsAdjusting()) {
+                if (inventoryTable.getSelectedRow() >= 0) {
+                    receiptTable.clearSelection();
+                    btnConfirm.setEnabled(false);
+                }
+            }
+        });
+
         inventoryPanel.add(inventoryLabel, BorderLayout.NORTH);
         inventoryPanel.add(UIFactory.tableScrollPane(inventoryTable), BorderLayout.CENTER);
 
@@ -134,22 +161,21 @@ public class InventoryClerkWorkArea extends JPanel {
                 1, 0, 0, 0, UIConstants.BORDER_LIGHT
         ));
 
-        // 🔹 NEW BUTTON
-        JButton btnConfirm = UIFactory.primaryButton("Confirm Receipt");
+        btnConfirm = UIFactory.primaryButton("Confirm Receipt");
+        btnConfirm.setEnabled(false);
 
-        // 🔹 EXISTING BUTTON
         JButton btnRefresh = UIFactory.secondaryButton("Refresh");
 
-        // 🔹 ACTION (we will implement panel next step)
         btnConfirm.addActionListener(e -> openConfirmReceiptPanel());
 
-        // 🔹 EXISTING ACTION
         btnRefresh.addActionListener(e -> {
             loadReceiptTable();
             loadInventoryTable();
+            receiptTable.clearSelection();
+            inventoryTable.clearSelection();
+            btnConfirm.setEnabled(false);
         });
 
-        // 🔹 ORDER MATTERS (Confirm first, then Refresh)
         btnBar.add(btnConfirm);
         btnBar.add(btnRefresh);
 
@@ -160,28 +186,22 @@ public class InventoryClerkWorkArea extends JPanel {
     public void loadReceiptTable() {
         receiptTableModel.setRowCount(0);
 
-        // Pull receipt confirmations from the shared work request directory
-        for (WorkRequest request : ConfigureABusiness.workRequestDirectory.getAllRequests()) {
+        for (ShipmentReceiptConfirmation confirmation : ConfigureABusiness.receiptDirectory.getAllReceipts()) {
 
-            // Only process shipment receipt confirmations
-            if (request instanceof ShipmentReceiptConfirmation) {
-                ShipmentReceiptConfirmation confirmation = (ShipmentReceiptConfirmation) request;
+            // Show only receipts routed to storefront inventory that are still pending
+            if (confirmation.getReceiverOrg() == ConfigureABusiness.storefrontInventory
+                    && StatusConstants.PENDING.equals(confirmation.getStatus())) {
 
-                // Show only receipts routed to storefront inventory and not yet stocked
-                if (confirmation.getReceiverOrg() == ConfigureABusiness.storefrontInventory
-                        && !StatusConstants.STOCKED.equals(confirmation.getStatus())) {
+                DeliveryRequest delivery = confirmation.getDeliveryRequest();
 
-                    DeliveryRequest delivery = confirmation.getDeliveryRequest();
-
-                    receiptTableModel.addRow(new Object[]{
-                        confirmation,
-                        delivery.getWarehouseItem().getProductName(),
-                        delivery.getPurchaseOrderId(),
-                        delivery.getDriver(),
-                        confirmation.getSenderOrg(),
-                        confirmation.getStatus()
-                    });
-                }
+                receiptTableModel.addRow(new Object[]{
+                    confirmation,
+                    delivery.getWarehouseItem().getProductName(),
+                    delivery.getPurchaseOrderId(),
+                    delivery.getDriver(),
+                    confirmation.getSenderOrg(),
+                    confirmation.getStatus()
+                });
             }
         }
     }

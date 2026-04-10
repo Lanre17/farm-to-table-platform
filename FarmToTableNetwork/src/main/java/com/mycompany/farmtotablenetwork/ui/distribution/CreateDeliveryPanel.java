@@ -8,6 +8,8 @@ import com.mycompany.farmtotablenetwork.ConfigureABusiness;
 import com.mycompany.farmtotablenetwork.distribution.Shipment;
 import com.mycompany.farmtotablenetwork.distribution.WarehouseItem;
 import com.mycompany.farmtotablenetwork.requests.DeliveryRequest;
+import com.mycompany.farmtotablenetwork.requests.PurchaseOrder;
+import com.mycompany.farmtotablenetwork.ui.StatusConstants;
 import com.mycompany.farmtotablenetwork.ui.UIConstants;
 import com.mycompany.farmtotablenetwork.ui.UIFactory;
 import com.mycompany.farmtotablenetwork.ui.main.CardSequencePanel;
@@ -16,9 +18,11 @@ import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.util.ArrayList;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -33,7 +37,7 @@ public class CreateDeliveryPanel extends JPanel { //HL: added import using AltEn
     private final CardSequencePanel cardPanel;
     private final WarehouseManagerWorkArea parent;
 
-    private JTextField fieldPoId; //HL: added import using AltEnter
+    private JComboBox<PurchaseOrder> comboPo; //HL: combo box for real PO numbers generated from retail 
     private JTextField fieldNotes;
     private JLabel errorLabel; //HL: added import using AltEnter
     
@@ -81,13 +85,21 @@ public class CreateDeliveryPanel extends JPanel { //HL: added import using AltEn
         UIFactory.detailRow(card, gbc, "Location", item.getLocation(), row++);
         UIFactory.detailRow(card, gbc, "Cert Type",item.getCertification().getCertType(), row++);
         
+        //HL: shows Unfulfilled PO's & allows selection 
+        gbc.gridx = 0; gbc.gridy = row++; gbc.gridwidth = 2; gbc.fill = GridBagConstraints.HORIZONTAL;
+        card.add(UIFactory.sectionDivider("Fulfill Purchase Order"), gbc);
+        gbc.gridwidth = 1;
+        
+        //HL: ensures Warhouse Manager can't fulfill a PO twice by filtering through orderDirectory & only shows unfulfilled/submitted PO's 
+        ArrayList<PurchaseOrder> openOrders = ConfigureABusiness.orderDirectory.findByStatus(StatusConstants.SUBMITTED);
+        comboPo = UIFactory.labeledCombo(card, gbc, "Purchase Order ", openOrders.toArray(new PurchaseOrder[0]), row++);
+        
+        
         //HL: delivery details area - Purchase Order ID & Tracking Notes (optional) 
         gbc.gridx = 0; gbc.gridy = row++; gbc.gridwidth = 2; gbc.fill = GridBagConstraints.HORIZONTAL;
         card.add(UIFactory.sectionDivider("Delivery Details"), gbc);
         gbc.gridwidth = 1;
         
-        //HL: Purchase Order ID links the delivery to PurchaseOrder & stored as an integer 
-        fieldPoId  = UIFactory.labeledField(card, gbc, "Purchase Order ID *", row++);
         //HL: makes tracking notes optional — if there are notes, they are passed to Shipment, notes do not require validation 
         fieldNotes = UIFactory.labeledField(card, gbc, "Tracking Notes", row++);
         
@@ -125,30 +137,28 @@ public class CreateDeliveryPanel extends JPanel { //HL: added import using AltEn
         
     }
     
-    //HL: method that validates Purchase Order ID (again, tracking notes are optional and do not require validation) 
-    //HL: called by onSubmit()method which will only proceed if all fields are true
+    //HL: method that ensures a PO is selected from combo box before allowing the WarehouseManager to create a Delivery Request 
+    //HL: again, tracking notes are optional 
+    //HL: called by onSubmit() method 
     private boolean validateInputs() {
-        try {
-            int id = Integer.parseInt(fieldPoId.getText().trim()); //HL enforces whole numbers (ex. cannot add 1.5) 
-            if (id <= 0) throw new NumberFormatException(); //HL: enforces positive whole numbers (0 and negatives not allowed) 
-        } catch (NumberFormatException ex) {
-            errorLabel.setText("Purchase Order ID must be a positive whole number");
+        if (comboPo.getSelectedItem() == null) {
+            errorLabel.setText("Zero unfulfilled PO's. Retail must submit an order"); //HL: null check error message if there are no unfulfilled POs to choose from
             return false;
         }
         errorLabel.setText(" ");
         return true;
     }
 
-    //HL: method that creates a DeliveryRequest (for driver) & Shipment
-    //HL: only runs if input is validated
+    //HL: method that only runs if validateInputs() is successful 
     private void onSubmit() {
         if (!validateInputs()) return;
-        int poId = Integer.parseInt(fieldPoId.getText().trim());
+        PurchaseOrder po = (PurchaseOrder) comboPo.getSelectedItem();
+        po.confirm(); //HL: Changes purchase order status from Submitted to Confirmed (prevents the PO from reappearing for future deliveries)
         
-        //HL: creates DeliveryRequest, adds it to DeliveryDirectory (cross-organization request) 
+        //HL: creates DeliveryRequest, adds it to DeliveryDirectory + WorkRequestDirectory (cross-organization request WarehouseOps to FleetMgmt) 
         DeliveryRequest dr = ConfigureABusiness.deliveryDirectory.newDelivery( //HL: added imports using AltEnter
                 item,
-                poId,
+                po.getRequestId(),
                 ConfigureABusiness.warehouseOps, //HL: sender 
                 ConfigureABusiness.fleetMgmt //HL: receiver 
         );

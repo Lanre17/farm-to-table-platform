@@ -10,7 +10,7 @@ import com.mycompany.farmtotablenetwork.distribution.ShipmentReceiptConfirmation
 import com.mycompany.farmtotablenetwork.distribution.WarehouseDirectory;
 import com.mycompany.farmtotablenetwork.ecosystem.Enterprise;
 import com.mycompany.farmtotablenetwork.ecosystem.Organization;
-import com.mycompany.farmtotablenetwork.farm.Crop;
+//import com.mycompany.farmtotablenetwork.farm.Crop; //ps stubbed 4/11/26
 import com.mycompany.farmtotablenetwork.farm.CropDirectory;
 import com.mycompany.farmtotablenetwork.farm.HarvestBatch;
 import com.mycompany.farmtotablenetwork.farm.HarvestBatchDirectory;
@@ -18,7 +18,7 @@ import com.mycompany.farmtotablenetwork.personnel.Person;
 import com.mycompany.farmtotablenetwork.personnel.UserAccountDirectory;
 import com.mycompany.farmtotablenetwork.personnel.profiles.FarmerProfile;
 import com.mycompany.farmtotablenetwork.personnel.profiles.HarvestWorkerProfile;
-import com.mycompany.farmtotablenetwork.requests.HarvestSubmission;
+//import com.mycompany.farmtotablenetwork.requests.HarvestSubmission; //ps stubbed 4/11/26
 import com.mycompany.farmtotablenetwork.requests.WorkRequestDirectory;
 import com.mycompany.farmtotablenetwork.retail.InventoryDirectory;
 import com.mycompany.farmtotablenetwork.retail.PurchaseOrderDirectory;
@@ -94,7 +94,7 @@ public class ConfigureABusiness {
         
         
         seedAuth(); //HL
-      //  seedFarm();    //ps added 4/4/26
+      //  seedFarm();    //ps added 4/4/26 //ps stubbed 4/11/26
         seedInspection(); // EC 
         seedDistribution(); //HL
         seedRetail(); // LY added 4/5/26
@@ -182,7 +182,7 @@ public class ConfigureABusiness {
 
     }
     
-    
+    //ps stubbed 4/11/26
     /*private static void seedFarm(){
         
         // - Crops seeding

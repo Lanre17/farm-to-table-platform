@@ -25,12 +25,10 @@ import com.mycompany.farmtotablenetwork.ui.farm.*;
 import com.mycompany.farmtotablenetwork.ui.inspection.*;
 import com.mycompany.farmtotablenetwork.ui.distribution.*;
 import com.mycompany.farmtotablenetwork.ui.retail.*;
-import com.mycompany.farmtotablenetwork.ui.admin.*;
-import com.mycompany.farmtotablenetwork.ui.reports.*;
 import com.mycompany.farmtotablenetwork.ui.UIConstants;
+import com.mycompany.farmtotablenetwork.ui.reports.QualityAnalystWorkArea;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
 
 public class MainFrame extends JFrame {
 
@@ -237,6 +235,12 @@ public class MainFrame extends JFrame {
             cardPanel.pushPanel(
                     new InventoryClerkWorkArea((InventoryClerkProfile) profile, cardPanel)
             ); // LY added 4/5/26
+            
+        // Quality Analyst
+        } else if (profile instanceof QualityAnalystProfile) {
+            cardPanel.pushPanel(
+                    new QualityAnalystWorkArea((QualityAnalystProfile) profile, cardPanel)
+            ); // PS added 4/11/26
 
         
         // ── Fallback ─────────────────────────────────────

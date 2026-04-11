@@ -94,7 +94,7 @@ public class ConfigureABusiness {
         
         
         seedAuth(); //HL
-        seedFarm();    //ps added 4/4/26
+      //  seedFarm();    //ps added 4/4/26
         seedInspection(); // EC 
         seedDistribution(); //HL
         seedRetail(); // LY added 4/5/26
@@ -183,7 +183,7 @@ public class ConfigureABusiness {
     }
     
     
-    private static void seedFarm(){
+    /*private static void seedFarm(){
         
         // - Crops seeding
         Crop tomatoes =    cropDirectory.newCrop("Tomato", "2026-03-01", "Field A");  //ps added 4/4/26
@@ -196,7 +196,7 @@ public class ConfigureABusiness {
         HarvestSubmission sub1 = new HarvestSubmission(tomatoes, "farmer1", 250.5f, cropMgmt, harvestAndPackaging); //placeholder code for when Emmanuel's classes are ready
         sub1.approve(); 
         
-    }
+    }*/
     
     private static void seedInspection() {
     // get the tomato batch Polina seeded in seedFarm()

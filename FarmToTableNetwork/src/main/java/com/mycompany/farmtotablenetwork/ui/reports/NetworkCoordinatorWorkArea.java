@@ -64,3 +64,57 @@ public class NetworkCoordinatorWorkArea extends JPanel {
         buildUI();
         loadTable("All");
     }
+    
+  private void buildUI() {
+        // NORTH
+        add(UIFactory.header("Network Overview — All Requests",
+                profile.getPerson().getFullName(), profile.getRole()), BorderLayout.NORTH);
+
+        // CENTER — filter bar + table
+        JPanel center = new JPanel(new BorderLayout());
+        center.setBackground(UIConstants.BG_APP);
+        center.setBorder(BorderFactory.createEmptyBorder(
+            UIConstants.PADDING, UIConstants.PADDING, 0, UIConstants.PADDING));
+
+        // filter bar
+        JPanel filterBar = new JPanel(new FlowLayout(FlowLayout.LEFT, 8, 4));
+        filterBar.setBackground(UIConstants.BG_APP);
+        JLabel filterLabel = new JLabel("Filter by status:");
+        filterLabel.setFont(UIConstants.FONT_SECTION_LABEL);
+        filterLabel.setForeground(UIConstants.TEXT_SECONDARY);
+        filterCombo = new JComboBox<>(FILTER_OPTIONS);
+        filterCombo.setFont(UIConstants.FONT_BODY);
+        filterCombo.setPreferredSize(new Dimension(180, UIConstants.FIELD_HEIGHT));
+
+        // reload table whenever filter selection changes
+        filterCombo.addActionListener(e -> {
+            String selected = (String) filterCombo.getSelectedItem();
+            loadTable(selected == null ? "All" : selected);
+        });
+
+        filterBar.add(filterLabel);
+        filterBar.add(filterCombo);
+        center.add(filterBar, BorderLayout.NORTH);
+
+        tableModel = new DefaultTableModel(COLUMNS, 0) {
+            @Override public boolean isCellEditable(int r, int c) { return false; }
+        };
+        table = UIFactory.styledTable(tableModel);
+        center.add(UIFactory.tableScrollPane(table), BorderLayout.CENTER);
+        add(center, BorderLayout.CENTER);
+
+        // SOUTH — refresh button only, this is a read-only panel
+        JPanel btnBar = new JPanel(new FlowLayout(FlowLayout.RIGHT, 8, UIConstants.PADDING));
+        btnBar.setBackground(UIConstants.BG_APP);
+        btnBar.setBorder(BorderFactory.createMatteBorder(1, 0, 0, 0, UIConstants.BORDER_LIGHT));
+        JButton btnRefresh = UIFactory.secondaryButton("↻ Refresh");
+        btnRefresh.addActionListener(e -> {
+            String selected = (String) filterCombo.getSelectedItem();
+            loadTable(selected == null ? "All" : selected);
+        });
+        btnBar.add(btnRefresh);
+        add(btnBar, BorderLayout.SOUTH);
+    }
+  
+}
+

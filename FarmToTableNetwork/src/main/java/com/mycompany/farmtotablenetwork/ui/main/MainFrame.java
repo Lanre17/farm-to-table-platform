@@ -26,6 +26,7 @@ import com.mycompany.farmtotablenetwork.ui.inspection.*;
 import com.mycompany.farmtotablenetwork.ui.distribution.*;
 import com.mycompany.farmtotablenetwork.ui.retail.*;
 import com.mycompany.farmtotablenetwork.ui.UIConstants;
+import com.mycompany.farmtotablenetwork.ui.admin.SystemAdminWorkArea;
 import com.mycompany.farmtotablenetwork.ui.reports.QualityAnalystWorkArea;
 import javax.swing.*;
 import java.awt.*;
@@ -241,6 +242,16 @@ public class MainFrame extends JFrame {
             cardPanel.pushPanel(
                     new QualityAnalystWorkArea((QualityAnalystProfile) profile, cardPanel)
             ); // PS added 4/11/26
+            
+        //HL: Admin Roles (System Admin & Enterprise Admin) 4/12/2026
+        } else if (profile instanceof SystemAdminProfile) {
+            cardPanel.pushPanel(new SystemAdminWorkArea(profile, cardPanel));
+        
+        //HL: TO-DO: uncomment when Lanre creates EnerpriseAdminProfile 
+        /*} else if (profile instanceof EnterpriseAdminProfile) {
+            cardPanel.pushPanel(new EnterpriseAdminWorkArea(profile, cardPanel));*/
+        
+            
 
         
         // ── Fallback ─────────────────────────────────────

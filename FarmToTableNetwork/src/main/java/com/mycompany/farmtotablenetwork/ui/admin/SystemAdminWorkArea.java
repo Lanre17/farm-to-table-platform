@@ -125,7 +125,7 @@ public class SystemAdminWorkArea extends JPanel {
     }
 
     private void pushAddPanel() {
-        
+        cardPanel.pushPanel(new AddEditUserPanel(cardPanel, this));
     }
     
 }

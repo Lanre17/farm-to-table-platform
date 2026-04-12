@@ -30,6 +30,7 @@ import com.mycompany.farmtotablenetwork.personnel.profiles.InspectorProfile;
 import com.mycompany.farmtotablenetwork.personnel.profiles.InventoryClerkProfile;
 import com.mycompany.farmtotablenetwork.personnel.profiles.ProcurementOfficerProfile;
 import com.mycompany.farmtotablenetwork.personnel.profiles.QualityAnalystProfile;
+import com.mycompany.farmtotablenetwork.personnel.profiles.SystemAdminProfile;
 import com.mycompany.farmtotablenetwork.personnel.profiles.WarehouseManagerProfile;
 import com.mycompany.farmtotablenetwork.requests.PurchaseOrder;
 import com.mycompany.farmtotablenetwork.requests.InspectionRequest;
@@ -178,6 +179,11 @@ public class ConfigureABusiness {
         NetworkCoordinatorProfile networkCoordinatorProfile = new NetworkCoordinatorProfile (networkCoordinatorPerson,         InspectorProfile inspectorProfile = new InspectorProfile (inspectorPerson, inspectionDept); 
         accountDirectory.newAccount("network1", "password", networkCoordinatorProfile);
         */
+        
+        //HL: System Admin Profile 
+        Person saPerson = new Person(faker.name().firstName(), faker.name().lastName(), faker.internet().emailAddress(), faker.phoneNumber().cellPhone());
+        SystemAdminProfile saProfile = new SystemAdminProfile(saPerson, cropMgmt); //HL: added import using AltEnter 
+        accountDirectory.newAccount("admin", "admin", saProfile);
         
 
     }

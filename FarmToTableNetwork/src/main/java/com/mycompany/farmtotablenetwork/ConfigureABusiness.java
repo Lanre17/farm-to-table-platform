@@ -29,6 +29,7 @@ import com.mycompany.farmtotablenetwork.personnel.profiles.DeliveryDriverProfile
 import com.mycompany.farmtotablenetwork.personnel.profiles.EnterpriseAdminProfile;
 import com.mycompany.farmtotablenetwork.personnel.profiles.InspectorProfile;
 import com.mycompany.farmtotablenetwork.personnel.profiles.InventoryClerkProfile;
+import com.mycompany.farmtotablenetwork.personnel.profiles.NetworkCoordinatorProfile;
 import com.mycompany.farmtotablenetwork.personnel.profiles.ProcurementOfficerProfile;
 import com.mycompany.farmtotablenetwork.personnel.profiles.QualityAnalystProfile;
 import com.mycompany.farmtotablenetwork.personnel.profiles.SystemAdminProfile;
@@ -96,7 +97,7 @@ public class ConfigureABusiness {
         
         
         seedAuth(); //HL
-      //  seedFarm();    //ps added 4/4/26
+        seedFarm();    //ps added 4/4/26
         seedInspection(); // EC 
         seedDistribution(); //HL
         seedRetail(); // LY added 4/5/26
@@ -173,13 +174,13 @@ public class ConfigureABusiness {
         
         //Emmanuel, unstub this when you have the NetworkCoordinatorProfile ready
         
-        /*
+        
         Person networkCoordinatorPerson = new Person (
                 faker.name().firstName(), faker.name().lastName(),
                 faker.internet().emailAddress(), faker.phoneNumber().cellPhone());
-        NetworkCoordinatorProfile networkCoordinatorProfile = new NetworkCoordinatorProfile (networkCoordinatorPerson,         InspectorProfile inspectorProfile = new InspectorProfile (inspectorPerson, inspectionDept); 
+        NetworkCoordinatorProfile networkCoordinatorProfile = new NetworkCoordinatorProfile(networkCoordinatorPerson, inspectionDept); 
         accountDirectory.newAccount("network1", "password", networkCoordinatorProfile);
-        */
+        
         
         //HL: System Admin Profile 
         Person saPerson = new Person(faker.name().firstName(), faker.name().lastName(), faker.internet().emailAddress(), faker.phoneNumber().cellPhone());
@@ -206,7 +207,7 @@ public class ConfigureABusiness {
     }
     
     
-    /*private static void seedFarm(){
+    private static void seedFarm(){
         
         // - Crops seeding
         Crop tomatoes =    cropDirectory.newCrop("Tomato", "2026-03-01", "Field A");  //ps added 4/4/26
@@ -219,7 +220,7 @@ public class ConfigureABusiness {
         HarvestSubmission sub1 = new HarvestSubmission(tomatoes, "farmer1", 250.5f, cropMgmt, harvestAndPackaging); //placeholder code for when Emmanuel's classes are ready
         sub1.approve(); 
         
-    }*/
+    }
     
     private static void seedInspection() {
     // get the tomato batch Polina seeded in seedFarm()

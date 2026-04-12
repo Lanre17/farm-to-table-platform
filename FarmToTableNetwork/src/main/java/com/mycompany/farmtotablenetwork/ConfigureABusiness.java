@@ -26,10 +26,12 @@ import com.mycompany.farmtotablenetwork.inspection.CertificationDirectory;
 import com.mycompany.farmtotablenetwork.inspection.InspectionDirectory;
 import com.mycompany.farmtotablenetwork.personnel.profiles.CertifierProfile;
 import com.mycompany.farmtotablenetwork.personnel.profiles.DeliveryDriverProfile;
+import com.mycompany.farmtotablenetwork.personnel.profiles.EnterpriseAdminProfile;
 import com.mycompany.farmtotablenetwork.personnel.profiles.InspectorProfile;
 import com.mycompany.farmtotablenetwork.personnel.profiles.InventoryClerkProfile;
 import com.mycompany.farmtotablenetwork.personnel.profiles.ProcurementOfficerProfile;
 import com.mycompany.farmtotablenetwork.personnel.profiles.QualityAnalystProfile;
+import com.mycompany.farmtotablenetwork.personnel.profiles.SystemAdminProfile;
 import com.mycompany.farmtotablenetwork.personnel.profiles.WarehouseManagerProfile;
 import com.mycompany.farmtotablenetwork.requests.PurchaseOrder;
 import com.mycompany.farmtotablenetwork.requests.InspectionRequest;
@@ -179,6 +181,27 @@ public class ConfigureABusiness {
         accountDirectory.newAccount("network1", "password", networkCoordinatorProfile);
         */
         
+        //HL: System Admin Profile 
+        Person saPerson = new Person(faker.name().firstName(), faker.name().lastName(), faker.internet().emailAddress(), faker.phoneNumber().cellPhone());
+        SystemAdminProfile saProfile = new SystemAdminProfile(saPerson, cropMgmt); //HL: added import using AltEnter 
+        accountDirectory.newAccount("admin", "admin", saProfile); //HL: username & password
+        
+        //HL: Enterprise Admin Profile (one per enterprise, 4 total) 
+        Person ea1Person = new Person(faker.name().firstName(), faker.name().lastName(), faker.internet().emailAddress(), faker.phoneNumber().cellPhone());
+        EnterpriseAdminProfile ea1Profile = new EnterpriseAdminProfile(ea1Person, cropMgmt); //HL: added import using AltEnter 
+        accountDirectory.newAccount("farm_admin", "pass", ea1Profile);
+        
+        Person ea2Person = new Person(faker.name().firstName(), faker.name().lastName(), faker.internet().emailAddress(), faker.phoneNumber().cellPhone());
+        EnterpriseAdminProfile ea2Profile = new EnterpriseAdminProfile(ea2Person, inspectionDept);
+        accountDirectory.newAccount("inspection_admin", "pass", ea2Profile);
+        
+        Person ea3Person = new Person(faker.name().firstName(), faker.name().lastName(), faker.internet().emailAddress(), faker.phoneNumber().cellPhone());
+        EnterpriseAdminProfile ea3Profile = new EnterpriseAdminProfile(ea3Person, warehouseOps);
+        accountDirectory.newAccount("dist_admin", "pass", ea3Profile);
+        
+        Person ea4Person = new Person(faker.name().firstName(), faker.name().lastName(), faker.internet().emailAddress(), faker.phoneNumber().cellPhone());
+        EnterpriseAdminProfile ea4Profile = new EnterpriseAdminProfile(ea4Person, procurement);
+        accountDirectory.newAccount("retail_admin", "pass", ea4Profile);
 
     }
     

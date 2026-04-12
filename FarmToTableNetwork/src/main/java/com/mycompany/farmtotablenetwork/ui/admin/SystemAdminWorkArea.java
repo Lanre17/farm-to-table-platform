@@ -90,7 +90,7 @@ public class SystemAdminWorkArea extends JPanel {
     }
 
     //HL: method that loads JTable in SystemAdminWorkArea UI - displays account, username, role, full name, & email address
-    private void loadTable() {
+    public void loadTable() {
         tableModel.setRowCount(0);
         for (UserAccount a : ConfigureABusiness.accountDirectory.getAllAccounts()) {
             tableModel.addRow(new Object[]{

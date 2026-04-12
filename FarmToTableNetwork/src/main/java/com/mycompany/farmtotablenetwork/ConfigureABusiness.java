@@ -184,7 +184,7 @@ public class ConfigureABusiness {
         //HL: System Admin Profile 
         Person saPerson = new Person(faker.name().firstName(), faker.name().lastName(), faker.internet().emailAddress(), faker.phoneNumber().cellPhone());
         SystemAdminProfile saProfile = new SystemAdminProfile(saPerson, cropMgmt); //HL: added import using AltEnter 
-        accountDirectory.newAccount("admin", "admin", saProfile);
+        accountDirectory.newAccount("admin", "admin", saProfile); //HL: username & password
         
         //HL: Enterprise Admin Profile (one per enterprise, 4 total) 
         Person ea1Person = new Person(faker.name().firstName(), faker.name().lastName(), faker.internet().emailAddress(), faker.phoneNumber().cellPhone());

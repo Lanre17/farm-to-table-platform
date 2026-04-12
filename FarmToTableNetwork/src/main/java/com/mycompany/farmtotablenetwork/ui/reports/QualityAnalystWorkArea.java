@@ -197,12 +197,12 @@ public class QualityAnalystWorkArea extends JPanel {
         }
         
         //------Open Requests Table
-        /*
+        
         requestsTableModel.setRowCount(0);
         HashMap<String, Integer> openCounts = summary.openRequestsByType();
         for (Map.Entry<String, Integer> entry : openCounts.entrySet()) {
             requestsTableModel.addRow(new Object[]{ entry.getKey(), entry.getValue() });
-        }*/
+        }
 
     }
 

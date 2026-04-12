@@ -26,6 +26,7 @@ import com.mycompany.farmtotablenetwork.ui.inspection.*;
 import com.mycompany.farmtotablenetwork.ui.distribution.*;
 import com.mycompany.farmtotablenetwork.ui.retail.*;
 import com.mycompany.farmtotablenetwork.ui.UIConstants;
+import com.mycompany.farmtotablenetwork.ui.admin.EnterpriseAdminWorkArea;
 import com.mycompany.farmtotablenetwork.ui.admin.SystemAdminWorkArea;
 import com.mycompany.farmtotablenetwork.ui.reports.QualityAnalystWorkArea;
 import javax.swing.*;
@@ -248,8 +249,8 @@ public class MainFrame extends JFrame {
             cardPanel.pushPanel(new SystemAdminWorkArea(profile, cardPanel));
         
         //HL: TO-DO: uncomment when Lanre creates EnerpriseAdminProfile 
-        /*} else if (profile instanceof EnterpriseAdminProfile) {
-            cardPanel.pushPanel(new EnterpriseAdminWorkArea(profile, cardPanel));*/
+        } else if (profile instanceof EnterpriseAdminProfile) {
+            cardPanel.pushPanel(new EnterpriseAdminWorkArea(profile, cardPanel));
         
             
 

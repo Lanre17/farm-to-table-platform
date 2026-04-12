@@ -142,7 +142,7 @@ public class CreateBatchPanel extends JPanel {
         ConfigureABusiness.inspectionDirectory.addInspectionRequest(ir);
         ConfigureABusiness.workRequestDirectory.addRequest(ir);
         submission.updateStatus(StatusConstants.INSPECTION_REQUESTED);
-        submission.getCrop().setStatus(StatusConstants.INSPECTION_REQUESTED);
+        submission.getCrop().setStatus(StatusConstants.INSPECTION_REQUESTED); 
         
         parent.loadTable();
             

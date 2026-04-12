@@ -94,6 +94,15 @@ public class NetworkSummary {
 
     
     //Methods 4 & 5 Total WarehouseItems and total received orders
+    public int totalWarehouseItems() {
+        return warehouseDirectory.findByStatus(StatusConstants.WAREHOUSED).size();
+    }
+
+    public int totalOrdersReceived() {
+        return orderDirectory.findByStatus(StatusConstants.RECEIVED).size();
+    }
+
+
 
     
 }

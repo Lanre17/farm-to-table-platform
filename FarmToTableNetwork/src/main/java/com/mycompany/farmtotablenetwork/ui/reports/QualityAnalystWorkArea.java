@@ -182,12 +182,12 @@ public class QualityAnalystWorkArea extends JPanel {
         );
         
         // --------KPI Labels----------
-        /*
+        
         float rate = summary.certPassFailRate();
         passRateLabel.setText(String.format("%.0f%%", rate));
         warehouseLabel.setText(String.valueOf(summary.totalWarehouseItems()));
         ordersLabel.setText(String.valueOf(summary.totalOrdersReceived()));
-        */
+        
         
         //------Batch counts table------
         batchTableModel.setRowCount(0);

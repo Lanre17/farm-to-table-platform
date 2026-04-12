@@ -29,6 +29,7 @@ import com.mycompany.farmtotablenetwork.personnel.profiles.DeliveryDriverProfile
 import com.mycompany.farmtotablenetwork.personnel.profiles.EnterpriseAdminProfile;
 import com.mycompany.farmtotablenetwork.personnel.profiles.InspectorProfile;
 import com.mycompany.farmtotablenetwork.personnel.profiles.InventoryClerkProfile;
+import com.mycompany.farmtotablenetwork.personnel.profiles.NetworkCoordinatorProfile;
 import com.mycompany.farmtotablenetwork.personnel.profiles.ProcurementOfficerProfile;
 import com.mycompany.farmtotablenetwork.personnel.profiles.QualityAnalystProfile;
 import com.mycompany.farmtotablenetwork.personnel.profiles.SystemAdminProfile;
@@ -173,13 +174,13 @@ public class ConfigureABusiness {
         
         //Emmanuel, unstub this when you have the NetworkCoordinatorProfile ready
         
-        /*
+        
         Person networkCoordinatorPerson = new Person (
                 faker.name().firstName(), faker.name().lastName(),
                 faker.internet().emailAddress(), faker.phoneNumber().cellPhone());
-        NetworkCoordinatorProfile networkCoordinatorProfile = new NetworkCoordinatorProfile (networkCoordinatorPerson,         InspectorProfile inspectorProfile = new InspectorProfile (inspectorPerson, inspectionDept); 
+        NetworkCoordinatorProfile networkCoordinatorProfile = new NetworkCoordinatorProfile(networkCoordinatorPerson, inspectionDept); 
         accountDirectory.newAccount("network1", "password", networkCoordinatorProfile);
-        */
+        
         
         //HL: System Admin Profile 
         Person saPerson = new Person(faker.name().firstName(), faker.name().lastName(), faker.internet().emailAddress(), faker.phoneNumber().cellPhone());

@@ -116,5 +116,31 @@ public class NetworkCoordinatorWorkArea extends JPanel {
         add(btnBar, BorderLayout.SOUTH);
     }
   
+  public void loadTable(String statusFilter) {
+        tableModel.setRowCount(0);
+        ArrayList<WorkRequest> requests;
+
+        // load all or filter by status depending on combo selection
+        if ("All".equals(statusFilter)) {
+            requests = ConfigureABusiness.workRequestDirectory.getAllRequests();
+        } else {
+            requests = ConfigureABusiness.workRequestDirectory.findByStatus(statusFilter);
+        }
+
+        for (WorkRequest r : requests) {
+            tableModel.addRow(new Object[]{
+                r,
+                r.getClass().getSimpleName(),
+                r.getSenderOrg().getName(),
+                r.getReceiverOrg().getName(),
+                r.getCreatedAt(),
+                r.getStatus()
+            });
+        }
+    }
 }
+  
+  
+  
+
 

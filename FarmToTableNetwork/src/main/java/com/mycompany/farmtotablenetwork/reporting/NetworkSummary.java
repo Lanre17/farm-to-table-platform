@@ -50,8 +50,21 @@ public class NetworkSummary {
         return counts;
     }
     
-    //Method 2 Inspection pass/fail rate as a percentage
-    
+    // returns the % of InspectionRequests with status Passed
+    // returns 0.0 if no requests exist to avoid divide-by-zero
+public float certPassFailRate() {
+    int passed = 0;
+    int total  = 0;
+    for (com.mycompany.farmtotablenetwork.requests.InspectionRequest r
+            : inspectionDirectory.getAllRequests()) {
+        total++;
+        if (com.mycompany.farmtotablenetwork.ui.StatusConstants.PASSED
+                .equals(r.getStatus())) {
+            passed++;
+        }
+    }
+    return total == 0 ? 0.0f : (float) passed / total * 100;
+}
     
     
     //Method 3 Open WorkRequests grouped by class name

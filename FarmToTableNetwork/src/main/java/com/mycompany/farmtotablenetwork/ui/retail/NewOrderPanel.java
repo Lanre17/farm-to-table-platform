@@ -21,6 +21,7 @@ import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
@@ -186,6 +187,14 @@ public class NewOrderPanel extends JPanel {
 
         // Refresh parent table
         parent.loadTable();
+
+        // Show success message
+        JOptionPane.showMessageDialog(
+                this,
+                "Purchase order created successfully.",
+                "Order Created",
+                JOptionPane.INFORMATION_MESSAGE
+        );
 
         // Return to Procurement work area
         goBack();

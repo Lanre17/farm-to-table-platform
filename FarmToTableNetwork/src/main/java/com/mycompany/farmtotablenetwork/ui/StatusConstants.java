@@ -37,10 +37,10 @@ public class StatusConstants {
     public static final String FULFILLING = "Fulfilling";
     public static final String SHIPPED    = "Shipped";
     public static final String RECEIVED   = "Received";
+    public static final String CANCELLED = "Cancelled";
 
     // Shipment Receipt Confirmation (Cross-enterprise: Distribution → Retail)
     public static final String PENDING = "Pending";
     public static final String STOCKED = "Stocked";
-    
     
 }

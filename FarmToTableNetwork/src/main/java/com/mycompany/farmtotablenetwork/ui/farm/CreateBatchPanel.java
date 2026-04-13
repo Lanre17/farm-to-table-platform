@@ -131,6 +131,7 @@ public class CreateBatchPanel extends JPanel {
         HarvestBatch batch = ConfigureABusiness.batchDirectory.newBatch(
             submission.getCrop(), qty, grade, pkg
         );
+        batch.setStatus(StatusConstants.PENDING_REVIEW);
 
         // Trigger InspectionRequest — cross-enterprise handoff to Emmanuel's Inspector
         InspectionRequest ir = new InspectionRequest(
@@ -141,7 +142,7 @@ public class CreateBatchPanel extends JPanel {
         ConfigureABusiness.inspectionDirectory.addInspectionRequest(ir);
         ConfigureABusiness.workRequestDirectory.addRequest(ir);
         submission.updateStatus(StatusConstants.INSPECTION_REQUESTED);
-        submission.getCrop().setStatus(StatusConstants.INSPECTION_REQUESTED);
+        submission.getCrop().setStatus(StatusConstants.INSPECTION_REQUESTED); 
         
         parent.loadTable();
             

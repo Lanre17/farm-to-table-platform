@@ -43,4 +43,8 @@ public class StatusConstants {
     public static final String PENDING = "Pending";
     public static final String STOCKED = "Stocked";
     
+    // Archive WorkOrder
+    public static final String ARCHIVE = "Archive";
+    
+    
 }

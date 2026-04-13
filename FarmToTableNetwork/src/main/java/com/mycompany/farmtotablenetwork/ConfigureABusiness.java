@@ -10,7 +10,7 @@ import com.mycompany.farmtotablenetwork.distribution.ShipmentReceiptConfirmation
 import com.mycompany.farmtotablenetwork.distribution.WarehouseDirectory;
 import com.mycompany.farmtotablenetwork.ecosystem.Enterprise;
 import com.mycompany.farmtotablenetwork.ecosystem.Organization;
-import com.mycompany.farmtotablenetwork.farm.Crop;
+//import com.mycompany.farmtotablenetwork.farm.Crop; //ps stubbed 4/11/26
 import com.mycompany.farmtotablenetwork.farm.CropDirectory;
 import com.mycompany.farmtotablenetwork.farm.HarvestBatch;
 import com.mycompany.farmtotablenetwork.farm.HarvestBatchDirectory;
@@ -18,7 +18,7 @@ import com.mycompany.farmtotablenetwork.personnel.Person;
 import com.mycompany.farmtotablenetwork.personnel.UserAccountDirectory;
 import com.mycompany.farmtotablenetwork.personnel.profiles.FarmerProfile;
 import com.mycompany.farmtotablenetwork.personnel.profiles.HarvestWorkerProfile;
-import com.mycompany.farmtotablenetwork.requests.HarvestSubmission;
+//import com.mycompany.farmtotablenetwork.requests.HarvestSubmission; //ps stubbed 4/11/26
 import com.mycompany.farmtotablenetwork.requests.WorkRequestDirectory;
 import com.mycompany.farmtotablenetwork.retail.InventoryDirectory;
 import com.mycompany.farmtotablenetwork.retail.PurchaseOrderDirectory;
@@ -29,6 +29,7 @@ import com.mycompany.farmtotablenetwork.personnel.profiles.DeliveryDriverProfile
 import com.mycompany.farmtotablenetwork.personnel.profiles.EnterpriseAdminProfile;
 import com.mycompany.farmtotablenetwork.personnel.profiles.InspectorProfile;
 import com.mycompany.farmtotablenetwork.personnel.profiles.InventoryClerkProfile;
+import com.mycompany.farmtotablenetwork.personnel.profiles.NetworkCoordinatorProfile;
 import com.mycompany.farmtotablenetwork.personnel.profiles.ProcurementOfficerProfile;
 import com.mycompany.farmtotablenetwork.personnel.profiles.QualityAnalystProfile;
 import com.mycompany.farmtotablenetwork.personnel.profiles.SystemAdminProfile;
@@ -96,7 +97,7 @@ public class ConfigureABusiness {
         
         
         seedAuth(); //HL
-      //  seedFarm();    //ps added 4/4/26
+      //  seedFarm();    //ps added 4/4/26 //ps stubbed 4/11/26
         seedInspection(); // EC 
         seedDistribution(); //HL
         seedRetail(); // LY added 4/5/26
@@ -173,39 +174,39 @@ public class ConfigureABusiness {
         
         //Emmanuel, unstub this when you have the NetworkCoordinatorProfile ready
         
-        /*
+        
         Person networkCoordinatorPerson = new Person (
                 faker.name().firstName(), faker.name().lastName(),
                 faker.internet().emailAddress(), faker.phoneNumber().cellPhone());
-        NetworkCoordinatorProfile networkCoordinatorProfile = new NetworkCoordinatorProfile (networkCoordinatorPerson,         InspectorProfile inspectorProfile = new InspectorProfile (inspectorPerson, inspectionDept); 
+        NetworkCoordinatorProfile networkCoordinatorProfile = new NetworkCoordinatorProfile(networkCoordinatorPerson, inspectionDept); 
         accountDirectory.newAccount("network1", "password", networkCoordinatorProfile);
-        */
+        
         
         //HL: System Admin Profile 
         Person saPerson = new Person(faker.name().firstName(), faker.name().lastName(), faker.internet().emailAddress(), faker.phoneNumber().cellPhone());
         SystemAdminProfile saProfile = new SystemAdminProfile(saPerson, cropMgmt); //HL: added import using AltEnter 
-        accountDirectory.newAccount("admin", "admin", saProfile); //HL: username & password
+        accountDirectory.newAccount("admin", "password", saProfile); //HL: username & password
         
         //HL: Enterprise Admin Profile (one per enterprise, 4 total) 
         Person ea1Person = new Person(faker.name().firstName(), faker.name().lastName(), faker.internet().emailAddress(), faker.phoneNumber().cellPhone());
         EnterpriseAdminProfile ea1Profile = new EnterpriseAdminProfile(ea1Person, cropMgmt); //HL: added import using AltEnter 
-        accountDirectory.newAccount("farm_admin", "pass", ea1Profile);
+        accountDirectory.newAccount("farm_admin", "password", ea1Profile);
         
         Person ea2Person = new Person(faker.name().firstName(), faker.name().lastName(), faker.internet().emailAddress(), faker.phoneNumber().cellPhone());
         EnterpriseAdminProfile ea2Profile = new EnterpriseAdminProfile(ea2Person, inspectionDept);
-        accountDirectory.newAccount("inspection_admin", "pass", ea2Profile);
+        accountDirectory.newAccount("inspection_admin", "password", ea2Profile);
         
         Person ea3Person = new Person(faker.name().firstName(), faker.name().lastName(), faker.internet().emailAddress(), faker.phoneNumber().cellPhone());
         EnterpriseAdminProfile ea3Profile = new EnterpriseAdminProfile(ea3Person, warehouseOps);
-        accountDirectory.newAccount("dist_admin", "pass", ea3Profile);
+        accountDirectory.newAccount("dist_admin", "password", ea3Profile);
         
         Person ea4Person = new Person(faker.name().firstName(), faker.name().lastName(), faker.internet().emailAddress(), faker.phoneNumber().cellPhone());
         EnterpriseAdminProfile ea4Profile = new EnterpriseAdminProfile(ea4Person, procurement);
-        accountDirectory.newAccount("retail_admin", "pass", ea4Profile);
+        accountDirectory.newAccount("retail_admin", "password", ea4Profile);
 
     }
     
-    
+    //ps stubbed 4/11/26
     /*private static void seedFarm(){
         
         // - Crops seeding

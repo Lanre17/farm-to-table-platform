@@ -8,8 +8,11 @@ import com.mycompany.farmtotablenetwork.distribution.WarehouseDirectory;
 import com.mycompany.farmtotablenetwork.farm.HarvestBatch;
 import com.mycompany.farmtotablenetwork.farm.HarvestBatchDirectory;
 import com.mycompany.farmtotablenetwork.inspection.InspectionDirectory;
+import com.mycompany.farmtotablenetwork.requests.WorkRequest;
 import com.mycompany.farmtotablenetwork.requests.WorkRequestDirectory;
 import com.mycompany.farmtotablenetwork.retail.PurchaseOrderDirectory;
+import com.mycompany.farmtotablenetwork.ui.StatusConstants;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
@@ -52,25 +55,54 @@ public class NetworkSummary {
     
     // returns the % of InspectionRequests with status Passed
     // returns 0.0 if no requests exist to avoid divide-by-zero
-public float certPassFailRate() {
-    int passed = 0;
-    int total  = 0;
-    for (com.mycompany.farmtotablenetwork.requests.InspectionRequest r
-            : inspectionDirectory.getAllRequests()) {
-        total++;
-        if (com.mycompany.farmtotablenetwork.ui.StatusConstants.PASSED
-                .equals(r.getStatus())) {
-            passed++;
+    public float certPassFailRate() {
+        int passed = 0;
+        int total  = 0;
+        for (com.mycompany.farmtotablenetwork.requests.InspectionRequest r
+                : inspectionDirectory.getAllRequests()) {
+            total++;
+            if (com.mycompany.farmtotablenetwork.ui.StatusConstants.PASSED
+                    .equals(r.getStatus())) {
+                passed++;
+            }
         }
+        return total == 0 ? 0.0f : (float) passed / total * 100;
     }
-    return total == 0 ? 0.0f : (float) passed / total * 100;
-}
     
     
     //Method 3 Open WorkRequests grouped by class name
     
+        public HashMap<String, Integer> openRequestsByType() {
+        ArrayList<String> terminal = new ArrayList<>();
+        terminal.add(StatusConstants.PASSED);
+        terminal.add(StatusConstants.FAILED);
+        terminal.add(StatusConstants.DENIED);
+        terminal.add(StatusConstants.RECEIVED);
+        terminal.add(StatusConstants.STOCKED);
+        terminal.add(StatusConstants.DELIVERED);
+        terminal.add(StatusConstants.REJECTED);
+
+        HashMap<String, Integer> counts = new HashMap<>();
+        for (WorkRequest r : workRequestDirectory.getAllRequests()) {
+            if (!terminal.contains(r.getStatus())) {
+                String type = r.getClass().getSimpleName();
+                counts.put(type, counts.getOrDefault(type, 0) + 1);
+            }
+        }
+        return counts;
+    }
+
     
     //Methods 4 & 5 Total WarehouseItems and total received orders
+    public int totalWarehouseItems() {
+        return warehouseDirectory.findByStatus(StatusConstants.WAREHOUSED).size();
+    }
+
+    public int totalOrdersReceived() {
+        return orderDirectory.findByStatus(StatusConstants.RECEIVED).size();
+    }
+
+
 
     
 }

@@ -37,6 +37,10 @@ public class PurchaseOrder extends WorkRequest {
     public void fulfill() {
         updateStatus(StatusConstants.FULFILLING);
     }
+    
+    public void markInTransit() {
+        updateStatus(StatusConstants.IN_TRANSIT);
+    }
 
     public void markShipped() {
         updateStatus(StatusConstants.SHIPPED);
@@ -44,6 +48,10 @@ public class PurchaseOrder extends WorkRequest {
 
     public void receive() {
         updateStatus(StatusConstants.RECEIVED);
+    }
+    
+    public void cancel() {
+        updateStatus(StatusConstants.CANCELLED);
     }
 
     // ── Getters ────────────────────────────────────────

@@ -185,24 +185,24 @@ public class ConfigureABusiness {
         //HL: System Admin Profile 
         Person saPerson = new Person(faker.name().firstName(), faker.name().lastName(), faker.internet().emailAddress(), faker.phoneNumber().cellPhone());
         SystemAdminProfile saProfile = new SystemAdminProfile(saPerson, cropMgmt); //HL: added import using AltEnter 
-        accountDirectory.newAccount("admin", "admin", saProfile); //HL: username & password
+        accountDirectory.newAccount("admin", "password", saProfile); //HL: username & password
         
         //HL: Enterprise Admin Profile (one per enterprise, 4 total) 
         Person ea1Person = new Person(faker.name().firstName(), faker.name().lastName(), faker.internet().emailAddress(), faker.phoneNumber().cellPhone());
         EnterpriseAdminProfile ea1Profile = new EnterpriseAdminProfile(ea1Person, cropMgmt); //HL: added import using AltEnter 
-        accountDirectory.newAccount("farm_admin", "pass", ea1Profile);
+        accountDirectory.newAccount("farm_admin", "password", ea1Profile);
         
         Person ea2Person = new Person(faker.name().firstName(), faker.name().lastName(), faker.internet().emailAddress(), faker.phoneNumber().cellPhone());
         EnterpriseAdminProfile ea2Profile = new EnterpriseAdminProfile(ea2Person, inspectionDept);
-        accountDirectory.newAccount("inspection_admin", "pass", ea2Profile);
+        accountDirectory.newAccount("inspection_admin", "password", ea2Profile);
         
         Person ea3Person = new Person(faker.name().firstName(), faker.name().lastName(), faker.internet().emailAddress(), faker.phoneNumber().cellPhone());
         EnterpriseAdminProfile ea3Profile = new EnterpriseAdminProfile(ea3Person, warehouseOps);
-        accountDirectory.newAccount("dist_admin", "pass", ea3Profile);
+        accountDirectory.newAccount("dist_admin", "password", ea3Profile);
         
         Person ea4Person = new Person(faker.name().firstName(), faker.name().lastName(), faker.internet().emailAddress(), faker.phoneNumber().cellPhone());
         EnterpriseAdminProfile ea4Profile = new EnterpriseAdminProfile(ea4Person, procurement);
-        accountDirectory.newAccount("retail_admin", "pass", ea4Profile);
+        accountDirectory.newAccount("retail_admin", "password", ea4Profile);
 
     }
     

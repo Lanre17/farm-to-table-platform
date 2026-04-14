@@ -6,6 +6,7 @@ package com.mycompany.farmtotablenetwork.ui.retail;
 
 import com.mycompany.farmtotablenetwork.ConfigureABusiness;
 import com.mycompany.farmtotablenetwork.personnel.profiles.ProcurementOfficerProfile;
+import com.mycompany.farmtotablenetwork.requests.DeliveryRequest;
 import com.mycompany.farmtotablenetwork.requests.PurchaseOrder;
 import com.mycompany.farmtotablenetwork.ui.StatusConstants;
 import com.mycompany.farmtotablenetwork.ui.UIConstants;
@@ -34,6 +35,10 @@ public class ProcurementOfficerWorkArea extends JPanel{
     private JButton btnNewOrder;
     private JButton btnRefresh;
     private JButton btnCancel;
+    private JButton btnShowActive;
+    private JButton btnShowClosed;
+    
+    private String currentFilter = "ACTIVE";
 
     private static final String[] COLUMNS = {
         "Order", "Product", "Qty", "Distributor", "Receiver", "Requested Date", "Status"
@@ -107,7 +112,22 @@ public class ProcurementOfficerWorkArea extends JPanel{
 
         btnNewOrder = UIFactory.primaryButton("+ New Order");
         btnNewOrder.addActionListener(e -> openNewOrderPanel());
+        
+        btnShowActive = UIFactory.secondaryButton("Show Active");
+        btnShowClosed = UIFactory.secondaryButton("Show Closed");
 
+        btnShowActive.addActionListener(e -> {
+            currentFilter = "ACTIVE";
+            loadTable();
+        });
+
+        btnShowClosed.addActionListener(e -> {
+            currentFilter = "CLOSED";
+            loadTable();
+        });
+
+        btnBar.add(btnShowActive);
+        btnBar.add(btnShowClosed);
         btnBar.add(btnRefresh);
         btnBar.add(btnCancel);
         btnBar.add(btnNewOrder);
@@ -120,6 +140,22 @@ public class ProcurementOfficerWorkArea extends JPanel{
         tableModel.setRowCount(0);
 
         for (PurchaseOrder order : ConfigureABusiness.orderDirectory.getAllOrders()) {
+
+            String status = getDisplayStatus(order);
+
+            boolean isClosed
+                    = StatusConstants.RECEIVED.equals(status)
+                    || StatusConstants.CANCELLED.equals(status)
+                    || StatusConstants.ARCHIVE.equals(status);
+
+            if ("ACTIVE".equals(currentFilter) && isClosed) {
+                continue;
+            }
+
+            if ("CLOSED".equals(currentFilter) && !isClosed) {
+                continue;
+            }
+
             tableModel.addRow(new Object[]{
                 order,
                 order.getProductName(),
@@ -141,6 +177,29 @@ public class ProcurementOfficerWorkArea extends JPanel{
             return null;
         }
         return (PurchaseOrder) tableModel.getValueAt(row, 0);
+    }
+    
+    private String getDisplayStatus(PurchaseOrder order) {
+        String poStatus = order.getStatus();
+
+        // Keep closed/final procurement-owned states as source of truth.
+        if (StatusConstants.RECEIVED.equals(poStatus)
+                || StatusConstants.CANCELLED.equals(poStatus)) {
+            return poStatus;
+        }
+
+        for (DeliveryRequest dr : ConfigureABusiness.deliveryDirectory.getAllDeliveries()) {
+            if (dr.getPurchaseOrderId() == order.getRequestId()) {
+                if (StatusConstants.DELIVERED.equals(dr.getStatus())) {
+                    return StatusConstants.DELIVERED;
+                }
+                if (StatusConstants.IN_TRANSIT.equals(dr.getStatus())) {
+                    return StatusConstants.IN_TRANSIT;
+                }
+            }
+        }
+
+        return poStatus;
     }
 
     // Cancels only orders that are still in Submitted status.

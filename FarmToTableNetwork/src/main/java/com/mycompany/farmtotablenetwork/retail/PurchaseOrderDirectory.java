@@ -49,4 +49,12 @@ public class PurchaseOrderDirectory {
         return result;
     }
     
+    public PurchaseOrder findOrder(int id) {
+        for (PurchaseOrder o : orders) {
+            if (o.getRequestId() == id) {
+                return o;
+            }
+        }
+        return null;
+    }
 }

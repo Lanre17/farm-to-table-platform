@@ -81,6 +81,7 @@ public class NetworkSummary {
         terminal.add(StatusConstants.STOCKED);
         terminal.add(StatusConstants.DELIVERED);
         terminal.add(StatusConstants.REJECTED);
+        terminal.add(StatusConstants.INSPECTION_REQUESTED); // new ps added 4/14/26
 
         HashMap<String, Integer> counts = new HashMap<>();
         for (WorkRequest r : workRequestDirectory.getAllRequests()) {

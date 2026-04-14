@@ -36,6 +36,7 @@ public class CertificationApproval extends WorkRequest {
             this.inspection, certifierUsername, certType, expiryDate
         );
         ConfigureABusiness.certDirectory.addCertification(cert);
+        this.inspection.getBatch().updateStatus(StatusConstants.CERTIFIED); // updates the status of the HarvestBatch object ps added 4/14/26
     }
 
     // denial is terminal — no notification sent back to the Farm

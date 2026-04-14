@@ -115,6 +115,13 @@ public class SystemAdminWorkArea extends JPanel {
     private void onDelete() {
         UserAccount selected = getSelected();
         if (selected == null) return;
+        
+        // prevent sysadmin from deleting their own account ps added 4/14/26
+        if (selected.getProfile() == profile) {
+        JOptionPane.showMessageDialog(this, "You cannot delete your own account.", 
+            "Action Not Allowed", JOptionPane.WARNING_MESSAGE);
+        return;
+    }
 
         //HL: asks System Admin if they actually want to delete a selected account from the JTable or not 
         int confirm = JOptionPane.showConfirmDialog(this, "Delete account \"" + selected.getUsername() + "\"?", "Confirm Delete", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);

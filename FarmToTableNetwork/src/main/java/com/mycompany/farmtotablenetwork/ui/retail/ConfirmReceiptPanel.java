@@ -11,8 +11,8 @@ import com.mycompany.farmtotablenetwork.requests.PurchaseOrder;
 import com.mycompany.farmtotablenetwork.requests.ShipmentReceiptConfirmation;
 import com.mycompany.farmtotablenetwork.ui.UIConstants;
 import com.mycompany.farmtotablenetwork.ui.UIFactory;
+import com.mycompany.farmtotablenetwork.ui.main.CardSequencePanel;
 import java.awt.BorderLayout;
-import java.awt.CardLayout;
 import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -34,7 +34,7 @@ import javax.swing.JTextField;
 class ConfirmReceiptPanel extends JPanel {
     private final ShipmentReceiptConfirmation confirmation;
     private final InventoryClerkProfile profile;
-    private final JPanel cardPanel;
+    private final CardSequencePanel cardPanel;
     private final InventoryClerkWorkArea parent;
 
     private JTextField fieldShelfLocation;
@@ -42,7 +42,7 @@ class ConfirmReceiptPanel extends JPanel {
 
     public ConfirmReceiptPanel(ShipmentReceiptConfirmation confirmation,
             InventoryClerkProfile profile,
-            JPanel cardPanel,
+            CardSequencePanel cardPanel,
             InventoryClerkWorkArea parent) {
         this.confirmation = confirmation;
         this.profile = profile;
@@ -197,8 +197,6 @@ class ConfirmReceiptPanel extends JPanel {
     }
 
     private void goBack() {
-        cardPanel.remove(this);
-        CardLayout layout = (CardLayout) cardPanel.getLayout();
-        layout.previous(cardPanel);
+        cardPanel.popPanel(this);
     }
 }

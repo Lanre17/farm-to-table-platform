@@ -11,8 +11,8 @@ import com.mycompany.farmtotablenetwork.requests.PurchaseOrder;
 import com.mycompany.farmtotablenetwork.ui.StatusConstants;
 import com.mycompany.farmtotablenetwork.ui.UIConstants;
 import com.mycompany.farmtotablenetwork.ui.UIFactory;
+import com.mycompany.farmtotablenetwork.ui.main.CardSequencePanel;
 import java.awt.BorderLayout;
-import java.awt.CardLayout;
 import java.awt.FlowLayout;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -28,7 +28,7 @@ import javax.swing.table.DefaultTableModel;
 
 public class ProcurementOfficerWorkArea extends JPanel{
     private final ProcurementOfficerProfile profile;
-    private final JPanel cardPanel;
+    private final CardSequencePanel cardPanel;
 
     private DefaultTableModel tableModel;
     private JTable orderTable;
@@ -44,7 +44,7 @@ public class ProcurementOfficerWorkArea extends JPanel{
         "Order", "Product", "Qty", "Distributor", "Receiver", "Requested Date", "Status"
     };
 
-    public ProcurementOfficerWorkArea(ProcurementOfficerProfile profile, JPanel cardPanel) {
+    public ProcurementOfficerWorkArea(ProcurementOfficerProfile profile, CardSequencePanel cardPanel) {
         this.profile = profile;
         this.cardPanel = cardPanel;
 
@@ -248,10 +248,8 @@ public class ProcurementOfficerWorkArea extends JPanel{
     }
 
     // Opens the form panel for creating a new order.
+    //ps updated to use CardSequence method instead of raw card layout
     private void openNewOrderPanel() {
-        NewOrderPanel panel = new NewOrderPanel(profile, cardPanel, this);
-        cardPanel.add(panel, "NewOrderPanel");
-        CardLayout layout = (CardLayout) cardPanel.getLayout();
-        layout.next(cardPanel);
+            cardPanel.pushPanel(new NewOrderPanel(profile, cardPanel, this));
     }
 }

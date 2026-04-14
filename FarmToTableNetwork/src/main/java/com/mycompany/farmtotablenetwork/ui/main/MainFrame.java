@@ -273,49 +273,6 @@ public class MainFrame extends JFrame {
         }
     }
     
-    /* private void loadWorkArea(Profile profile) {
-        // ── Farm (Polina) ─────────────────────────────────────────────────
-        if (profile instanceof FarmerProfile) {
-            cardPanel.pushPanel(new FarmerWorkArea((FarmerProfile) profile, cardPanel));
-        }else if (profile instanceof HarvestWorkerProfile) {
-            cardPanel.pushPanel(new HarvestWorkerWorkArea((HarvestWorkerProfile) profile, cardPanel));
-
-        // ── Inspection (Emmanuel) ─────────────────────────────────────────
-
-        } else if (profile instanceof InspectorProfile) {
-            cardPanel.pushPanel(new InspectorWorkArea((InspectorProfile) profile, cardPanel));
-        } else if (profile instanceof CertifierProfile) {
-            cardPanel.pushPanel(new CertifierWorkArea((CertifierProfile) profile, cardPanel));
-
-        // ── Distribution (Henry) ──────────────────────────────────────────
-
-        } else if (profile instanceof WarehouseManagerProfile) {
-            cardPanel.pushPanel(new WarehouseManagerWorkArea((WarehouseManagerProfile) profile, cardPanel));
-        } else if (profile instanceof DeliveryDriverProfile) {
-            cardPanel.pushPanel(new DeliveryDriverWorkArea((DeliveryDriverProfile) profile, cardPanel));
-
-        // ── Retail (Lanre) ────────────────────────────────────────────────
-
-        } else if (profile instanceof ProcurementOfficerProfile) {
-            cardPanel.pushPanel(new ProcurementOfficerWorkArea((ProcurementOfficerProfile) profile, cardPanel));
-        } else if (profile instanceof InventoryClerkProfile) {
-            cardPanel.pushPanel(new InventoryClerkWorkArea((InventoryClerkProfile) profile, cardPanel));
-
-        // ── Network / Shared roles ────────────────────────────────────────
-        } else if (profile instanceof NetworkCoordinatorProfile) {
-            cardPanel.pushPanel(new NetworkCoordinatorWorkArea((NetworkCoordinatorProfile) profile, cardPanel));
-        } else if (profile instanceof QualityAnalystProfile) {
-            cardPanel.pushPanel(new QualityAnalystWorkArea((QualityAnalystProfile) profile, cardPanel));
-
-        // ── Fallback ──────────────────────────────────────────────────────
-        } else {
-            JLabel fallback = new JLabel("No work area for role: " + profile.getRole());
-            fallback.setFont(UIConstants.FONT_BODY);
-            fallback.setHorizontalAlignment(SwingConstants.CENTER);
-            cardPanel.pushPanel(new JPanel() {{ add(fallback); }});
-        }
-
-    } */
 
 }
 

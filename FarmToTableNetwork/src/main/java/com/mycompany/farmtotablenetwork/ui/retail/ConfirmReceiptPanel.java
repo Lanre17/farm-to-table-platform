@@ -7,6 +7,7 @@ package com.mycompany.farmtotablenetwork.ui.retail;
 import com.mycompany.farmtotablenetwork.ConfigureABusiness;
 import com.mycompany.farmtotablenetwork.personnel.profiles.InventoryClerkProfile;
 import com.mycompany.farmtotablenetwork.requests.DeliveryRequest;
+import com.mycompany.farmtotablenetwork.requests.PurchaseOrder;
 import com.mycompany.farmtotablenetwork.requests.ShipmentReceiptConfirmation;
 import com.mycompany.farmtotablenetwork.ui.UIConstants;
 import com.mycompany.farmtotablenetwork.ui.UIFactory;
@@ -155,7 +156,7 @@ class ConfirmReceiptPanel extends JPanel {
 
     private void onSubmit() {
 
-        if (!validateInput()) {
+                if (!validateInput()) {
             return;
         }
 
@@ -174,6 +175,12 @@ class ConfirmReceiptPanel extends JPanel {
                 LocalDate.now().toString()
         );
 
+        // Update related purchase order to Received
+        PurchaseOrder po = ConfigureABusiness.orderDirectory.findOrder(delivery.getPurchaseOrderId());
+        if (po != null) {
+            po.receive();
+        }
+
         // Refresh clerk dashboard tables
         parent.loadReceiptTable();
         parent.loadInventoryTable();
@@ -185,7 +192,7 @@ class ConfirmReceiptPanel extends JPanel {
                 "Success",
                 JOptionPane.INFORMATION_MESSAGE
         );
-        
+
         goBack();
     }
 

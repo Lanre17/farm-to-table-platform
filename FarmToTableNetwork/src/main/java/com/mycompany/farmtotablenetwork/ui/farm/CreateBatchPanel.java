@@ -131,7 +131,7 @@ public class CreateBatchPanel extends JPanel {
         HarvestBatch batch = ConfigureABusiness.batchDirectory.newBatch(
             submission.getCrop(), qty, grade, pkg
         );
-        batch.setStatus(StatusConstants.PENDING_REVIEW);
+     //   batch.setStatus(StatusConstants.INSPECTION_REQUESTED);
 
         // Trigger InspectionRequest — cross-enterprise handoff to Emmanuel's Inspector
         InspectionRequest ir = new InspectionRequest(

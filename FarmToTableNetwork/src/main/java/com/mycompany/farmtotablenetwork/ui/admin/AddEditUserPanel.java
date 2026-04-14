@@ -14,6 +14,7 @@ import com.mycompany.farmtotablenetwork.personnel.profiles.FarmerProfile;
 import com.mycompany.farmtotablenetwork.personnel.profiles.HarvestWorkerProfile;
 import com.mycompany.farmtotablenetwork.personnel.profiles.InspectorProfile;
 import com.mycompany.farmtotablenetwork.personnel.profiles.InventoryClerkProfile;
+import com.mycompany.farmtotablenetwork.personnel.profiles.NetworkCoordinatorProfile;
 import com.mycompany.farmtotablenetwork.personnel.profiles.ProcurementOfficerProfile;
 import com.mycompany.farmtotablenetwork.personnel.profiles.QualityAnalystProfile;
 import com.mycompany.farmtotablenetwork.personnel.profiles.WarehouseManagerProfile;
@@ -225,7 +226,7 @@ public class AddEditUserPanel extends JPanel {
             case "Procurement Officer": return new ProcurementOfficerProfile(person, org);
             case "Inventory Clerk": return new InventoryClerkProfile(person, org);
             //HL: TO-DO, UNCOMMENT after Emmanuel creates NetworkCoordinatorProfile
-            //case "Network Coordinator": return new NetworkCoordinatorProfile(person, org);
+            case "Network Coordinator": return new NetworkCoordinatorProfile(person, org);
             case "Quality Analyst": return new QualityAnalystProfile(person, org);
             default: return new FarmerProfile(person, org);
         }

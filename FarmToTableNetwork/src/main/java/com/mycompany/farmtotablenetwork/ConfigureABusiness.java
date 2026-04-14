@@ -10,7 +10,7 @@ import com.mycompany.farmtotablenetwork.distribution.ShipmentReceiptConfirmation
 import com.mycompany.farmtotablenetwork.distribution.WarehouseDirectory;
 import com.mycompany.farmtotablenetwork.ecosystem.Enterprise;
 import com.mycompany.farmtotablenetwork.ecosystem.Organization;
-//import com.mycompany.farmtotablenetwork.farm.Crop; //ps stubbed 4/11/26
+import com.mycompany.farmtotablenetwork.farm.Crop; 
 import com.mycompany.farmtotablenetwork.farm.CropDirectory;
 import com.mycompany.farmtotablenetwork.farm.HarvestBatch;
 import com.mycompany.farmtotablenetwork.farm.HarvestBatchDirectory;
@@ -18,7 +18,6 @@ import com.mycompany.farmtotablenetwork.personnel.Person;
 import com.mycompany.farmtotablenetwork.personnel.UserAccountDirectory;
 import com.mycompany.farmtotablenetwork.personnel.profiles.FarmerProfile;
 import com.mycompany.farmtotablenetwork.personnel.profiles.HarvestWorkerProfile;
-//import com.mycompany.farmtotablenetwork.requests.HarvestSubmission; //ps stubbed 4/11/26
 import com.mycompany.farmtotablenetwork.requests.WorkRequestDirectory;
 import com.mycompany.farmtotablenetwork.retail.InventoryDirectory;
 import com.mycompany.farmtotablenetwork.retail.PurchaseOrderDirectory;
@@ -37,6 +36,7 @@ import com.mycompany.farmtotablenetwork.personnel.profiles.WarehouseManagerProfi
 import com.mycompany.farmtotablenetwork.requests.PurchaseOrder;
 import com.mycompany.farmtotablenetwork.requests.InspectionRequest;
 import com.mycompany.farmtotablenetwork.requests.CertificationApproval;
+import com.mycompany.farmtotablenetwork.requests.HarvestSubmission;
 
 
 /**
@@ -75,6 +75,8 @@ public class ConfigureABusiness {
     public static Organization fleetMgmt;                           //ps added 4/4/26
     public static Organization procurement;                         //ps added 4/4/26
     public static Organization storefrontInventory;                 //ps added 4/4/26
+    public static Organization qualityAssurance;                    //ps added 4/14/26
+    public static Organization iT;                                   //ps added 4/14/26
    
        
     
@@ -83,6 +85,7 @@ public class ConfigureABusiness {
         Enterprise inspectionEnterprise     = new Enterprise("Quality & Inspection Agency");      //ps added 4/4/26
         Enterprise distributionEnterprise   = new Enterprise("Distribution / Logistics Co.");     //ps added 4/4/26
         Enterprise retailEnterprise         = new Enterprise("Retail Store / Restaurant");        //ps added 4/4/26
+        Enterprise headOffice               = new Enterprise("Head Office");                      //ps added 4/14/26  
 
         
         cropMgmt            = new Organization ("Crop Management", farmEnterprise.getEnterpriseId());                       //ps added 4/4/26
@@ -93,11 +96,11 @@ public class ConfigureABusiness {
         fleetMgmt           = new Organization("Fleet / Delivery Management", distributionEnterprise.getEnterpriseId());    //ps added 4/4/26
         procurement         = new Organization("Procurement / Purchasing", retailEnterprise.getEnterpriseId());             //ps added 4/4/26
         storefrontInventory = new Organization("Storefront / Inventory", retailEnterprise.getEnterpriseId());               //ps added 4/4/26
-
-        
+        qualityAssurance    = new Organization("QA", headOffice.getEnterpriseId());                                         //ps added 4/14/26 
+        iT                  = new Organization("IT", headOffice.getEnterpriseId());
         
         seedAuth(); //HL
-      //  seedFarm();    //ps added 4/4/26 //ps stubbed 4/11/26
+        seedFarm();    //ps added 4/4/26 //ps stubbed 4/11/26
         seedInspection(); // EC 
         seedDistribution(); //HL
         seedRetail(); // LY added 4/5/26
@@ -168,7 +171,7 @@ public class ConfigureABusiness {
         Person qualityAnalystPerson = new Person (
                 faker.name().firstName(), faker.name().lastName(),
                 faker.internet().emailAddress(), faker.phoneNumber().cellPhone());
-        QualityAnalystProfile qaProfile = new QualityAnalystProfile (qualityAnalystPerson, cropMgmt);
+        QualityAnalystProfile qaProfile = new QualityAnalystProfile (qualityAnalystPerson, qualityAssurance);
         accountDirectory.newAccount("qa1", "password", qaProfile);
         
         
@@ -184,7 +187,7 @@ public class ConfigureABusiness {
         
         //HL: System Admin Profile 
         Person saPerson = new Person(faker.name().firstName(), faker.name().lastName(), faker.internet().emailAddress(), faker.phoneNumber().cellPhone());
-        SystemAdminProfile saProfile = new SystemAdminProfile(saPerson, cropMgmt); //HL: added import using AltEnter 
+        SystemAdminProfile saProfile = new SystemAdminProfile(saPerson, iT); //HL: added import using AltEnter 
         accountDirectory.newAccount("admin", "password", saProfile); //HL: username & password
         
         //HL: Enterprise Admin Profile (one per enterprise, 4 total) 
@@ -206,21 +209,24 @@ public class ConfigureABusiness {
 
     }
     
-    //ps stubbed 4/11/26
-    /*private static void seedFarm(){
+    
+    private static void seedFarm(){
         
         // - Crops seeding
         Crop tomatoes =    cropDirectory.newCrop("Tomato", "2026-03-01", "Field A");  //ps added 4/4/26
         Crop lettuce = cropDirectory.newCrop("Lettuce", "2026-03-10", "Field B");       //ps added 4/4/26
+        Crop cabbage = cropDirectory.newCrop("Cabbage", "2026-03-01", "Field C");
+        Crop beans  = cropDirectory.newCrop("Beans", "2026-03-01", "Field D");
+        Crop pumpkin = cropDirectory.newCrop("Pumpkin", "2026-04-01", "Field E");
         
         //Harvest Batches seeding
-        HarvestBatch batch1 = batchDirectory.newBatch(tomatoes, 250.5f, "A", "Crate");   //this batch is the one inspected for the demo story   ps added 4/4/26
+       // HarvestBatch batch1 = batchDirectory.newBatch(tomatoes, 250.5f, "A", "Crate");   
         
         //HarvestSubmission seeding // it's already approved so HarvestWorker can see it
         HarvestSubmission sub1 = new HarvestSubmission(tomatoes, "farmer1", 250.5f, cropMgmt, harvestAndPackaging); //placeholder code for when Emmanuel's classes are ready
         sub1.approve(); 
         
-    }*/
+    }
     
     private static void seedInspection() {
     // get the tomato batch Polina seeded in seedFarm()

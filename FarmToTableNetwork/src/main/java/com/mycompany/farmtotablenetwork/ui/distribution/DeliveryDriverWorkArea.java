@@ -7,6 +7,7 @@ package com.mycompany.farmtotablenetwork.ui.distribution;
 import com.mycompany.farmtotablenetwork.ConfigureABusiness;
 import com.mycompany.farmtotablenetwork.personnel.profiles.DeliveryDriverProfile;
 import com.mycompany.farmtotablenetwork.requests.DeliveryRequest;
+import com.mycompany.farmtotablenetwork.requests.PurchaseOrder;
 import com.mycompany.farmtotablenetwork.ui.StatusConstants;
 import com.mycompany.farmtotablenetwork.ui.UIConstants;
 import com.mycompany.farmtotablenetwork.ui.UIFactory;
@@ -150,6 +151,13 @@ public class DeliveryDriverWorkArea extends JPanel { //HL: added import using Al
         DeliveryRequest dr = getSelected();
         if (dr == null) return;
         dr.markInTransit();
+        
+        //ps added 4/14/26. This bit marks the PO as "in transit"
+        PurchaseOrder po = ConfigureABusiness.orderDirectory.findOrder(dr.getPurchaseOrderId());
+        if (po != null) 
+            po.markInTransit();
+        //end of polina's addition
+        
         loadTable();
     }
 
@@ -160,6 +168,12 @@ public class DeliveryDriverWorkArea extends JPanel { //HL: added import using Al
         DeliveryRequest dr = getSelected();
         if (dr == null) return;
         dr.markDelivered();
+        
+        //ps added 4/14/26 these 3 lines update the status on the PO
+        PurchaseOrder po = ConfigureABusiness.orderDirectory.findOrder(dr.getPurchaseOrderId());
+        if (po != null) 
+            po.receive();
+        //end of polina's addition
         loadTable();
     }
     

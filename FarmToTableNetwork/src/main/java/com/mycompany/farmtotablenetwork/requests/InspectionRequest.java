@@ -45,6 +45,7 @@ public class InspectionRequest extends WorkRequest {
         this.result = result;
         if (StatusConstants.PASSED.equals(result)) {
             this.updateStatus(StatusConstants.PASSED);
+            this.batch.updateStatus(StatusConstants.PASSED); // update status on the HarvestBatch object too ps added 4/14/26
             // auto-create CertificationApproval, no manual step needed
             CertificationApproval ca = new CertificationApproval(
                 this,
@@ -55,6 +56,7 @@ public class InspectionRequest extends WorkRequest {
             ConfigureABusiness.workRequestDirectory.addRequest(ca);
         } else {
             this.updateStatus(StatusConstants.FAILED);
+            this.batch.updateStatus(StatusConstants.FAILED); // update status on the HarvestBatch object too ps added 4/14/26
         }
     }
 

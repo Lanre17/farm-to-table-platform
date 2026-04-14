@@ -8,13 +8,12 @@ import com.mycompany.farmtotablenetwork.ConfigureABusiness;
 import com.mycompany.farmtotablenetwork.personnel.profiles.InventoryClerkProfile;
 import com.mycompany.farmtotablenetwork.requests.DeliveryRequest;
 import com.mycompany.farmtotablenetwork.requests.ShipmentReceiptConfirmation;
-import com.mycompany.farmtotablenetwork.requests.WorkRequest;
 import com.mycompany.farmtotablenetwork.retail.InventoryItem;
 import com.mycompany.farmtotablenetwork.ui.StatusConstants;
 import com.mycompany.farmtotablenetwork.ui.UIConstants;
 import com.mycompany.farmtotablenetwork.ui.UIFactory;
+import com.mycompany.farmtotablenetwork.ui.main.CardSequencePanel;
 import java.awt.BorderLayout;
-import java.awt.CardLayout;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import javax.swing.BorderFactory;
@@ -32,7 +31,7 @@ import javax.swing.table.DefaultTableModel;
 
 public class InventoryClerkWorkArea extends JPanel {
     private final InventoryClerkProfile profile;
-    private final JPanel cardPanel;
+    private final CardSequencePanel cardPanel;  //ps addded 4/14/26
 
     // Table for incoming shipment receipts awaiting clerk confirmation
     private JTable receiptTable;
@@ -44,7 +43,7 @@ public class InventoryClerkWorkArea extends JPanel {
 
     private JButton btnConfirm;
 
-    public InventoryClerkWorkArea(InventoryClerkProfile profile, JPanel cardPanel) {
+    public InventoryClerkWorkArea(InventoryClerkProfile profile, CardSequencePanel cardPanel) {
         this.profile = profile;
         this.cardPanel = cardPanel;
 
@@ -244,7 +243,7 @@ public class InventoryClerkWorkArea extends JPanel {
                 this
         );
 
-        cardPanel.add(panel);
-        ((CardLayout) cardPanel.getLayout()).next(cardPanel);
+        cardPanel.pushPanel(panel); // ps changed raw CardLayout to prebuilt one 4/14/26
+        
     }
 }

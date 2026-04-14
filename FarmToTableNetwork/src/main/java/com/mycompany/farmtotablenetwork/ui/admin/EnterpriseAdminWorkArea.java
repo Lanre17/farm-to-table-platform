@@ -173,6 +173,14 @@ public class EnterpriseAdminWorkArea extends JPanel {
                     JOptionPane.WARNING_MESSAGE
             );
             return;
+        
+        }
+        
+        //prevents from deleting your own account
+        if (selected.getProfile() == profile) {
+        JOptionPane.showMessageDialog(this, "You cannot delete your own account.", 
+            "Action Not Allowed", JOptionPane.WARNING_MESSAGE);
+        return;
         }
 
         int confirm = JOptionPane.showConfirmDialog(

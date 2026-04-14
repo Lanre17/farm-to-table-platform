@@ -9,8 +9,8 @@ import com.mycompany.farmtotablenetwork.personnel.profiles.ProcurementOfficerPro
 import com.mycompany.farmtotablenetwork.requests.PurchaseOrder;
 import com.mycompany.farmtotablenetwork.ui.UIConstants;
 import com.mycompany.farmtotablenetwork.ui.UIFactory;
+import com.mycompany.farmtotablenetwork.ui.main.CardSequencePanel; // ps added 4/14/26 to use instead of raw CardLayout
 import java.awt.BorderLayout;
-import java.awt.CardLayout;
 import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -32,7 +32,7 @@ import javax.swing.JTextField;
  */
 public class NewOrderPanel extends JPanel {
     private final ProcurementOfficerProfile profile;
-    private final JPanel cardPanel;
+    private final CardSequencePanel cardPanel;
     private final ProcurementOfficerWorkArea parent;
 
     private JTextField fieldProduct;
@@ -41,7 +41,7 @@ public class NewOrderPanel extends JPanel {
     private JTextField fieldDate;
     private JLabel errorLabel;
 
-    public NewOrderPanel(ProcurementOfficerProfile profile, JPanel cardPanel, ProcurementOfficerWorkArea parent) {
+    public NewOrderPanel(ProcurementOfficerProfile profile, CardSequencePanel cardPanel, ProcurementOfficerWorkArea parent) {
         this.profile = profile;
         this.cardPanel = cardPanel;
         this.parent = parent;
@@ -201,8 +201,6 @@ public class NewOrderPanel extends JPanel {
     }
 
     private void goBack() {
-        cardPanel.remove(this);
-        CardLayout layout = (CardLayout) cardPanel.getLayout();
-        layout.previous(cardPanel);
+        cardPanel.popPanel(this); //changed to use existing method ps 4/14/26
     }
 }

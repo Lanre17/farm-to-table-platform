@@ -8,6 +8,7 @@ import com.mycompany.farmtotablenetwork.ConfigureABusiness;
 import com.mycompany.farmtotablenetwork.distribution.WarehouseItem;
 import com.mycompany.farmtotablenetwork.personnel.profiles.WarehouseManagerProfile;
 import com.mycompany.farmtotablenetwork.requests.PurchaseOrder;
+import com.mycompany.farmtotablenetwork.ui.StatusConstants;
 import com.mycompany.farmtotablenetwork.ui.UIConstants;
 import com.mycompany.farmtotablenetwork.ui.UIFactory;
 import com.mycompany.farmtotablenetwork.ui.main.CardSequencePanel;
@@ -26,91 +27,119 @@ import javax.swing.table.DefaultTableModel;
  * @author Hank_Local
  */
 public class WarehouseManagerWorkArea extends JPanel { //HL: added import using AltEnter 
-    private final WarehouseManagerProfile profile; //HL: added import using AltEnter
-    private final CardSequencePanel cardPanel; //HL: added import using AltEnter
-    
-    //HL: table 1 (top) for warehoused items 
+    private final WarehouseManagerProfile profile;
+    private final CardSequencePanel cardPanel;
+
+    // Top table for warehoused items
     private DefaultTableModel warehouseTableModel;
     private JTable warehouseTable;
-    
-    //HL: table 2 (bottom) for all purchase orders (both submitted & fulfilled) 
+
+    // Bottom table for retail purchase orders
     private DefaultTableModel ordersTableModel;
     private JTable ordersTable;
-    
-    //HL: buttons 
-    private JButton btnReceive; //HL: added import using AltEnter
+
+    // Action buttons
+    private JButton btnReceive;
     private JButton btnCreateDelivery;
-    
-    //HL: Table 1 Column 0 - stores Warehouse Item for retrieval upon clicking a row 
-    private static final String[] WAREHOUSE_COLS = { "Item", "Product", "Qty", "Location", "Cert Type", "Status" }; 
-    
-    //HL: Table 2 Column 0 - stores Purchase Order for retrieval upon clicking a row 
-    private static final String[] ORDER_COLS = { "Order", "Product", "Qty", "Distributor", "Requested", "Status" };
-    
-    //HL: constuctor 
-    public WarehouseManagerWorkArea(WarehouseManagerProfile profile, CardSequencePanel cardPanel){
+
+    // Column 0 stores the actual domain object for row retrieval
+    private static final String[] WAREHOUSE_COLS = {
+        "Item", "Product", "Qty", "Location", "Cert Type", "Status"
+    };
+
+    private static final String[] ORDER_COLS = {
+        "Order", "Product", "Qty", "Distributor", "Requested", "Status"
+    };
+
+    public WarehouseManagerWorkArea(WarehouseManagerProfile profile, CardSequencePanel cardPanel) {
         this.profile = profile;
         this.cardPanel = cardPanel;
-        setLayout(new BorderLayout()); //HL: added import using AltEnter
-        setBackground(UIConstants.BG_APP); //HL: added import using AltEnter
-        buildUI(); //HL: added method using AltEnter 
-        loadTable();//HL: added method using AltEnter 
+
+        setLayout(new BorderLayout());
+        setBackground(UIConstants.BG_APP);
+
+        buildUI();
+        loadTables();
     }
 
-    //HL: method that populates consistent UI pattern with other roles in the ecosystem 
     private void buildUI() {
-        //HL: NORTH - adds panel header w/title & user info (based on who is logged in) 
-        add(UIFactory.header("Warehouse Operations", profile.getPerson().getFullName(), profile.getRole()), BorderLayout.NORTH); 
-        
-        //HL: CENTER - populates both tables - Warehouse Items on top, Purchase Orders on bottom 
-        //HL: gives tables equal spacing in UI 
-        JPanel center = new JPanel(new GridLayout(2, 1, 0, UIConstants.PADDING)); //HL: added import using AltEnter 
+        add(UIFactory.header(
+                "Warehouse Operations",
+                profile.getPerson().getFullName(),
+                profile.getRole()
+        ), BorderLayout.NORTH);
+
+        JPanel center = new JPanel(new GridLayout(2, 1, 0, UIConstants.PADDING));
         center.setBackground(UIConstants.BG_APP);
-        center.setBorder(BorderFactory.createEmptyBorder(UIConstants.PADDING, UIConstants.PADDING, 0, UIConstants.PADDING));
-        
-        
-        //HL: top table for warehouse items 
+        center.setBorder(BorderFactory.createEmptyBorder(
+                UIConstants.PADDING, UIConstants.PADDING, 0, UIConstants.PADDING
+        ));
+
+        // =========================
+        // Top table: Warehouse items
+        // =========================
         warehouseTableModel = new DefaultTableModel(WAREHOUSE_COLS, 0) {
             @Override
-            public boolean isCellEditable(int r, int c) { return false; } //HL: ensures table info is not editable 
+            public boolean isCellEditable(int r, int c) {
+                return false;
+            }
         };
+
         warehouseTable = UIFactory.styledTable(warehouseTableModel);
-        
-        //HL: enforces that user can only create dlievery when an item in the top table is selected 
+
+        // Enable Create Delivery only when both a matching warehouse item and PO are selected
         warehouseTable.getSelectionModel().addListSelectionListener(e -> {
             if (!e.getValueIsAdjusting()) {
-                btnCreateDelivery.setEnabled(warehouseTable.getSelectedRow() >= 0);
+                updateCreateDeliveryButtonState();
             }
         });
-        
+
         JPanel topPanel = new JPanel(new BorderLayout());
         topPanel.setBackground(UIConstants.BG_APP);
-        JLabel topLabel = new JLabel(" Warehoused Items"); //HL: added import using AltEnter 
+
+        JLabel topLabel = new JLabel(" Warehoused Items");
         topLabel.setFont(UIConstants.FONT_SECTION_LABEL);
         topLabel.setForeground(UIConstants.TEXT_SECONDARY);
+
         topPanel.add(topLabel, BorderLayout.NORTH);
         topPanel.add(UIFactory.tableScrollPane(warehouseTable), BorderLayout.CENTER);
         center.add(topPanel);
-        
-        //HL: bottom table for purchase orders
+
+        // =========================
+        // Bottom table: Retail purchase orders
+        // =========================
         ordersTableModel = new DefaultTableModel(ORDER_COLS, 0) {
             @Override
-            public boolean isCellEditable(int r, int c) { return false; } //HL: ensures table info is not editable
+            public boolean isCellEditable(int r, int c) {
+                return false;
+            }
         };
+
         ordersTable = UIFactory.styledTable(ordersTableModel);
+
+        // Enable Create Delivery only when both a matching PO and warehouse item are selected
+        ordersTable.getSelectionModel().addListSelectionListener(e -> {
+            if (!e.getValueIsAdjusting()) {
+                updateCreateDeliveryButtonState();
+            }
+        });
 
         JPanel bottomPanel = new JPanel(new BorderLayout());
         bottomPanel.setBackground(UIConstants.BG_APP);
+
         JLabel bottomLabel = new JLabel(" Purchase Orders from Retail");
         bottomLabel.setFont(UIConstants.FONT_SECTION_LABEL);
         bottomLabel.setForeground(UIConstants.TEXT_SECONDARY);
+
         bottomPanel.add(bottomLabel, BorderLayout.NORTH);
         bottomPanel.add(UIFactory.tableScrollPane(ordersTable), BorderLayout.CENTER);
         center.add(bottomPanel);
 
         add(center, BorderLayout.CENTER);
-        
-        //HL: SOUTH - buttons (bottom of panel) 
+
+        // =========================
+        // Bottom action bar
+        // =========================
         JPanel btnBar = new JPanel(new FlowLayout(FlowLayout.RIGHT, 8, UIConstants.PADDING));
         btnBar.setBackground(UIConstants.BG_APP);
         btnBar.setBorder(BorderFactory.createMatteBorder(1, 0, 0, 0, UIConstants.BORDER_LIGHT));
@@ -119,20 +148,18 @@ public class WarehouseManagerWorkArea extends JPanel { //HL: added import using 
         btnCreateDelivery = UIFactory.primaryButton("Create Delivery");
         btnCreateDelivery.setEnabled(false);
 
-        btnReceive.addActionListener(e -> pushReceiveBatchPanel()); //HL: added method using AltEnter
-        btnCreateDelivery.addActionListener(e -> pushCreateDeliveryPanel()); //HL: added method using AltEnter
+        btnReceive.addActionListener(e -> pushReceiveBatchPanel());
+        btnCreateDelivery.addActionListener(e -> pushCreateDeliveryPanel());
 
         btnBar.add(btnCreateDelivery);
         btnBar.add(btnReceive);
         add(btnBar, BorderLayout.SOUTH);
-        
     }
-    
-    //HL: method to load both Warehoused Items & Purchase Orders tables in UI
-    //HL: automatically refreshes both tables whenever warehoused items or purhcase order status is changed 
-     public void loadTables() {
-         
-         //HL: Table 1: All Warehouse items 
+
+    // Reload both warehouse inventory and incoming Retail POs
+    public void loadTables() {
+
+        // Table 1: Warehouse items
         warehouseTableModel.setRowCount(0);
         for (WarehouseItem item : ConfigureABusiness.warehouseDirectory.getAllItems()) {
             warehouseTableModel.addRow(new Object[]{
@@ -144,10 +171,10 @@ public class WarehouseManagerWorkArea extends JPanel { //HL: added import using 
                 item.getStatus()
             });
         }
-         
-         //HL: Table 2: All Purchase Orders (submitted & fulfilled) 
+
+        // Table 2: Retail purchase orders
         ordersTableModel.setRowCount(0);
-         for (PurchaseOrder po : ConfigureABusiness.orderDirectory.getAllOrders()) { //HL: added purchase order import using AltEnter 
+        for (PurchaseOrder po : ConfigureABusiness.orderDirectory.getAllOrders()) {
             ordersTableModel.addRow(new Object[]{
                 po,
                 po.getProductName(),
@@ -157,32 +184,63 @@ public class WarehouseManagerWorkArea extends JPanel { //HL: added import using 
                 po.getStatus()
             });
         }
-         
-     }
-    
 
-    //HL: method to refresh both tables 
+        btnCreateDelivery.setEnabled(false);
+    }
+
+    // Keep existing public method name for parent refresh compatibility
     public void loadTable() {
         loadTables();
     }
-    
-    //HL: getter for WarehouseItem, adds to Column 0 in table 
-    private WarehouseItem getSelected(){
+
+    // Retrieve selected warehouse item from top table
+    private WarehouseItem getSelectedWarehouseItem() {
         int row = warehouseTable.getSelectedRow();
-        if (row < 0) return null;
+        if (row < 0) {
+            return null;
+        }
         return (WarehouseItem) warehouseTableModel.getValueAt(row, 0);
     }
 
-    //HL: method that pushes to ReceiveBatchPanel, Warehouse Manager completes form 
+    // Retrieve selected purchase order from bottom table
+    private PurchaseOrder getSelectedPurchaseOrder() {
+        int row = ordersTable.getSelectedRow();
+        if (row < 0) {
+            return null;
+        }
+        return (PurchaseOrder) ordersTableModel.getValueAt(row, 0);
+    }
+
+    // Only allow delivery creation when selected warehouse stock can fulfill the selected Retail PO
+    private void updateCreateDeliveryButtonState() {
+        WarehouseItem item = getSelectedWarehouseItem();
+        PurchaseOrder po = getSelectedPurchaseOrder();
+
+        if (item == null || po == null) {
+            btnCreateDelivery.setEnabled(false);
+            return;
+        }
+
+        boolean sameProduct = item.getProductName().equalsIgnoreCase(po.getProductName());
+        boolean enoughQty = item.getQty() >= po.getQty();
+        boolean openPo = StatusConstants.SUBMITTED.equals(po.getStatus());
+
+        btnCreateDelivery.setEnabled(sameProduct && enoughQty && openPo);
+    }
+
     private void pushReceiveBatchPanel() {
         cardPanel.pushPanel(new ReceiveBatchPanel(cardPanel, this));
     }
 
-    //HL: method that pushes to CreateDeliverPanel - passes the WarehouseItem selected in table 
+    // Pass both the selected warehouse item and selected PO into delivery creation
     private void pushCreateDeliveryPanel() {
-        WarehouseItem selected = getSelected();
-        if (selected == null) return;
-        cardPanel.pushPanel(new CreateDeliveryPanel(selected, cardPanel, this));
+        WarehouseItem item = getSelectedWarehouseItem();
+        PurchaseOrder po = getSelectedPurchaseOrder();
+
+        if (item == null || po == null) {
+            return;
+        }
+
+        cardPanel.pushPanel(new CreateDeliveryPanel(item, po, cardPanel, this));
     }
-    
 }

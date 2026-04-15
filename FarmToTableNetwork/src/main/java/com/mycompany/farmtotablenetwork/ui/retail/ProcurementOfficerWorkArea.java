@@ -163,7 +163,7 @@ public class ProcurementOfficerWorkArea extends JPanel{
                 order.getDistributor(),
                 order.getReceiverOrg().getName(),
                 order.getRequestedDate(),
-                order.getStatus()
+                status
             });
         }
 

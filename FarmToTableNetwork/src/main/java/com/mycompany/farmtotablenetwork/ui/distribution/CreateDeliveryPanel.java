@@ -18,11 +18,9 @@ import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.util.ArrayList;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.JButton;
-import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -33,150 +31,191 @@ import javax.swing.JTextField;
  * @author Hank_Local
  */
 public class CreateDeliveryPanel extends JPanel { //HL: added import using AltEnter 
-    private final WarehouseItem item; //HL: item selected in WarehouseManagerWorkArea, added import using AltEnter
+    private final WarehouseItem item;
+    private final PurchaseOrder po;
     private final CardSequencePanel cardPanel;
     private final WarehouseManagerWorkArea parent;
 
-    private JComboBox<PurchaseOrder> comboPo; //HL: combo box for real PO numbers generated from retail 
     private JTextField fieldNotes;
-    private JLabel errorLabel; //HL: added import using AltEnter
-    
-    //HL: constructor, item is pass from WarehouseManagerWorkArea (parent) 
-    public CreateDeliveryPanel(WarehouseItem item, CardSequencePanel cardPanel, WarehouseManagerWorkArea parent) {
+    private JLabel errorLabel;
+
+    public CreateDeliveryPanel(WarehouseItem item,
+            PurchaseOrder po,
+            CardSequencePanel cardPanel,
+            WarehouseManagerWorkArea parent) {
         this.item = item;
+        this.po = po;
         this.cardPanel = cardPanel;
         this.parent = parent;
+
         setLayout(new BorderLayout());
-        setBackground(UIConstants.BG_APP); //HL: added import using AltEnter
-        buildUI(); //HL: created method using AltEnter 
+        setBackground(UIConstants.BG_APP);
+        buildUI();
     }
 
-    //HL: method that populates consistent UI pattern with other roles in the ecosystem
     private void buildUI() {
-        //HL: NORTH - title header 
-        add(UIFactory.headerSimple("Create Delivery Request"), BorderLayout.NORTH); //HL: added import using AltEnter 
-        
-        //HL: form padding 
+        add(UIFactory.headerSimple("Create Delivery Request"), BorderLayout.NORTH);
+
         JPanel formOuter = new JPanel(new BorderLayout());
         formOuter.setBackground(UIConstants.BG_APP);
-        formOuter.setBorder(BorderFactory.createEmptyBorder(UIConstants.PADDING, UIConstants.PADDING * 3, UIConstants.PADDING, UIConstants.PADDING * 3)); //HL: added import using AltEnter
-        
-        //HL: card form container
-        JPanel card = new JPanel(new GridBagLayout()); //HL: added import using AltEnter
+        formOuter.setBorder(BorderFactory.createEmptyBorder(
+                UIConstants.PADDING,
+                UIConstants.PADDING * 3,
+                UIConstants.PADDING,
+                UIConstants.PADDING * 3
+        ));
+
+        JPanel card = new JPanel(new GridBagLayout());
         card.setBackground(UIConstants.BG_PANEL);
         card.setBorder(BorderFactory.createCompoundBorder(
                 BorderFactory.createLineBorder(UIConstants.BORDER_LIGHT),
-                BorderFactory.createEmptyBorder(UIConstants.PADDING, UIConstants.PADDING,
-                        UIConstants.PADDING, UIConstants.PADDING)));
+                BorderFactory.createEmptyBorder(
+                        UIConstants.PADDING,
+                        UIConstants.PADDING,
+                        UIConstants.PADDING,
+                        UIConstants.PADDING
+                )
+        ));
 
-        GridBagConstraints gbc = new GridBagConstraints(); //HL: added import using AltEnter
-        gbc.insets = new Insets(6, 8, 6, 8); //HL: added import using AltEnter
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(6, 8, 6, 8);
         gbc.anchor = GridBagConstraints.WEST;
 
         int row = 0;
-        
-        //HL: read-only item reference, allows WarehouseManager to view & confirm item they are creating a delivery for 
-        gbc.gridx = 0; gbc.gridy = row++; gbc.gridwidth = 2; gbc.fill = GridBagConstraints.HORIZONTAL;
-        card.add(UIFactory.sectionDivider("Item Reference"), gbc);
+
+        // Read-only warehouse item reference
+        gbc.gridx = 0;
+        gbc.gridy = row++;
+        gbc.gridwidth = 2;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        card.add(UIFactory.sectionDivider("Selected Warehouse Item"), gbc);
         gbc.gridwidth = 1;
 
         UIFactory.detailRow(card, gbc, "Product", item.getProductName(), row++);
-        UIFactory.detailRow(card, gbc, "Qty", String.valueOf(item.getQty()), row++);
+        UIFactory.detailRow(card, gbc, "Available Qty", String.valueOf(item.getQty()), row++);
         UIFactory.detailRow(card, gbc, "Location", item.getLocation(), row++);
-        UIFactory.detailRow(card, gbc, "Cert Type",item.getCertification().getCertType(), row++);
-        
-        //HL: shows Unfulfilled PO's & allows selection 
-        gbc.gridx = 0; gbc.gridy = row++; gbc.gridwidth = 2; gbc.fill = GridBagConstraints.HORIZONTAL;
-        card.add(UIFactory.sectionDivider("Fulfill Purchase Order"), gbc);
+        UIFactory.detailRow(card, gbc, "Cert Type", item.getCertification().getCertType(), row++);
+
+        // Read-only purchase order reference
+        gbc.gridx = 0;
+        gbc.gridy = row++;
+        gbc.gridwidth = 2;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        card.add(UIFactory.sectionDivider("Selected Purchase Order"), gbc);
         gbc.gridwidth = 1;
-        
-        //HL: ensures Warhouse Manager can't fulfill a PO twice by filtering through orderDirectory & only shows unfulfilled/submitted PO's 
-        ArrayList<PurchaseOrder> openOrders = ConfigureABusiness.orderDirectory.findByStatus(StatusConstants.SUBMITTED);
-        comboPo = UIFactory.labeledCombo(card, gbc, "Purchase Order ", openOrders.toArray(new PurchaseOrder[0]), row++);
-        
-        
-        //HL: delivery details area - Purchase Order ID & Tracking Notes (optional) 
-        gbc.gridx = 0; gbc.gridy = row++; gbc.gridwidth = 2; gbc.fill = GridBagConstraints.HORIZONTAL;
+
+        UIFactory.detailRow(card, gbc, "PO", String.valueOf(po), row++);
+        UIFactory.detailRow(card, gbc, "Requested Product", po.getProductName(), row++);
+        UIFactory.detailRow(card, gbc, "Requested Qty", String.valueOf(po.getQty()), row++);
+        UIFactory.detailRow(card, gbc, "Current Status", po.getStatus(), row++);
+
+        // Optional shipment notes
+        gbc.gridx = 0;
+        gbc.gridy = row++;
+        gbc.gridwidth = 2;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
         card.add(UIFactory.sectionDivider("Delivery Details"), gbc);
         gbc.gridwidth = 1;
-        
-        //HL: makes tracking notes optional — if there are notes, they are passed to Shipment, notes do not require validation 
+
         fieldNotes = UIFactory.labeledField(card, gbc, "Tracking Notes", row++);
-        
-        //HL: vertical glue that pushes error label to bottom of panel
-        //HL: without this the UI would combine all rows together 
-        gbc.gridx = 0; gbc.gridy = row++; gbc.gridwidth = 2;
-        gbc.weighty = 1; gbc.fill = GridBagConstraints.BOTH;
-        card.add(Box.createVerticalGlue(), gbc); //HL: added import using AltEnter 
+
+        gbc.gridx = 0;
+        gbc.gridy = row++;
+        gbc.gridwidth = 2;
+        gbc.weighty = 1;
+        gbc.fill = GridBagConstraints.BOTH;
+        card.add(Box.createVerticalGlue(), gbc);
         gbc.weighty = 0;
-        
-        //HL: error label - blank until validateInputs() method discovers any errors
-        gbc.gridx = 0; gbc.gridy = row++; gbc.gridwidth = 2; gbc.fill = GridBagConstraints.HORIZONTAL;
+
+        gbc.gridx = 0;
+        gbc.gridy = row++;
+        gbc.gridwidth = 2;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
         errorLabel = UIFactory.errorLabel();
         card.add(errorLabel, gbc);
-        
-        //HL: text is wrapped in scroll pane if UI is resized
+
         formOuter.add(card, BorderLayout.CENTER);
-        JScrollPane scroll = new JScrollPane(formOuter); //HL: added import using AltEnter 
+
+        JScrollPane scroll = new JScrollPane(formOuter);
         scroll.setBorder(null);
         scroll.getViewport().setBackground(UIConstants.BG_APP);
         add(scroll, BorderLayout.CENTER);
-        
-        //HL: SOUTH - buttons (back & create delivery) 
-        JPanel btnBar = new JPanel(new FlowLayout(FlowLayout.RIGHT, 8, UIConstants.PADDING)); //HL: added import using AltEnter 
+
+        JPanel btnBar = new JPanel(new FlowLayout(FlowLayout.RIGHT, 8, UIConstants.PADDING));
         btnBar.setBackground(UIConstants.BG_APP);
         btnBar.setBorder(BorderFactory.createMatteBorder(1, 0, 0, 0, UIConstants.BORDER_LIGHT));
 
-        JButton btnBack   = UIFactory.secondaryButton("Back"); //HL: added import using AltEnter 
+        JButton btnBack = UIFactory.secondaryButton("Back");
         JButton btnSubmit = UIFactory.primaryButton("Create Delivery");
-        btnBack.addActionListener(e -> popPanel()); //HL: created method using AltEnter
-        btnSubmit.addActionListener(e -> onSubmit()); //HL: created method using AltEnter
+
+        btnBack.addActionListener(e -> popPanel());
+        btnSubmit.addActionListener(e -> onSubmit());
+
         btnBar.add(btnBack);
         btnBar.add(btnSubmit);
+
         add(btnBar, BorderLayout.SOUTH);
-        
     }
-    
-    //HL: method that ensures a PO is selected from combo box before allowing the WarehouseManager to create a Delivery Request 
-    //HL: again, tracking notes are optional 
-    //HL: called by onSubmit() method 
+
+    // Validate that the selected warehouse stock can fulfill the selected PO
     private boolean validateInputs() {
-        if (comboPo.getSelectedItem() == null) {
-            errorLabel.setText("Zero unfulfilled PO's. Retail must submit an order"); //HL: null check error message if there are no unfulfilled POs to choose from
+        if (!StatusConstants.SUBMITTED.equals(po.getStatus())) {
+            errorLabel.setText("Only submitted purchase orders can be fulfilled.");
             return false;
         }
+
+        if (!item.getProductName().equalsIgnoreCase(po.getProductName())) {
+            errorLabel.setText("Selected warehouse item does not match the purchase order product.");
+            return false;
+        }
+
+        if (item.getQty() < po.getQty()) {
+            errorLabel.setText("Warehouse quantity is insufficient to fulfill this purchase order.");
+            return false;
+        }
+
         errorLabel.setText(" ");
         return true;
     }
 
-    //HL: method that only runs if validateInputs() is successful 
     private void onSubmit() {
-        if (!validateInputs()) return;
-        PurchaseOrder po = (PurchaseOrder) comboPo.getSelectedItem();
-        po.confirm(); //HL: Changes purchase order status from Submitted to Confirmed (prevents the PO from reappearing for future deliveries)
-        
-        //HL: creates DeliveryRequest, adds it to DeliveryDirectory + WorkRequestDirectory (cross-organization request WarehouseOps to FleetMgmt) 
-        DeliveryRequest dr = ConfigureABusiness.deliveryDirectory.newDelivery( //HL: added imports using AltEnter
-                item,
-                po.getRequestId(),
-                ConfigureABusiness.warehouseOps, //HL: sender 
-                ConfigureABusiness.fleetMgmt //HL: receiver 
+        if (!validateInputs()) {
+            return;
+        }
+
+        // Create a delivery-sized warehouse item so Fleet sees the PO quantity, not the full warehouse stock
+        WarehouseItem deliveryItem = new WarehouseItem(
+                item.getCertification(),
+                item.getProductName(),
+                po.getQty(),
+                item.getLocation()
         );
-        
-        //HL: adds to workRequestDirectory 
+
+        // Reduce the original warehouse stock by the PO quantity
+        item.deplete(po.getQty());
+
+        // Delivery creation means warehouse has started fulfilling the PO
+        po.fulfill();
+
+        // Create the cross-organization delivery request
+        DeliveryRequest dr = ConfigureABusiness.deliveryDirectory.newDelivery(
+                deliveryItem,
+                po.getRequestId(),
+                ConfigureABusiness.warehouseOps,
+                ConfigureABusiness.fleetMgmt
+        );
+
+        // Add the delivery request to the shared system flow
         ConfigureABusiness.workRequestDirectory.addRequest(dr);
-        
-        //HL: Creates Shipment when DeliveryRequest is made by Warehouse Manager 
-        new Shipment(dr, fieldNotes.getText().trim()); //HL: fieldNotes are optional, added Shipment import using AltEnter
-        
-        parent.loadTable(); //HL: refreshes WarehouseManagerWorkArea (parent) table
+
+        // Create shipment record with optional notes
+        new Shipment(dr, fieldNotes.getText().trim());
+
+        parent.loadTable();
         popPanel();
-        
     }
 
-    //HL: back button navigation 
     private void popPanel() {
         cardPanel.popPanel(this);
     }
-    
 }

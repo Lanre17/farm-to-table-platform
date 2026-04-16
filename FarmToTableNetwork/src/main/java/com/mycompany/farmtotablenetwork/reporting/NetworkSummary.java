@@ -79,6 +79,7 @@ public class NetworkSummary {
         terminal.add(StatusConstants.DENIED);
         terminal.add(StatusConstants.RECEIVED);
         terminal.add(StatusConstants.STOCKED);
+        terminal.add(StatusConstants.CANCELLED);
         terminal.add(StatusConstants.DELIVERED);
         terminal.add(StatusConstants.REJECTED);
         terminal.add(StatusConstants.INSPECTION_REQUESTED); // new ps added 4/14/26

@@ -113,7 +113,7 @@ public class ProcurementOfficerWorkArea extends JPanel{
         btnNewOrder = UIFactory.primaryButton("+ New Order");
         btnNewOrder.addActionListener(e -> openNewOrderPanel());
         
-        btnShowActive = UIFactory.secondaryButton("Show Active");
+        btnShowActive = UIFactory.secondaryButton("Show Open");
         btnShowClosed = UIFactory.secondaryButton("Show Closed");
 
         btnShowActive.addActionListener(e -> {
